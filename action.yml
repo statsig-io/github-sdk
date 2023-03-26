@@ -35,5 +35,5 @@ inputs:
 #     description: 'The param value of the evaluated config'
 
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'
