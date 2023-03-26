@@ -36002,102 +36002,6 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 6144:
-/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var statsig_node__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(6434);
-/* harmony import */ var statsig_node__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(statsig_node__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(1314);
-
-
-
-const sdkKey = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputString */ .Z.parseInputString("sdk-key", true);
-_actions_core__WEBPACK_IMPORTED_MODULE_0__.setSecret(sdkKey);
-const user = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputJSON */ .Z.parseInputJSON("user", true);
-const gates = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputArray */ .Z.parseInputArray("gates", false);
-const configs = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputArray */ .Z.parseInputArray("configs", false);
-const logExposures = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputBoolean */ .Z.parseInputBoolean("log-exposures", false, false);
-await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().initialize(sdkKey);
-await Promise.all(gates.map(async (gateName) => {
-    const value = logExposures
-        ? await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().checkGate(user, gateName)
-        : await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().checkGateWithExposureLoggingDisabled(user, gateName);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput(`gate.${gateName}`, value);
-}));
-await Promise.all(configs.map(async (configName) => {
-    const config = logExposures
-        ? await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().getConfig(user, configName)
-        : await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().getConfigWithExposureLoggingDisabled(user, configName);
-    Object.entries(config.value).forEach(([param, value]) => {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput(`config.${configName}.${param}`, value);
-    });
-}));
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } }, 1);
-
-/***/ }),
-
-/***/ 1314:
-/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (/* binding */ Utils)
-/* harmony export */ });
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-
-class Utils {
-    static parseInputString(key, required = false, defaultValue = "") {
-        try {
-            return _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput(key, { required: required });
-        }
-        catch (e) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(`Invalid Input (${key}): ${e.message}`);
-        }
-        return defaultValue;
-    }
-    static parseInputJSON(key, required = false, defaultValue = {}) {
-        const input = this.parseInputString(key, required);
-        try {
-            return JSON.parse(input);
-        }
-        catch (e) {
-            if (defaultValue === undefined) {
-                _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(`Invalid Input (${key}): ${e.message}`);
-            }
-        }
-        return defaultValue;
-    }
-    static parseInputArray(key, required = false, defaultValue = []) {
-        try {
-            return _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getMultilineInput(key, { required: required });
-        }
-        catch (e) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(`Invalid Input (${key}): ${e.message}`);
-        }
-        return defaultValue;
-    }
-    static parseInputBoolean(key, required = false, defaultValue = false) {
-        try {
-            return _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getBooleanInput(key, { required: required });
-        }
-        catch (e) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(`Invalid Input (${key}): ${e.message}`);
-        }
-        return defaultValue;
-    }
-}
-
-
-/***/ }),
-
 /***/ 9491:
 /***/ ((module) => {
 
@@ -36227,75 +36131,6 @@ module.exports = JSON.parse('{"name":"statsig-node","version":"5.4.0","descripti
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/async module */
-/******/ 	(() => {
-/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
-/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
-/******/ 		var resolveQueue = (queue) => {
-/******/ 			if(queue && !queue.d) {
-/******/ 				queue.d = 1;
-/******/ 				queue.forEach((fn) => (fn.r--));
-/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
-/******/ 			}
-/******/ 		}
-/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
-/******/ 			if(dep !== null && typeof dep === "object") {
-/******/ 				if(dep[webpackQueues]) return dep;
-/******/ 				if(dep.then) {
-/******/ 					var queue = [];
-/******/ 					queue.d = 0;
-/******/ 					dep.then((r) => {
-/******/ 						obj[webpackExports] = r;
-/******/ 						resolveQueue(queue);
-/******/ 					}, (e) => {
-/******/ 						obj[webpackError] = e;
-/******/ 						resolveQueue(queue);
-/******/ 					});
-/******/ 					var obj = {};
-/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
-/******/ 					return obj;
-/******/ 				}
-/******/ 			}
-/******/ 			var ret = {};
-/******/ 			ret[webpackQueues] = x => {};
-/******/ 			ret[webpackExports] = dep;
-/******/ 			return ret;
-/******/ 		}));
-/******/ 		__nccwpck_require__.a = (module, body, hasAwait) => {
-/******/ 			var queue;
-/******/ 			hasAwait && ((queue = []).d = 1);
-/******/ 			var depQueues = new Set();
-/******/ 			var exports = module.exports;
-/******/ 			var currentDeps;
-/******/ 			var outerResolve;
-/******/ 			var reject;
-/******/ 			var promise = new Promise((resolve, rej) => {
-/******/ 				reject = rej;
-/******/ 				outerResolve = resolve;
-/******/ 			});
-/******/ 			promise[webpackExports] = exports;
-/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
-/******/ 			module.exports = promise;
-/******/ 			body((deps) => {
-/******/ 				currentDeps = wrapDeps(deps);
-/******/ 				var fn;
-/******/ 				var getResult = () => (currentDeps.map((d) => {
-/******/ 					if(d[webpackError]) throw d[webpackError];
-/******/ 					return d[webpackExports];
-/******/ 				}))
-/******/ 				var promise = new Promise((resolve) => {
-/******/ 					fn = () => (resolve(getResult));
-/******/ 					fn.r = 0;
-/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
-/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
-/******/ 				});
-/******/ 				return fn.r ? promise : getResult();
-/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
-/******/ 			queue && (queue.d = 0);
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -36341,12 +36176,98 @@ module.exports = JSON.parse('{"name":"statsig-node","version":"5.4.0","descripti
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module used 'module' so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(6144);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(2186);
+// EXTERNAL MODULE: ./node_modules/statsig-node/dist/index.js
+var dist = __nccwpck_require__(6434);
+var dist_default = /*#__PURE__*/__nccwpck_require__.n(dist);
+;// CONCATENATED MODULE: ./src/utils.ts
+
+class Utils {
+    static parseInputString(key, required = false, defaultValue = "") {
+        try {
+            return core.getInput(key, { required: required });
+        }
+        catch (e) {
+            core.setFailed(`Invalid Input (${key}): ${e.message}`);
+        }
+        return defaultValue;
+    }
+    static parseInputJSON(key, required = false, defaultValue = {}) {
+        const input = this.parseInputString(key, required);
+        try {
+            return JSON.parse(input);
+        }
+        catch (e) {
+            if (defaultValue === undefined) {
+                core.setFailed(`Invalid Input (${key}): ${e.message}`);
+            }
+        }
+        return defaultValue;
+    }
+    static parseInputArray(key, required = false, defaultValue = []) {
+        try {
+            return core.getMultilineInput(key, { required: required });
+        }
+        catch (e) {
+            core.setFailed(`Invalid Input (${key}): ${e.message}`);
+        }
+        return defaultValue;
+    }
+    static parseInputBoolean(key, required = false, defaultValue = false) {
+        try {
+            return core.getBooleanInput(key, { required: required });
+        }
+        catch (e) {
+            core.setFailed(`Invalid Input (${key}): ${e.message}`);
+        }
+        return defaultValue;
+    }
+}
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
+
+async function run() {
+    try {
+        const sdkKey = Utils.parseInputString("sdk-key", true);
+        core.setSecret(sdkKey);
+        const user = Utils.parseInputJSON("user", true);
+        const gates = Utils.parseInputArray("gates", false);
+        const configs = Utils.parseInputArray("configs", false);
+        const logExposures = Utils.parseInputBoolean("log-exposures", false, false);
+        await dist_default().initialize(sdkKey);
+        await Promise.all(gates.map(async (gateName) => {
+            const value = logExposures
+                ? await dist_default().checkGate(user, gateName)
+                : await dist_default().checkGateWithExposureLoggingDisabled(user, gateName);
+            core.setOutput(`gate.${gateName}`, value);
+        }));
+        await Promise.all(configs.map(async (configName) => {
+            const config = logExposures
+                ? await dist_default().getConfig(user, configName)
+                : await dist_default().getConfigWithExposureLoggingDisabled(user, configName);
+            Object.entries(config.value).forEach(([param, value]) => {
+                core.setOutput(`config.${configName}.${param}`, value);
+            });
+        }));
+    }
+    catch (e) {
+        core.setFailed(e.message);
+    }
+}
+run();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;

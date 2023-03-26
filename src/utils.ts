@@ -1,4 +1,4 @@
-import core from "@actions/core";
+import * as core from "@actions/core";
 
 export default class Utils {
   public static parseInputString(

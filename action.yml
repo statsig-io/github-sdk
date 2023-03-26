@@ -17,11 +17,11 @@ inputs:
     required: false
     default: 'false'
   gates:
-    description: 'Comma separated list of feature gates to evaluate'
+    description: ':ist of feature gates to evaluate separated by new line'
     required: false
     default: ''
   configs:
-    description: 'Comma separated list of dynamic configs to evaluate'
+    description: 'List of dynamic configs to evaluate separated by new line'
     required: false
     default: ''
 
