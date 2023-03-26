@@ -36017,7 +36017,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 const sdkKey = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputString */ .Z.parseInputString("sdk-key", true);
-_actions_core__WEBPACK_IMPORTED_MODULE_0___default().setSecret(sdkKey);
+_actions_core__WEBPACK_IMPORTED_MODULE_0__.setSecret(sdkKey);
 const user = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputJSON */ .Z.parseInputJSON("user", true);
 const gates = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputArray */ .Z.parseInputArray("gates", false);
 const configs = _utils__WEBPACK_IMPORTED_MODULE_2__/* ["default"].parseInputArray */ .Z.parseInputArray("configs", false);
@@ -36027,14 +36027,14 @@ await Promise.all(gates.map(async (gateName) => {
     const value = logExposures
         ? await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().checkGate(user, gateName)
         : await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().checkGateWithExposureLoggingDisabled(user, gateName);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setOutput(`gate.${gateName}`, value);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput(`gate.${gateName}`, value);
 }));
 await Promise.all(configs.map(async (configName) => {
     const config = logExposures
         ? await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().getConfig(user, configName)
         : await statsig_node__WEBPACK_IMPORTED_MODULE_1___default().getConfigWithExposureLoggingDisabled(user, configName);
     Object.entries(config.value).forEach(([param, value]) => {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setOutput(`config.${configName}.${param}`, value);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput(`config.${configName}.${param}`, value);
     });
 }));
 
