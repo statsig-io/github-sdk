@@ -1,0 +1,39 @@
+name: 'Statsig'
+description: 'Statsig SDK for github actions'
+
+author: 'kenny-statsig'
+
+inputs:
+  sdk-key:
+    description: 'Statsig server SDK key'
+    required: true
+    default: ''
+  user:
+    description: 'User JSON to use for evaluating'
+    required: true
+    default: ''
+  log-exposures:
+    description: 'Whether or not to log exposures. Default: false'
+    required: false
+    default: 'false'
+  gates:
+    description: 'Comma separated list of feature gates to evaluate'
+    required: false
+    default: ''
+  configs:
+    description: 'Comma separated list of dynamic configs to evaluate'
+    required: false
+    default: ''
+
+###
+### Outputs will be in the format below based on the inputs
+###
+# outputs:
+#   gate.<GATE-NAME>:
+#     description: 'The evaluated value of the gate'
+#   config.<CONFIG-NAME>.<PARAM-NAME>:
+#     description: 'The param value of the evaluated config'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

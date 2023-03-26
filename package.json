@@ -1,0 +1,27 @@
+{
+  "name": "github-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --license LICENSE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statsig-io/github-sdk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/statsig-io/github-sdk/issues"
+  },
+  "homepage": "https://github.com/statsig-io/github-sdk#readme",
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "statsig-node": "^5.4.0"
+  }
+}
