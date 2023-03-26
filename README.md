@@ -1,7 +1,8 @@
 # Statsig Github Actions SDK
 
 A Github Action wrapper for the [Statsig Node JS server SDK](https://github.com/statsig-io/node-js-server-sdk/).
-Allows you to evaluate gates and configs from your Statsig project directly within a github action.
+
+Allows you to evaluate gates and configs directly within a github action.
 
 ## Inputs
 
