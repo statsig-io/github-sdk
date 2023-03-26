@@ -19,11 +19,11 @@ Whether or not to log exposures. Default `false`
 
 ### `gates`
 
-Comma separated list of feature gates to evaluate.
+List of feature gates to evaluate separated by newline.
 
 ### `configs`
 
-Comma separated list of dynamic configs to evaluate.
+List of dynamic configs to evaluate separated by newline.
 
 ## Outputs
 
