@@ -1,0 +1,30 @@
+name: Example
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    
+jobs:
+  statsig-example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate
+        id: statsig
+        uses: ./
+        with:
+          sdk-key: ${{ secrets.SDK_KEY }}
+          user: '{ "userID": "test123", "email": "test123@statsig.com" }'
+          log-exposures: 'false'
+          gates: | 
+            'always_pass'
+            'always_fail'
+            'statsig_email'
+          configs: 'statsig_pets'
+      - name: Print output
+        run: |
+          echo ${{ steps.statsig.outputs.gate.always_pass }}
+          echo ${{ steps.statsig.outputs.gate.always_fail }}
+          echo ${{ steps.statsig.outputs.gate.statsig_email }}
+          echo ${{ steps.statsig.outputs.config.statsig_pets.roles }}
