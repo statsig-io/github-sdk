@@ -1,5 +1,6 @@
-import core from "@actions/core";
-import statsig, { StatsigUser } from "statsig-node";
+import * as core from "@actions/core"
+import statsig from "statsig-node";
+import type { StatsigUser } from "statsig-node";
 import Utils from "./utils";
 
 const sdkKey: string = Utils.parseInputString("sdk-key", true);
