@@ -1,7 +1,26 @@
 import * as core from "@actions/core";
+import type { StatsigUser } from "statsig-node";
+
+export type Inputs = {
+  sdkKey: string;
+  user: StatsigUser;
+  gates: string[];
+  configs: string[];
+  logExposures: boolean;
+};
 
 export default class Utils {
-  public static parseInputString(
+  public static getInputs(): Inputs {
+    const sdkKey: string = this.parseInputString("sdk-key", true);
+    core.setSecret(sdkKey);
+    const user: StatsigUser = this.parseInputJSON("user", true) as StatsigUser;
+    const gates: string[] = this.parseInputArray("gates", false);
+    const configs: string[] = this.parseInputArray("configs", false);
+    const logExposures: boolean = this.parseInputBoolean("log-exposures", false);
+    return { sdkKey, user, gates, configs, logExposures };
+  }
+
+  private static parseInputString(
     key: string,
     required: boolean = false,
     defaultValue: string = ""
@@ -14,7 +33,7 @@ export default class Utils {
     return defaultValue;
   }
 
-  public static parseInputJSON(
+  private static parseInputJSON(
     key: string,
     required: boolean = false,
     defaultValue: object = {}
@@ -30,7 +49,7 @@ export default class Utils {
     return defaultValue;
   }
 
-  public static parseInputArray(
+  private static parseInputArray(
     key: string,
     required: boolean = false,
     defaultValue: string[] = []
@@ -43,10 +62,10 @@ export default class Utils {
     return defaultValue;
   }
 
-  public static parseInputBoolean(
+  private static parseInputBoolean(
     key: string,
     required: boolean = false,
-    defaultValue: boolean = false,
+    defaultValue: boolean = false
   ): boolean {
     try {
       return core.getBooleanInput(key, { required: required });
