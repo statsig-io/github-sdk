@@ -28,11 +28,11 @@ List of dynamic configs to evaluate separated by newline.
 
 ## Outputs
 
-### `gate.<GATE-NAME>`
+### `gate_<GATE-NAME>`
 
 The evaluated value of the gate
 
-### `config.<CONFIG-NAME>.<PARAM-NAME>`
+### `config_<CONFIG-NAME>_<PARAM-NAME>`
 
 The param value of the evaluated config
 
