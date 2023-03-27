@@ -56,8 +56,8 @@ jobs:
           configs: 'example_config'
       - name: Print output
         run: |
-          echo ${{ steps.statsig.outputs.gate.example_gate_1 }}
-          echo ${{ steps.statsig.outputs.gate.example_gate_2 }}
-          echo ${{ steps.statsig.outputs.config.example_config }}
+          echo ${{ steps.statsig.outputs.gate_example_gate_1 }}
+          echo ${{ steps.statsig.outputs.gate_example_gate_2 }}
+          echo '${{ toJSON(steps.statsig.outputs.config_example_config) }}'
 run: 
 ```
