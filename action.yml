@@ -1,4 +1,4 @@
-name: 'Statsig'
+name: 'Statsig Github SDK'
 description: 'Statsig SDK for github actions'
 
 author: 'kenny-statsig'
