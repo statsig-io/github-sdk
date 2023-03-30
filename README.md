@@ -51,9 +51,9 @@ jobs:
           user: '{ "userID": "test123", "email": "test123@statsig.com" }'
           log-exposures: 'false'
           gates: | 
-            'example_gate_1'
-            'example_gate_2'
-          configs: 'example_config'
+            example_gate_1
+            example_gate_2
+          configs: example_config
       - name: Print output
         run: |
           echo ${{ steps.statsig.outputs.gate_example_gate_1 }}
