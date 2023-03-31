@@ -58,6 +58,6 @@ jobs:
         run: |
           echo ${{ steps.statsig.outputs.gate_example_gate_1 }}
           echo ${{ steps.statsig.outputs.gate_example_gate_2 }}
-          echo '${{ toJSON(steps.statsig.outputs.config_example_config) }}'
+          echo '${{ toJSON(steps.statsig.outputs.config_example_config_param_1) }}'
 run: 
 ```
