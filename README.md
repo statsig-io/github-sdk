@@ -14,6 +14,10 @@ Allows you to evaluate gates and configs directly within a github action.
 
 **Required** User JSON to use for evaluating. See [StatsigUser](https://docs.statsig.com/server/concepts/user).
 
+### `environment`
+
+Statsig environment tier.
+
 ### `log-exposures`
 
 Whether or not to log exposures. Default `false`
@@ -62,7 +66,10 @@ jobs:
             'example_gate_1'
             'example_gate_2'
           configs: 'example_config'
-          experiments: 'example_experiment
+          experiments: 'example_experiment'
+          events: |
+            { "eventName": "example_event_1", "value": 1, "metadata": { "some string": "string", "some number": 123} }
+            { "eventName": "example_event_2", "value": 2, "user": { "userID": "test456", "email": "test456@statsig.com" } }
       - name: Print output
         run: |
           echo ${{ steps.statsig.outputs['gate::example_gate_1'] }}

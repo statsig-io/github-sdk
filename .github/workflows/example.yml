@@ -28,6 +28,9 @@ jobs:
             statsig_pets
           experiments: |
             test_experiment
+          events: |
+            { "eventName": "example_event_1", "value": 1, "metadata": { "some string": "string", "some number": 123} }
+            { "eventName": "example_event_2", "value": 2, "user": { "userID": "test456", "email": "test456@statsig.com" } }
       - name: Print output
         run: |
           echo ${{ steps.statsig.outputs['gate::always_pass'] }}
