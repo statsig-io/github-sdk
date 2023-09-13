@@ -6,6 +6,7 @@ export type Inputs = {
   user: StatsigUser;
   gates: string[];
   configs: string[];
+  experiments: string[];
   logExposures: boolean;
 };
 
@@ -16,8 +17,9 @@ export default class Utils {
     const user: StatsigUser = this.parseInputJSON("user", true) as StatsigUser;
     const gates: string[] = this.parseInputArray("gates", false);
     const configs: string[] = this.parseInputArray("configs", false);
+    const experiments: string[] = this.parseInputArray("experiments", false);
     const logExposures: boolean = this.parseInputBoolean("log-exposures", false);
-    return { sdkKey, user, gates, configs, logExposures };
+    return { sdkKey, user, gates, configs, experiments, logExposures };
   }
 
   private static parseInputString(

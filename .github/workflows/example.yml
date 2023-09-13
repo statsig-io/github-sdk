@@ -19,16 +19,23 @@ jobs:
         with:
           sdk-key: ${{ secrets.SDK_KEY }}
           user: '{ "userID": "test123", "email": "test123@statsig.com" }'
-          log-exposures: 'false'
+          log-exposures: 'true'
           gates: | 
             always_pass
             always_fail
             statsig_email
           configs: |
             statsig_pets
+          experiments: |
+            test_experiment
       - name: Print output
         run: |
-          echo ${{ steps.statsig.outputs.gate_always_pass }}
-          echo ${{ steps.statsig.outputs.gate_always_fail }}
-          echo ${{ steps.statsig.outputs.gate_statsig_email }}
-          echo '${{ toJSON(steps.statsig.outputs.config_statsig_pets_roles) }}'
+          echo ${{ steps.statsig.outputs['gate::always_pass'] }}
+          echo ${{ steps.statsig.outputs['gate::always_fail'] }}
+          echo ${{ steps.statsig.outputs['gate::statsig_email'] }}
+          echo '${{ toJSON(steps.statsig.outputs['config::statsig_pets::roles']) }}'
+          echo ${{ steps.statsig.outputs['experiment::test_experiment::A string'] }}
+          echo ${{ steps.statsig.outputs['experiment::test_experiment::A number'] }}
+          echo ${{ steps.statsig.outputs['experiment::test_experiment::A boolean'] }}
+          echo '${{ toJSON(steps.statsig.outputs['experiment::test_experiment::An object']) }}'
+          echo '${{ toJSON(steps.statsig.outputs['experiment::test_experiment::An array']) }}'
