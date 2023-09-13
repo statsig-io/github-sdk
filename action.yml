@@ -12,6 +12,10 @@ inputs:
     description: 'User JSON to use for evaluating'
     required: true
     default: ''
+  environment:
+    description: 'Statsig environment tier'
+    required: false
+    default: ''
   log-exposures:
     description: 'Whether or not to log exposures. Default: false'
     required: false
@@ -24,15 +28,14 @@ inputs:
     description: 'List of dynamic configs to evaluate separated by new line'
     required: false
     default: ''
-
-###
-### Outputs will be in the format below based on the inputs
-###
-# outputs:
-#   gate_<GATE-NAME>:
-#     description: 'The evaluated value of the gate'
-#   config_<CONFIG-NAME>_<PARAM-NAME>:
-#     description: 'The param value of the evaluated config'
+  experiments:
+    description: 'List of experiments to evaluate separated by new line'
+    required: false
+    default: ''
+  events:
+    description: 'List of events to evaluate separated by new line'
+    required: false
+    default: ''
 
 runs:
   using: 'node16'

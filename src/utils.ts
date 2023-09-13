@@ -1,13 +1,15 @@
 import * as core from "@actions/core";
-import type { StatsigUser } from "statsig-node";
+import type { StatsigUser, LogEventObject } from "statsig-node";
 
 export type Inputs = {
   sdkKey: string;
   user: StatsigUser;
+  environment: string;
   gates: string[];
   configs: string[];
   experiments: string[];
   logExposures: boolean;
+  events: LogEventObject[];
 };
 
 export default class Utils {
@@ -15,11 +17,31 @@ export default class Utils {
     const sdkKey: string = this.parseInputString("sdk-key", true);
     core.setSecret(sdkKey);
     const user: StatsigUser = this.parseInputJSON("user", true) as StatsigUser;
-    const gates: string[] = this.parseInputArray("gates", false);
-    const configs: string[] = this.parseInputArray("configs", false);
-    const experiments: string[] = this.parseInputArray("experiments", false);
-    const logExposures: boolean = this.parseInputBoolean("log-exposures", false);
-    return { sdkKey, user, gates, configs, experiments, logExposures };
+    const environment = this.parseInputString("environment");
+    const gates: string[] = this.parseInputArray("gates");
+    const configs: string[] = this.parseInputArray("configs");
+    const experiments: string[] = this.parseInputArray("experiments");
+    const logExposures: boolean = this.parseInputBoolean("log-exposures");
+    const eventsRaw: Partial<LogEventObject>[] =
+      this.parseInputArrayOfJSON("events");
+    const events: LogEventObject[] = eventsRaw
+      .filter((event) => event.eventName != null)
+      .map((event) => {
+        if (!event.user) {
+          event.user = user;
+        }
+        return event;
+      }) as LogEventObject[];
+    return {
+      sdkKey,
+      environment,
+      user,
+      gates,
+      configs,
+      experiments,
+      logExposures,
+      events,
+    };
   }
 
   private static parseInputString(
@@ -58,6 +80,21 @@ export default class Utils {
   ): string[] {
     try {
       return core.getMultilineInput(key, { required: required });
+    } catch (e: unknown) {
+      core.setFailed(`Invalid Input (${key}): ${(e as Error).message}`);
+    }
+    return defaultValue;
+  }
+
+  private static parseInputArrayOfJSON<T>(
+    key: string,
+    required: boolean = false,
+    defaultValue: T[] = []
+  ): T[] {
+    try {
+      return core
+        .getMultilineInput(key, { required: required })
+        .map((value) => JSON.parse(value) as T);
     } catch (e: unknown) {
       core.setFailed(`Invalid Input (${key}): ${(e as Error).message}`);
     }

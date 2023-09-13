@@ -13410,9 +13410,13 @@ var dist_default = /*#__PURE__*/__nccwpck_require__.n(dist);
 
 class Evaluator {
     static async evaluate(inputs) {
-        const { sdkKey, user, gates, configs, experiments, logExposures } = inputs;
+        const { sdkKey, user, environment, gates, configs, experiments, logExposures, events, } = inputs;
         await core.group("Initializing", async () => {
-            await dist_default().initialize(sdkKey);
+            let options = {};
+            if (environment) {
+                options.environment = { tier: environment };
+            }
+            await dist_default().initialize(sdkKey, options);
         });
         await core.group(`Evaluating gates ${gates.join(", ")}`, async () => {
             await Promise.all(gates.map(async (gateName) => {
@@ -13442,6 +13446,11 @@ class Evaluator {
                 });
             }));
         });
+        await core.group(`Logging events ${events.map((event) => event.eventName).join(", ")}`, async () => {
+            events.forEach((event) => {
+                dist_default().logEventObject(event);
+            });
+        });
         dist_default().shutdown();
     }
 }
@@ -13453,11 +13462,30 @@ class Utils {
         const sdkKey = this.parseInputString("sdk-key", true);
         core.setSecret(sdkKey);
         const user = this.parseInputJSON("user", true);
-        const gates = this.parseInputArray("gates", false);
-        const configs = this.parseInputArray("configs", false);
-        const experiments = this.parseInputArray("experiments", false);
-        const logExposures = this.parseInputBoolean("log-exposures", false);
-        return { sdkKey, user, gates, configs, experiments, logExposures };
+        const environment = this.parseInputString("environment");
+        const gates = this.parseInputArray("gates");
+        const configs = this.parseInputArray("configs");
+        const experiments = this.parseInputArray("experiments");
+        const logExposures = this.parseInputBoolean("log-exposures");
+        const eventsRaw = this.parseInputArrayOfJSON("events");
+        const events = eventsRaw
+            .filter((event) => event.eventName != null)
+            .map((event) => {
+            if (!event.user) {
+                event.user = user;
+            }
+            return event;
+        });
+        return {
+            sdkKey,
+            environment,
+            user,
+            gates,
+            configs,
+            experiments,
+            logExposures,
+            events,
+        };
     }
     static parseInputString(key, required = false, defaultValue = "") {
         try {
@@ -13483,6 +13511,16 @@ class Utils {
     static parseInputArray(key, required = false, defaultValue = []) {
         try {
             return core.getMultilineInput(key, { required: required });
+        }
+        catch (e) {
+            core.setFailed(`Invalid Input (${key}): ${e.message}`);
+        }
+        return defaultValue;
+    }
+    static parseInputArrayOfJSON(key, required = false, defaultValue = []) {
+        try {
+            return core.getMultilineInput(key, { required: required })
+                .map((value) => JSON.parse(value));
         }
         catch (e) {
             core.setFailed(`Invalid Input (${key}): ${e.message}`);
