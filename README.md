@@ -26,15 +26,23 @@ List of feature gates to evaluate separated by newline.
 
 List of dynamic configs to evaluate separated by newline.
 
+### `experiment`
+
+List of experiments to evaluate separated by newline.
+
 ## Outputs
 
-### `gate_<GATE-NAME>`
+### `gate::<GATE-NAME>`
 
 The evaluated value of the gate
 
-### `config_<CONFIG-NAME>_<PARAM-NAME>`
+### `config::<CONFIG-NAME>::<PARAM-NAME>`
 
 The param value of the evaluated config
+
+### `experiment::<EXPERIMENT-NAME>::<PARAM-NAME>`
+
+The param value of the evaluated experiment
 
 ## Example usage
 
@@ -54,10 +62,12 @@ jobs:
             'example_gate_1'
             'example_gate_2'
           configs: 'example_config'
+          experiments: 'example_experiment
       - name: Print output
         run: |
-          echo ${{ steps.statsig.outputs.gate_example_gate_1 }}
-          echo ${{ steps.statsig.outputs.gate_example_gate_2 }}
-          echo '${{ toJSON(steps.statsig.outputs.config_example_config_param_1) }}'
+          echo ${{ steps.statsig.outputs['gate::example_gate_1'] }}
+          echo ${{ steps.statsig.outputs['gate::example_gate_2'] }}
+          echo '${{ toJSON(steps.statsig.outputs['config::example_config::some key']) }}'
+          echo '${{ toJSON(steps.statsig.outputs['experiment::example_experiment::some param']) }}'
 run: 
 ```
