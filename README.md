@@ -34,6 +34,10 @@ List of dynamic configs to evaluate separated by newline.
 
 List of experiments to evaluate separated by newline.
 
+### `events`
+
+List of events to log separated by newline.
+
 ## Outputs
 
 ### `gate::<GATE-NAME>`
