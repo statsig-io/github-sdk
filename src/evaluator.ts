@@ -1,7 +1,8 @@
 import * as core from "@actions/core";
-import statsig from "statsig-node";
-import { StatsigOptions } from "statsig-node";
+
 import type { Inputs } from "./utils";
+import { StatsigOptions } from "statsig-node";
+import statsig from "statsig-node";
 
 export default class Evaluator {
   public static async evaluate(inputs: Inputs) {
@@ -26,8 +27,8 @@ export default class Evaluator {
       await Promise.all(
         gates.map(async (gateName) => {
           const result = logExposures
-            ? await statsig.checkGate(user, gateName)
-            : await statsig.checkGateWithExposureLoggingDisabled(
+            ? await statsig.checkGateSync(user, gateName)
+            : await statsig.checkGateWithExposureLoggingDisabledSync(
                 user,
                 gateName
               );
@@ -40,8 +41,8 @@ export default class Evaluator {
       await Promise.all(
         configs.map(async (configName) => {
           const config = logExposures
-            ? await statsig.getConfig(user, configName)
-            : await statsig.getConfigWithExposureLoggingDisabled(
+            ? await statsig.getConfigSync(user, configName)
+            : await statsig.getConfigWithExposureLoggingDisabledSync(
                 user,
                 configName
               );
@@ -57,8 +58,8 @@ export default class Evaluator {
         await Promise.all(
           experiments.map(async (experimentName) => {
             const experiment = logExposures
-              ? await statsig.getExperiment(user, experimentName)
-              : await statsig.getExperimentWithExposureLoggingDisabled(
+              ? await statsig.getExperimentSync(user, experimentName)
+              : await statsig.getExperimentWithExposureLoggingDisabledSync(
                   user,
                   experimentName
                 );
