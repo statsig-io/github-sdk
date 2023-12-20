@@ -31,6 +31,6 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "node-fetch": "^2.6.9",
-    "statsig-node": "^5.11.0"
+    "statsig-node": "^5.15.0"
   }
 }
