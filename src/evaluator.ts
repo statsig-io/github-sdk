@@ -1,4 +1,19 @@
 import * as core from "@actions/core";
+// moneypatch sdk type and version
+import * as coreUtils from 'statsig-node/dist/utils/core';
+function newGetSDKVersion() {
+  return '1.3.0';
+}
+
+function newGetSDKType() {
+  return 'github-sdk';
+}
+
+// @ts-ignore
+coreUtils.getSDKVersion = newGetSDKVersion;
+// @ts-ignore
+coreUtils.getSDKType = newGetSDKType;
+
 import statsig from "statsig-node";
 import { StatsigOptions } from "statsig-node";
 import type { Inputs } from "./utils";
