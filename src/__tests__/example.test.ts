@@ -4,10 +4,10 @@ import { Inputs } from "../utils";
 test("example", async () => {
   const user = { userID: "test-local", email: "test-local@statsig.com" };
   const inputs: Inputs = {
-    sdkKey: process.env.TEST_SDK_KEY ?? "secret-",
+    sdkKey: "secret-Tpyw9SiCPwilEpeabun0kKRxiGaHHGQrHs9tbzzlGcy", //process.env.TEST_SDK_KEY ?? "secret-",
     environment: 'test',
     user: user,
-    gates: ["always_pass", "always_fail", "statsig_email"],
+    gates: ["test_wink", "always_fail", "statsig_email"],
     configs: ["statsig_pets"],
     experiments: ["test_experiment"],
     logExposures: true,
