@@ -80,5 +80,4 @@ jobs:
           echo ${{ steps.statsig.outputs['gate::example_gate_2'] }}
           echo '${{ toJSON(steps.statsig.outputs['config::example_config::some key']) }}'
           echo '${{ toJSON(steps.statsig.outputs['experiment::example_experiment::some param']) }}'
-run: 
 ```

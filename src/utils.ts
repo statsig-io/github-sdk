@@ -66,8 +66,8 @@ export default class Utils {
     try {
       return JSON.parse(input);
     } catch (e: unknown) {
-      if (defaultValue === undefined) {
-        core.setFailed(`Invalid Input (${key}): ${(e as Error).message}`);
+      if (required) {
+        throw new Error(`Invalid Input (${key}): ${(e as Error).message}`);
       }
     }
     return defaultValue;

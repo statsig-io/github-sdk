@@ -1,6 +1,8 @@
 import * as core from "@actions/core";
 // moneypatch sdk type and version
-import * as coreUtils from 'statsig-node/dist/utils/core';
+const coreUtils = require(
+  "statsig-node/dist/utils/core"
+) as typeof import("statsig-node/dist/utils/core");
 function newGetSDKVersion() {
   return '1.3.0';
 }
@@ -92,6 +94,6 @@ export default class Evaluator {
         });
       }
     );
-    statsig.shutdown();
+    await statsig.shutdown();
   }
 }

@@ -21,7 +21,7 @@ inputs:
     required: false
     default: 'false'
   gates:
-    description: ':ist of feature gates to evaluate separated by new line'
+    description: 'List of feature gates to evaluate separated by new line'
     required: false
     default: ''
   configs:
@@ -38,5 +38,5 @@ inputs:
     default: ''
 
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/index.js'
