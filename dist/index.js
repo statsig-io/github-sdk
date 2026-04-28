@@ -8,7 +8,11 @@
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -21,7 +25,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -83,13 +87,13 @@ class Command {
     }
 }
 function escapeData(s) {
-    return utils_1.toCommandValue(s)
+    return (0, utils_1.toCommandValue)(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return utils_1.toCommandValue(s)
+    return (0, utils_1.toCommandValue)(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -107,7 +111,11 @@ function escapeProperty(s) {
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -120,7 +128,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -134,7 +142,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.platform = exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = exports.markdownSummary = exports.summary = exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
@@ -154,7 +162,7 @@ var ExitCode;
      * A code indicating that the action was a failure
      */
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
-})(ExitCode = exports.ExitCode || (exports.ExitCode = {}));
+})(ExitCode || (exports.ExitCode = ExitCode = {}));
 //-----------------------------------------------------------------------
 // Variables
 //-----------------------------------------------------------------------
@@ -165,13 +173,13 @@ var ExitCode;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    const convertedVal = utils_1.toCommandValue(val);
+    const convertedVal = (0, utils_1.toCommandValue)(val);
     process.env[name] = convertedVal;
     const filePath = process.env['GITHUB_ENV'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('ENV', file_command_1.prepareKeyValueMessage(name, val));
+        return (0, file_command_1.issueFileCommand)('ENV', (0, file_command_1.prepareKeyValueMessage)(name, val));
     }
-    command_1.issueCommand('set-env', { name }, convertedVal);
+    (0, command_1.issueCommand)('set-env', { name }, convertedVal);
 }
 exports.exportVariable = exportVariable;
 /**
@@ -179,7 +187,7 @@ exports.exportVariable = exportVariable;
  * @param secret value of the secret
  */
 function setSecret(secret) {
-    command_1.issueCommand('add-mask', {}, secret);
+    (0, command_1.issueCommand)('add-mask', {}, secret);
 }
 exports.setSecret = setSecret;
 /**
@@ -189,10 +197,10 @@ exports.setSecret = setSecret;
 function addPath(inputPath) {
     const filePath = process.env['GITHUB_PATH'] || '';
     if (filePath) {
-        file_command_1.issueFileCommand('PATH', inputPath);
+        (0, file_command_1.issueFileCommand)('PATH', inputPath);
     }
     else {
-        command_1.issueCommand('add-path', {}, inputPath);
+        (0, command_1.issueCommand)('add-path', {}, inputPath);
     }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
@@ -267,10 +275,10 @@ exports.getBooleanInput = getBooleanInput;
 function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('OUTPUT', file_command_1.prepareKeyValueMessage(name, value));
+        return (0, file_command_1.issueFileCommand)('OUTPUT', (0, file_command_1.prepareKeyValueMessage)(name, value));
     }
     process.stdout.write(os.EOL);
-    command_1.issueCommand('set-output', { name }, utils_1.toCommandValue(value));
+    (0, command_1.issueCommand)('set-output', { name }, (0, utils_1.toCommandValue)(value));
 }
 exports.setOutput = setOutput;
 /**
@@ -279,7 +287,7 @@ exports.setOutput = setOutput;
  *
  */
 function setCommandEcho(enabled) {
-    command_1.issue('echo', enabled ? 'on' : 'off');
+    (0, command_1.issue)('echo', enabled ? 'on' : 'off');
 }
 exports.setCommandEcho = setCommandEcho;
 //-----------------------------------------------------------------------
@@ -310,7 +318,7 @@ exports.isDebug = isDebug;
  * @param message debug message
  */
 function debug(message) {
-    command_1.issueCommand('debug', {}, message);
+    (0, command_1.issueCommand)('debug', {}, message);
 }
 exports.debug = debug;
 /**
@@ -319,7 +327,7 @@ exports.debug = debug;
  * @param properties optional properties to add to the annotation.
  */
 function error(message, properties = {}) {
-    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('error', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
@@ -328,7 +336,7 @@ exports.error = error;
  * @param properties optional properties to add to the annotation.
  */
 function warning(message, properties = {}) {
-    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('warning', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
 /**
@@ -337,7 +345,7 @@ exports.warning = warning;
  * @param properties optional properties to add to the annotation.
  */
 function notice(message, properties = {}) {
-    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    (0, command_1.issueCommand)('notice', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
 exports.notice = notice;
 /**
@@ -356,14 +364,14 @@ exports.info = info;
  * @param name The name of the output group
  */
 function startGroup(name) {
-    command_1.issue('group', name);
+    (0, command_1.issue)('group', name);
 }
 exports.startGroup = startGroup;
 /**
  * End an output group.
  */
 function endGroup() {
-    command_1.issue('endgroup');
+    (0, command_1.issue)('endgroup');
 }
 exports.endGroup = endGroup;
 /**
@@ -401,9 +409,9 @@ exports.group = group;
 function saveState(name, value) {
     const filePath = process.env['GITHUB_STATE'] || '';
     if (filePath) {
-        return file_command_1.issueFileCommand('STATE', file_command_1.prepareKeyValueMessage(name, value));
+        return (0, file_command_1.issueFileCommand)('STATE', (0, file_command_1.prepareKeyValueMessage)(name, value));
     }
-    command_1.issueCommand('save-state', { name }, utils_1.toCommandValue(value));
+    (0, command_1.issueCommand)('save-state', { name }, (0, utils_1.toCommandValue)(value));
 }
 exports.saveState = saveState;
 /**
@@ -439,6 +447,10 @@ var path_utils_1 = __nccwpck_require__(2981);
 Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
 Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
 Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
+/**
+ * Platform utilities exports
+ */
+exports.platform = __importStar(__nccwpck_require__(5243));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
@@ -451,7 +463,11 @@ Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: funct
 // For internal use, subject to change.
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -464,7 +480,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -472,9 +488,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const crypto = __importStar(__nccwpck_require__(6113));
 const fs = __importStar(__nccwpck_require__(7147));
 const os = __importStar(__nccwpck_require__(2037));
-const uuid_1 = __nccwpck_require__(5840);
 const utils_1 = __nccwpck_require__(5278);
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -484,14 +500,14 @@ function issueFileCommand(command, message) {
     if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
     }
-    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
         encoding: 'utf8'
     });
 }
 exports.issueFileCommand = issueFileCommand;
 function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${uuid_1.v4()}`;
-    const convertedValue = utils_1.toCommandValue(value);
+    const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
+    const convertedValue = (0, utils_1.toCommandValue)(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
     // the delimiter.
@@ -558,7 +574,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {
@@ -576,9 +592,9 @@ class OidcClient {
                     const encodedAudience = encodeURIComponent(audience);
                     id_token_url = `${id_token_url}&audience=${encodedAudience}`;
                 }
-                core_1.debug(`ID token url is ${id_token_url}`);
+                (0, core_1.debug)(`ID token url is ${id_token_url}`);
                 const id_token = yield OidcClient.getCall(id_token_url);
-                core_1.setSecret(id_token);
+                (0, core_1.setSecret)(id_token);
                 return id_token;
             }
             catch (error) {
@@ -599,7 +615,11 @@ exports.OidcClient = OidcClient;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -612,7 +632,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -654,6 +674,107 @@ function toPlatformPath(pth) {
 }
 exports.toPlatformPath = toPlatformPath;
 //# sourceMappingURL=path-utils.js.map
+
+/***/ }),
+
+/***/ 5243:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
+const os_1 = __importDefault(__nccwpck_require__(2037));
+const exec = __importStar(__nccwpck_require__(1514));
+const getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
+        silent: true
+    });
+    const { stdout: name } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', undefined, {
+        silent: true
+    });
+    return {
+        name: name.trim(),
+        version: version.trim()
+    };
+});
+const getMacOsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    const { stdout } = yield exec.getExecOutput('sw_vers', undefined, {
+        silent: true
+    });
+    const version = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : '';
+    const name = (_d = (_c = stdout.match(/ProductName:\s*(.+)/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : '';
+    return {
+        name,
+        version
+    };
+});
+const getLinuxInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    const { stdout } = yield exec.getExecOutput('lsb_release', ['-i', '-r', '-s'], {
+        silent: true
+    });
+    const [name, version] = stdout.trim().split('\n');
+    return {
+        name,
+        version
+    };
+});
+exports.platform = os_1.default.platform();
+exports.arch = os_1.default.arch();
+exports.isWindows = exports.platform === 'win32';
+exports.isMacOS = exports.platform === 'darwin';
+exports.isLinux = exports.platform === 'linux';
+function getDetails() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return Object.assign(Object.assign({}, (yield (exports.isWindows
+            ? getWindowsInfo()
+            : exports.isMacOS
+                ? getMacOsInfo()
+                : getLinuxInfo()))), { platform: exports.platform,
+            arch: exports.arch,
+            isWindows: exports.isWindows,
+            isMacOS: exports.isMacOS,
+            isLinux: exports.isLinux });
+    });
+}
+exports.getDetails = getDetails;
+//# sourceMappingURL=platform.js.map
 
 /***/ }),
 
@@ -991,6 +1112,741 @@ function toCommandProperties(annotationProperties) {
 }
 exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 1514:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getExecOutput = exports.exec = void 0;
+const string_decoder_1 = __nccwpck_require__(1576);
+const tr = __importStar(__nccwpck_require__(8159));
+/**
+ * Exec a command.
+ * Output will be streamed to the live console.
+ * Returns promise with return code
+ *
+ * @param     commandLine        command to execute (can include additional args). Must be correctly escaped.
+ * @param     args               optional arguments for tool. Escaping is handled by the lib.
+ * @param     options            optional exec options.  See ExecOptions
+ * @returns   Promise<number>    exit code
+ */
+function exec(commandLine, args, options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const commandArgs = tr.argStringToArray(commandLine);
+        if (commandArgs.length === 0) {
+            throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
+        }
+        // Path to tool to execute should be first arg
+        const toolPath = commandArgs[0];
+        args = commandArgs.slice(1).concat(args || []);
+        const runner = new tr.ToolRunner(toolPath, args, options);
+        return runner.exec();
+    });
+}
+exports.exec = exec;
+/**
+ * Exec a command and get the output.
+ * Output will be streamed to the live console.
+ * Returns promise with the exit code and collected stdout and stderr
+ *
+ * @param     commandLine           command to execute (can include additional args). Must be correctly escaped.
+ * @param     args                  optional arguments for tool. Escaping is handled by the lib.
+ * @param     options               optional exec options.  See ExecOptions
+ * @returns   Promise<ExecOutput>   exit code, stdout, and stderr
+ */
+function getExecOutput(commandLine, args, options) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        let stdout = '';
+        let stderr = '';
+        //Using string decoder covers the case where a mult-byte character is split
+        const stdoutDecoder = new string_decoder_1.StringDecoder('utf8');
+        const stderrDecoder = new string_decoder_1.StringDecoder('utf8');
+        const originalStdoutListener = (_a = options === null || options === void 0 ? void 0 : options.listeners) === null || _a === void 0 ? void 0 : _a.stdout;
+        const originalStdErrListener = (_b = options === null || options === void 0 ? void 0 : options.listeners) === null || _b === void 0 ? void 0 : _b.stderr;
+        const stdErrListener = (data) => {
+            stderr += stderrDecoder.write(data);
+            if (originalStdErrListener) {
+                originalStdErrListener(data);
+            }
+        };
+        const stdOutListener = (data) => {
+            stdout += stdoutDecoder.write(data);
+            if (originalStdoutListener) {
+                originalStdoutListener(data);
+            }
+        };
+        const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
+        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        //flush any remaining characters
+        stdout += stdoutDecoder.end();
+        stderr += stderrDecoder.end();
+        return {
+            exitCode,
+            stdout,
+            stderr
+        };
+    });
+}
+exports.getExecOutput = getExecOutput;
+//# sourceMappingURL=exec.js.map
+
+/***/ }),
+
+/***/ 8159:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.argStringToArray = exports.ToolRunner = void 0;
+const os = __importStar(__nccwpck_require__(2037));
+const events = __importStar(__nccwpck_require__(2361));
+const child = __importStar(__nccwpck_require__(2081));
+const path = __importStar(__nccwpck_require__(1017));
+const io = __importStar(__nccwpck_require__(7436));
+const ioUtil = __importStar(__nccwpck_require__(1962));
+const timers_1 = __nccwpck_require__(9512);
+/* eslint-disable @typescript-eslint/unbound-method */
+const IS_WINDOWS = process.platform === 'win32';
+/*
+ * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
+ */
+class ToolRunner extends events.EventEmitter {
+    constructor(toolPath, args, options) {
+        super();
+        if (!toolPath) {
+            throw new Error("Parameter 'toolPath' cannot be null or empty.");
+        }
+        this.toolPath = toolPath;
+        this.args = args || [];
+        this.options = options || {};
+    }
+    _debug(message) {
+        if (this.options.listeners && this.options.listeners.debug) {
+            this.options.listeners.debug(message);
+        }
+    }
+    _getCommandString(options, noPrefix) {
+        const toolPath = this._getSpawnFileName();
+        const args = this._getSpawnArgs(options);
+        let cmd = noPrefix ? '' : '[command]'; // omit prefix when piped to a second tool
+        if (IS_WINDOWS) {
+            // Windows + cmd file
+            if (this._isCmdFile()) {
+                cmd += toolPath;
+                for (const a of args) {
+                    cmd += ` ${a}`;
+                }
+            }
+            // Windows + verbatim
+            else if (options.windowsVerbatimArguments) {
+                cmd += `"${toolPath}"`;
+                for (const a of args) {
+                    cmd += ` ${a}`;
+                }
+            }
+            // Windows (regular)
+            else {
+                cmd += this._windowsQuoteCmdArg(toolPath);
+                for (const a of args) {
+                    cmd += ` ${this._windowsQuoteCmdArg(a)}`;
+                }
+            }
+        }
+        else {
+            // OSX/Linux - this can likely be improved with some form of quoting.
+            // creating processes on Unix is fundamentally different than Windows.
+            // on Unix, execvp() takes an arg array.
+            cmd += toolPath;
+            for (const a of args) {
+                cmd += ` ${a}`;
+            }
+        }
+        return cmd;
+    }
+    _processLineBuffer(data, strBuffer, onLine) {
+        try {
+            let s = strBuffer + data.toString();
+            let n = s.indexOf(os.EOL);
+            while (n > -1) {
+                const line = s.substring(0, n);
+                onLine(line);
+                // the rest of the string ...
+                s = s.substring(n + os.EOL.length);
+                n = s.indexOf(os.EOL);
+            }
+            return s;
+        }
+        catch (err) {
+            // streaming lines to console is best effort.  Don't fail a build.
+            this._debug(`error processing line. Failed with error ${err}`);
+            return '';
+        }
+    }
+    _getSpawnFileName() {
+        if (IS_WINDOWS) {
+            if (this._isCmdFile()) {
+                return process.env['COMSPEC'] || 'cmd.exe';
+            }
+        }
+        return this.toolPath;
+    }
+    _getSpawnArgs(options) {
+        if (IS_WINDOWS) {
+            if (this._isCmdFile()) {
+                let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
+                for (const a of this.args) {
+                    argline += ' ';
+                    argline += options.windowsVerbatimArguments
+                        ? a
+                        : this._windowsQuoteCmdArg(a);
+                }
+                argline += '"';
+                return [argline];
+            }
+        }
+        return this.args;
+    }
+    _endsWith(str, end) {
+        return str.endsWith(end);
+    }
+    _isCmdFile() {
+        const upperToolPath = this.toolPath.toUpperCase();
+        return (this._endsWith(upperToolPath, '.CMD') ||
+            this._endsWith(upperToolPath, '.BAT'));
+    }
+    _windowsQuoteCmdArg(arg) {
+        // for .exe, apply the normal quoting rules that libuv applies
+        if (!this._isCmdFile()) {
+            return this._uvQuoteCmdArg(arg);
+        }
+        // otherwise apply quoting rules specific to the cmd.exe command line parser.
+        // the libuv rules are generic and are not designed specifically for cmd.exe
+        // command line parser.
+        //
+        // for a detailed description of the cmd.exe command line parser, refer to
+        // http://stackoverflow.com/questions/4094699/how-does-the-windows-command-interpreter-cmd-exe-parse-scripts/7970912#7970912
+        // need quotes for empty arg
+        if (!arg) {
+            return '""';
+        }
+        // determine whether the arg needs to be quoted
+        const cmdSpecialChars = [
+            ' ',
+            '\t',
+            '&',
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+            '^',
+            '=',
+            ';',
+            '!',
+            "'",
+            '+',
+            ',',
+            '`',
+            '~',
+            '|',
+            '<',
+            '>',
+            '"'
+        ];
+        let needsQuotes = false;
+        for (const char of arg) {
+            if (cmdSpecialChars.some(x => x === char)) {
+                needsQuotes = true;
+                break;
+            }
+        }
+        // short-circuit if quotes not needed
+        if (!needsQuotes) {
+            return arg;
+        }
+        // the following quoting rules are very similar to the rules that by libuv applies.
+        //
+        // 1) wrap the string in quotes
+        //
+        // 2) double-up quotes - i.e. " => ""
+        //
+        //    this is different from the libuv quoting rules. libuv replaces " with \", which unfortunately
+        //    doesn't work well with a cmd.exe command line.
+        //
+        //    note, replacing " with "" also works well if the arg is passed to a downstream .NET console app.
+        //    for example, the command line:
+        //          foo.exe "myarg:""my val"""
+        //    is parsed by a .NET console app into an arg array:
+        //          [ "myarg:\"my val\"" ]
+        //    which is the same end result when applying libuv quoting rules. although the actual
+        //    command line from libuv quoting rules would look like:
+        //          foo.exe "myarg:\"my val\""
+        //
+        // 3) double-up slashes that precede a quote,
+        //    e.g.  hello \world    => "hello \world"
+        //          hello\"world    => "hello\\""world"
+        //          hello\\"world   => "hello\\\\""world"
+        //          hello world\    => "hello world\\"
+        //
+        //    technically this is not required for a cmd.exe command line, or the batch argument parser.
+        //    the reasons for including this as a .cmd quoting rule are:
+        //
+        //    a) this is optimized for the scenario where the argument is passed from the .cmd file to an
+        //       external program. many programs (e.g. .NET console apps) rely on the slash-doubling rule.
+        //
+        //    b) it's what we've been doing previously (by deferring to node default behavior) and we
+        //       haven't heard any complaints about that aspect.
+        //
+        // note, a weakness of the quoting rules chosen here, is that % is not escaped. in fact, % cannot be
+        // escaped when used on the command line directly - even though within a .cmd file % can be escaped
+        // by using %%.
+        //
+        // the saving grace is, on the command line, %var% is left as-is if var is not defined. this contrasts
+        // the line parsing rules within a .cmd file, where if var is not defined it is replaced with nothing.
+        //
+        // one option that was explored was replacing % with ^% - i.e. %var% => ^%var^%. this hack would
+        // often work, since it is unlikely that var^ would exist, and the ^ character is removed when the
+        // variable is used. the problem, however, is that ^ is not removed when %* is used to pass the args
+        // to an external program.
+        //
+        // an unexplored potential solution for the % escaping problem, is to create a wrapper .cmd file.
+        // % can be escaped within a .cmd file.
+        let reverse = '"';
+        let quoteHit = true;
+        for (let i = arg.length; i > 0; i--) {
+            // walk the string in reverse
+            reverse += arg[i - 1];
+            if (quoteHit && arg[i - 1] === '\\') {
+                reverse += '\\'; // double the slash
+            }
+            else if (arg[i - 1] === '"') {
+                quoteHit = true;
+                reverse += '"'; // double the quote
+            }
+            else {
+                quoteHit = false;
+            }
+        }
+        reverse += '"';
+        return reverse
+            .split('')
+            .reverse()
+            .join('');
+    }
+    _uvQuoteCmdArg(arg) {
+        // Tool runner wraps child_process.spawn() and needs to apply the same quoting as
+        // Node in certain cases where the undocumented spawn option windowsVerbatimArguments
+        // is used.
+        //
+        // Since this function is a port of quote_cmd_arg from Node 4.x (technically, lib UV,
+        // see https://github.com/nodejs/node/blob/v4.x/deps/uv/src/win/process.c for details),
+        // pasting copyright notice from Node within this function:
+        //
+        //      Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+        //
+        //      Permission is hereby granted, free of charge, to any person obtaining a copy
+        //      of this software and associated documentation files (the "Software"), to
+        //      deal in the Software without restriction, including without limitation the
+        //      rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+        //      sell copies of the Software, and to permit persons to whom the Software is
+        //      furnished to do so, subject to the following conditions:
+        //
+        //      The above copyright notice and this permission notice shall be included in
+        //      all copies or substantial portions of the Software.
+        //
+        //      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        //      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        //      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        //      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        //      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+        //      FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+        //      IN THE SOFTWARE.
+        if (!arg) {
+            // Need double quotation for empty argument
+            return '""';
+        }
+        if (!arg.includes(' ') && !arg.includes('\t') && !arg.includes('"')) {
+            // No quotation needed
+            return arg;
+        }
+        if (!arg.includes('"') && !arg.includes('\\')) {
+            // No embedded double quotes or backslashes, so I can just wrap
+            // quote marks around the whole thing.
+            return `"${arg}"`;
+        }
+        // Expected input/output:
+        //   input : hello"world
+        //   output: "hello\"world"
+        //   input : hello""world
+        //   output: "hello\"\"world"
+        //   input : hello\world
+        //   output: hello\world
+        //   input : hello\\world
+        //   output: hello\\world
+        //   input : hello\"world
+        //   output: "hello\\\"world"
+        //   input : hello\\"world
+        //   output: "hello\\\\\"world"
+        //   input : hello world\
+        //   output: "hello world\\" - note the comment in libuv actually reads "hello world\"
+        //                             but it appears the comment is wrong, it should be "hello world\\"
+        let reverse = '"';
+        let quoteHit = true;
+        for (let i = arg.length; i > 0; i--) {
+            // walk the string in reverse
+            reverse += arg[i - 1];
+            if (quoteHit && arg[i - 1] === '\\') {
+                reverse += '\\';
+            }
+            else if (arg[i - 1] === '"') {
+                quoteHit = true;
+                reverse += '\\';
+            }
+            else {
+                quoteHit = false;
+            }
+        }
+        reverse += '"';
+        return reverse
+            .split('')
+            .reverse()
+            .join('');
+    }
+    _cloneExecOptions(options) {
+        options = options || {};
+        const result = {
+            cwd: options.cwd || process.cwd(),
+            env: options.env || process.env,
+            silent: options.silent || false,
+            windowsVerbatimArguments: options.windowsVerbatimArguments || false,
+            failOnStdErr: options.failOnStdErr || false,
+            ignoreReturnCode: options.ignoreReturnCode || false,
+            delay: options.delay || 10000
+        };
+        result.outStream = options.outStream || process.stdout;
+        result.errStream = options.errStream || process.stderr;
+        return result;
+    }
+    _getSpawnOptions(options, toolPath) {
+        options = options || {};
+        const result = {};
+        result.cwd = options.cwd;
+        result.env = options.env;
+        result['windowsVerbatimArguments'] =
+            options.windowsVerbatimArguments || this._isCmdFile();
+        if (options.windowsVerbatimArguments) {
+            result.argv0 = `"${toolPath}"`;
+        }
+        return result;
+    }
+    /**
+     * Exec a tool.
+     * Output will be streamed to the live console.
+     * Returns promise with return code
+     *
+     * @param     tool     path to tool to exec
+     * @param     options  optional exec options.  See ExecOptions
+     * @returns   number
+     */
+    exec() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // root the tool path if it is unrooted and contains relative pathing
+            if (!ioUtil.isRooted(this.toolPath) &&
+                (this.toolPath.includes('/') ||
+                    (IS_WINDOWS && this.toolPath.includes('\\')))) {
+                // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
+                this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+            }
+            // if the tool is only a file name, then resolve it from the PATH
+            // otherwise verify it exists (add extension on Windows if necessary)
+            this.toolPath = yield io.which(this.toolPath, true);
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                this._debug(`exec tool: ${this.toolPath}`);
+                this._debug('arguments:');
+                for (const arg of this.args) {
+                    this._debug(`   ${arg}`);
+                }
+                const optionsNonNull = this._cloneExecOptions(this.options);
+                if (!optionsNonNull.silent && optionsNonNull.outStream) {
+                    optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
+                }
+                const state = new ExecState(optionsNonNull, this.toolPath);
+                state.on('debug', (message) => {
+                    this._debug(message);
+                });
+                if (this.options.cwd && !(yield ioUtil.exists(this.options.cwd))) {
+                    return reject(new Error(`The cwd: ${this.options.cwd} does not exist!`));
+                }
+                const fileName = this._getSpawnFileName();
+                const cp = child.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
+                let stdbuffer = '';
+                if (cp.stdout) {
+                    cp.stdout.on('data', (data) => {
+                        if (this.options.listeners && this.options.listeners.stdout) {
+                            this.options.listeners.stdout(data);
+                        }
+                        if (!optionsNonNull.silent && optionsNonNull.outStream) {
+                            optionsNonNull.outStream.write(data);
+                        }
+                        stdbuffer = this._processLineBuffer(data, stdbuffer, (line) => {
+                            if (this.options.listeners && this.options.listeners.stdline) {
+                                this.options.listeners.stdline(line);
+                            }
+                        });
+                    });
+                }
+                let errbuffer = '';
+                if (cp.stderr) {
+                    cp.stderr.on('data', (data) => {
+                        state.processStderr = true;
+                        if (this.options.listeners && this.options.listeners.stderr) {
+                            this.options.listeners.stderr(data);
+                        }
+                        if (!optionsNonNull.silent &&
+                            optionsNonNull.errStream &&
+                            optionsNonNull.outStream) {
+                            const s = optionsNonNull.failOnStdErr
+                                ? optionsNonNull.errStream
+                                : optionsNonNull.outStream;
+                            s.write(data);
+                        }
+                        errbuffer = this._processLineBuffer(data, errbuffer, (line) => {
+                            if (this.options.listeners && this.options.listeners.errline) {
+                                this.options.listeners.errline(line);
+                            }
+                        });
+                    });
+                }
+                cp.on('error', (err) => {
+                    state.processError = err.message;
+                    state.processExited = true;
+                    state.processClosed = true;
+                    state.CheckComplete();
+                });
+                cp.on('exit', (code) => {
+                    state.processExitCode = code;
+                    state.processExited = true;
+                    this._debug(`Exit code ${code} received from tool '${this.toolPath}'`);
+                    state.CheckComplete();
+                });
+                cp.on('close', (code) => {
+                    state.processExitCode = code;
+                    state.processExited = true;
+                    state.processClosed = true;
+                    this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
+                    state.CheckComplete();
+                });
+                state.on('done', (error, exitCode) => {
+                    if (stdbuffer.length > 0) {
+                        this.emit('stdline', stdbuffer);
+                    }
+                    if (errbuffer.length > 0) {
+                        this.emit('errline', errbuffer);
+                    }
+                    cp.removeAllListeners();
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(exitCode);
+                    }
+                });
+                if (this.options.input) {
+                    if (!cp.stdin) {
+                        throw new Error('child process missing stdin');
+                    }
+                    cp.stdin.end(this.options.input);
+                }
+            }));
+        });
+    }
+}
+exports.ToolRunner = ToolRunner;
+/**
+ * Convert an arg string to an array of args. Handles escaping
+ *
+ * @param    argString   string of arguments
+ * @returns  string[]    array of arguments
+ */
+function argStringToArray(argString) {
+    const args = [];
+    let inQuotes = false;
+    let escaped = false;
+    let arg = '';
+    function append(c) {
+        // we only escape double quotes.
+        if (escaped && c !== '"') {
+            arg += '\\';
+        }
+        arg += c;
+        escaped = false;
+    }
+    for (let i = 0; i < argString.length; i++) {
+        const c = argString.charAt(i);
+        if (c === '"') {
+            if (!escaped) {
+                inQuotes = !inQuotes;
+            }
+            else {
+                append(c);
+            }
+            continue;
+        }
+        if (c === '\\' && escaped) {
+            append(c);
+            continue;
+        }
+        if (c === '\\' && inQuotes) {
+            escaped = true;
+            continue;
+        }
+        if (c === ' ' && !inQuotes) {
+            if (arg.length > 0) {
+                args.push(arg);
+                arg = '';
+            }
+            continue;
+        }
+        append(c);
+    }
+    if (arg.length > 0) {
+        args.push(arg.trim());
+    }
+    return args;
+}
+exports.argStringToArray = argStringToArray;
+class ExecState extends events.EventEmitter {
+    constructor(options, toolPath) {
+        super();
+        this.processClosed = false; // tracks whether the process has exited and stdio is closed
+        this.processError = '';
+        this.processExitCode = 0;
+        this.processExited = false; // tracks whether the process has exited
+        this.processStderr = false; // tracks whether stderr was written to
+        this.delay = 10000; // 10 seconds
+        this.done = false;
+        this.timeout = null;
+        if (!toolPath) {
+            throw new Error('toolPath must not be empty');
+        }
+        this.options = options;
+        this.toolPath = toolPath;
+        if (options.delay) {
+            this.delay = options.delay;
+        }
+    }
+    CheckComplete() {
+        if (this.done) {
+            return;
+        }
+        if (this.processClosed) {
+            this._setResult();
+        }
+        else if (this.processExited) {
+            this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
+        }
+    }
+    _debug(message) {
+        this.emit('debug', message);
+    }
+    _setResult() {
+        // determine whether there is an error
+        let error;
+        if (this.processExited) {
+            if (this.processError) {
+                error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
+            }
+            else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) {
+                error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
+            }
+            else if (this.processStderr && this.options.failOnStdErr) {
+                error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
+            }
+        }
+        // clear the timeout
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
+        this.done = true;
+        this.emit('done', error, this.processExitCode);
+    }
+    static HandleTimeout(state) {
+        if (state.done) {
+            return;
+        }
+        if (!state.processClosed && state.processExited) {
+            const message = `The STDIO streams did not close within ${state.delay /
+                1000} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+            state._debug(message);
+        }
+        state._setResult();
+    }
+}
+//# sourceMappingURL=toolrunner.js.map
 
 /***/ }),
 
@@ -1774,6 +2630,502 @@ function isLoopbackAddress(host) {
         hostLower.startsWith('[0:0:0:0:0:0:0:1]'));
 }
 //# sourceMappingURL=proxy.js.map
+
+/***/ }),
+
+/***/ 1962:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
+const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
+_a = fs.promises
+// export const {open} = 'fs'
+, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
+// export const {open} = 'fs'
+exports.IS_WINDOWS = process.platform === 'win32';
+// See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
+exports.UV_FS_O_EXLOCK = 0x10000000;
+exports.READONLY = fs.constants.O_RDONLY;
+function exists(fsPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield exports.stat(fsPath);
+        }
+        catch (err) {
+            if (err.code === 'ENOENT') {
+                return false;
+            }
+            throw err;
+        }
+        return true;
+    });
+}
+exports.exists = exists;
+function isDirectory(fsPath, useStat = false) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const stats = useStat ? yield exports.stat(fsPath) : yield exports.lstat(fsPath);
+        return stats.isDirectory();
+    });
+}
+exports.isDirectory = isDirectory;
+/**
+ * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
+ * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
+ */
+function isRooted(p) {
+    p = normalizeSeparators(p);
+    if (!p) {
+        throw new Error('isRooted() parameter "p" cannot be empty');
+    }
+    if (exports.IS_WINDOWS) {
+        return (p.startsWith('\\') || /^[A-Z]:/i.test(p) // e.g. \ or \hello or \\hello
+        ); // e.g. C: or C:\hello
+    }
+    return p.startsWith('/');
+}
+exports.isRooted = isRooted;
+/**
+ * Best effort attempt to determine whether a file exists and is executable.
+ * @param filePath    file path to check
+ * @param extensions  additional file extensions to try
+ * @return if file exists and is executable, returns the file path. otherwise empty string.
+ */
+function tryGetExecutablePath(filePath, extensions) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let stats = undefined;
+        try {
+            // test file exists
+            stats = yield exports.stat(filePath);
+        }
+        catch (err) {
+            if (err.code !== 'ENOENT') {
+                // eslint-disable-next-line no-console
+                console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
+            }
+        }
+        if (stats && stats.isFile()) {
+            if (exports.IS_WINDOWS) {
+                // on Windows, test for valid extension
+                const upperExt = path.extname(filePath).toUpperCase();
+                if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
+                    return filePath;
+                }
+            }
+            else {
+                if (isUnixExecutable(stats)) {
+                    return filePath;
+                }
+            }
+        }
+        // try each extension
+        const originalFilePath = filePath;
+        for (const extension of extensions) {
+            filePath = originalFilePath + extension;
+            stats = undefined;
+            try {
+                stats = yield exports.stat(filePath);
+            }
+            catch (err) {
+                if (err.code !== 'ENOENT') {
+                    // eslint-disable-next-line no-console
+                    console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
+                }
+            }
+            if (stats && stats.isFile()) {
+                if (exports.IS_WINDOWS) {
+                    // preserve the case of the actual file (since an extension was appended)
+                    try {
+                        const directory = path.dirname(filePath);
+                        const upperName = path.basename(filePath).toUpperCase();
+                        for (const actualName of yield exports.readdir(directory)) {
+                            if (upperName === actualName.toUpperCase()) {
+                                filePath = path.join(directory, actualName);
+                                break;
+                            }
+                        }
+                    }
+                    catch (err) {
+                        // eslint-disable-next-line no-console
+                        console.log(`Unexpected error attempting to determine the actual case of the file '${filePath}': ${err}`);
+                    }
+                    return filePath;
+                }
+                else {
+                    if (isUnixExecutable(stats)) {
+                        return filePath;
+                    }
+                }
+            }
+        }
+        return '';
+    });
+}
+exports.tryGetExecutablePath = tryGetExecutablePath;
+function normalizeSeparators(p) {
+    p = p || '';
+    if (exports.IS_WINDOWS) {
+        // convert slashes on Windows
+        p = p.replace(/\//g, '\\');
+        // remove redundant slashes
+        return p.replace(/\\\\+/g, '\\');
+    }
+    // remove redundant slashes
+    return p.replace(/\/\/+/g, '/');
+}
+// on Mac/Linux, test the execute bit
+//     R   W  X  R  W X R W X
+//   256 128 64 32 16 8 4 2 1
+function isUnixExecutable(stats) {
+    return ((stats.mode & 1) > 0 ||
+        ((stats.mode & 8) > 0 && stats.gid === process.getgid()) ||
+        ((stats.mode & 64) > 0 && stats.uid === process.getuid()));
+}
+// Get the path of cmd.exe in windows
+function getCmdPath() {
+    var _a;
+    return (_a = process.env['COMSPEC']) !== null && _a !== void 0 ? _a : `cmd.exe`;
+}
+exports.getCmdPath = getCmdPath;
+//# sourceMappingURL=io-util.js.map
+
+/***/ }),
+
+/***/ 7436:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.findInPath = exports.which = exports.mkdirP = exports.rmRF = exports.mv = exports.cp = void 0;
+const assert_1 = __nccwpck_require__(9491);
+const path = __importStar(__nccwpck_require__(1017));
+const ioUtil = __importStar(__nccwpck_require__(1962));
+/**
+ * Copies a file or folder.
+ * Based off of shelljs - https://github.com/shelljs/shelljs/blob/9237f66c52e5daa40458f94f9565e18e8132f5a6/src/cp.js
+ *
+ * @param     source    source path
+ * @param     dest      destination path
+ * @param     options   optional. See CopyOptions.
+ */
+function cp(source, dest, options = {}) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { force, recursive, copySourceDirectory } = readCopyOptions(options);
+        const destStat = (yield ioUtil.exists(dest)) ? yield ioUtil.stat(dest) : null;
+        // Dest is an existing file, but not forcing
+        if (destStat && destStat.isFile() && !force) {
+            return;
+        }
+        // If dest is an existing directory, should copy inside.
+        const newDest = destStat && destStat.isDirectory() && copySourceDirectory
+            ? path.join(dest, path.basename(source))
+            : dest;
+        if (!(yield ioUtil.exists(source))) {
+            throw new Error(`no such file or directory: ${source}`);
+        }
+        const sourceStat = yield ioUtil.stat(source);
+        if (sourceStat.isDirectory()) {
+            if (!recursive) {
+                throw new Error(`Failed to copy. ${source} is a directory, but tried to copy without recursive flag.`);
+            }
+            else {
+                yield cpDirRecursive(source, newDest, 0, force);
+            }
+        }
+        else {
+            if (path.relative(source, newDest) === '') {
+                // a file cannot be copied to itself
+                throw new Error(`'${newDest}' and '${source}' are the same file`);
+            }
+            yield copyFile(source, newDest, force);
+        }
+    });
+}
+exports.cp = cp;
+/**
+ * Moves a path.
+ *
+ * @param     source    source path
+ * @param     dest      destination path
+ * @param     options   optional. See MoveOptions.
+ */
+function mv(source, dest, options = {}) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (yield ioUtil.exists(dest)) {
+            let destExists = true;
+            if (yield ioUtil.isDirectory(dest)) {
+                // If dest is directory copy src into dest
+                dest = path.join(dest, path.basename(source));
+                destExists = yield ioUtil.exists(dest);
+            }
+            if (destExists) {
+                if (options.force == null || options.force) {
+                    yield rmRF(dest);
+                }
+                else {
+                    throw new Error('Destination already exists');
+                }
+            }
+        }
+        yield mkdirP(path.dirname(dest));
+        yield ioUtil.rename(source, dest);
+    });
+}
+exports.mv = mv;
+/**
+ * Remove a path recursively with force
+ *
+ * @param inputPath path to remove
+ */
+function rmRF(inputPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (ioUtil.IS_WINDOWS) {
+            // Check for invalid characters
+            // https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+            if (/[*"<>|]/.test(inputPath)) {
+                throw new Error('File path must not contain `*`, `"`, `<`, `>` or `|` on Windows');
+            }
+        }
+        try {
+            // note if path does not exist, error is silent
+            yield ioUtil.rm(inputPath, {
+                force: true,
+                maxRetries: 3,
+                recursive: true,
+                retryDelay: 300
+            });
+        }
+        catch (err) {
+            throw new Error(`File was unable to be removed ${err}`);
+        }
+    });
+}
+exports.rmRF = rmRF;
+/**
+ * Make a directory.  Creates the full path with folders in between
+ * Will throw if it fails
+ *
+ * @param   fsPath        path to create
+ * @returns Promise<void>
+ */
+function mkdirP(fsPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        assert_1.ok(fsPath, 'a path argument must be provided');
+        yield ioUtil.mkdir(fsPath, { recursive: true });
+    });
+}
+exports.mkdirP = mkdirP;
+/**
+ * Returns path of a tool had the tool actually been invoked.  Resolves via paths.
+ * If you check and the tool does not exist, it will throw.
+ *
+ * @param     tool              name of the tool
+ * @param     check             whether to check if tool exists
+ * @returns   Promise<string>   path to tool
+ */
+function which(tool, check) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!tool) {
+            throw new Error("parameter 'tool' is required");
+        }
+        // recursive when check=true
+        if (check) {
+            const result = yield which(tool, false);
+            if (!result) {
+                if (ioUtil.IS_WINDOWS) {
+                    throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`);
+                }
+                else {
+                    throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also check the file mode to verify the file is executable.`);
+                }
+            }
+            return result;
+        }
+        const matches = yield findInPath(tool);
+        if (matches && matches.length > 0) {
+            return matches[0];
+        }
+        return '';
+    });
+}
+exports.which = which;
+/**
+ * Returns a list of all occurrences of the given tool on the system path.
+ *
+ * @returns   Promise<string[]>  the paths of the tool
+ */
+function findInPath(tool) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!tool) {
+            throw new Error("parameter 'tool' is required");
+        }
+        // build the list of extensions to try
+        const extensions = [];
+        if (ioUtil.IS_WINDOWS && process.env['PATHEXT']) {
+            for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
+                if (extension) {
+                    extensions.push(extension);
+                }
+            }
+        }
+        // if it's rooted, return it if exists. otherwise return empty.
+        if (ioUtil.isRooted(tool)) {
+            const filePath = yield ioUtil.tryGetExecutablePath(tool, extensions);
+            if (filePath) {
+                return [filePath];
+            }
+            return [];
+        }
+        // if any path separators, return empty
+        if (tool.includes(path.sep)) {
+            return [];
+        }
+        // build the list of directories
+        //
+        // Note, technically "where" checks the current directory on Windows. From a toolkit perspective,
+        // it feels like we should not do this. Checking the current directory seems like more of a use
+        // case of a shell, and the which() function exposed by the toolkit should strive for consistency
+        // across platforms.
+        const directories = [];
+        if (process.env.PATH) {
+            for (const p of process.env.PATH.split(path.delimiter)) {
+                if (p) {
+                    directories.push(p);
+                }
+            }
+        }
+        // find all matches
+        const matches = [];
+        for (const directory of directories) {
+            const filePath = yield ioUtil.tryGetExecutablePath(path.join(directory, tool), extensions);
+            if (filePath) {
+                matches.push(filePath);
+            }
+        }
+        return matches;
+    });
+}
+exports.findInPath = findInPath;
+function readCopyOptions(options) {
+    const force = options.force == null ? true : options.force;
+    const recursive = Boolean(options.recursive);
+    const copySourceDirectory = options.copySourceDirectory == null
+        ? true
+        : Boolean(options.copySourceDirectory);
+    return { force, recursive, copySourceDirectory };
+}
+function cpDirRecursive(sourceDir, destDir, currentDepth, force) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Ensure there is not a run away recursive copy
+        if (currentDepth >= 255)
+            return;
+        currentDepth++;
+        yield mkdirP(destDir);
+        const files = yield ioUtil.readdir(sourceDir);
+        for (const fileName of files) {
+            const srcFile = `${sourceDir}/${fileName}`;
+            const destFile = `${destDir}/${fileName}`;
+            const srcFileStat = yield ioUtil.lstat(srcFile);
+            if (srcFileStat.isDirectory()) {
+                // Recurse
+                yield cpDirRecursive(srcFile, destFile, currentDepth, force);
+            }
+            else {
+                yield copyFile(srcFile, destFile, force);
+            }
+        }
+        // Change the mode for the newly created directory
+        yield ioUtil.chmod(destDir, (yield ioUtil.stat(sourceDir)).mode);
+    });
+}
+// Buffered file copy
+function copyFile(srcFile, destFile, force) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((yield ioUtil.lstat(srcFile)).isSymbolicLink()) {
+            // unlink/re-link it
+            try {
+                yield ioUtil.lstat(destFile);
+                yield ioUtil.unlink(destFile);
+            }
+            catch (e) {
+                // Try to override file permission
+                if (e.code === 'EPERM') {
+                    yield ioUtil.chmod(destFile, '0666');
+                    yield ioUtil.unlink(destFile);
+                }
+                // other errors = it doesn't exist, no work to do
+            }
+            // Copy over symlink
+            const symlinkFull = yield ioUtil.readlink(srcFile);
+            yield ioUtil.symlink(symlinkFull, destFile, ioUtil.IS_WINDOWS ? 'junction' : null);
+        }
+        else if (!(yield ioUtil.exists(destFile)) || force) {
+            yield ioUtil.copyFile(srcFile, destFile);
+        }
+    });
+}
+//# sourceMappingURL=io.js.map
 
 /***/ }),
 
@@ -3699,9 +5051,10 @@ exports.AbortError = AbortError;
 exports.__esModule = true;
 var EvaluationDetails_1 = __nccwpck_require__(6612);
 var ConfigEvaluation = /** @class */ (function () {
-    function ConfigEvaluation(value, rule_id, group_name, secondary_exposures, json_value, explicit_parameters, config_delegate, unsupported) {
+    function ConfigEvaluation(value, rule_id, group_name, id_type, secondary_exposures, json_value, explicit_parameters, config_delegate, configVersion, unsupported, forward_all_exposures, sample_rate, seen_analytical_gates) {
         if (rule_id === void 0) { rule_id = ''; }
         if (group_name === void 0) { group_name = null; }
+        if (id_type === void 0) { id_type = null; }
         if (secondary_exposures === void 0) { secondary_exposures = []; }
         if (json_value === void 0) { json_value = {}; }
         if (explicit_parameters === void 0) { explicit_parameters = null; }
@@ -3723,6 +5076,11 @@ var ConfigEvaluation = /** @class */ (function () {
         this.explicit_parameters = explicit_parameters;
         this.is_experiment_group = false;
         this.group_name = group_name;
+        this.id_type = id_type;
+        this.configVersion = configVersion;
+        this.forward_all_exposures = forward_all_exposures !== null && forward_all_exposures !== void 0 ? forward_all_exposures : false;
+        this.sample_rate = sample_rate;
+        this.seen_analytical_gates = seen_analytical_gates !== null && seen_analytical_gates !== void 0 ? seen_analytical_gates : false;
     }
     ConfigEvaluation.prototype.withEvaluationDetails = function (evaulationDetails) {
         this.evaluation_details = evaulationDetails;
@@ -3732,8 +5090,31 @@ var ConfigEvaluation = /** @class */ (function () {
         if (isExperimentGroup === void 0) { isExperimentGroup = false; }
         this.is_experiment_group = isExperimentGroup;
     };
-    ConfigEvaluation.unsupported = function (configSyncTime, initialUpdateTime) {
-        return new ConfigEvaluation(false, '', null, [], {}, undefined, undefined, true).withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.unsupported(configSyncTime, initialUpdateTime));
+    ConfigEvaluation.unsupported = function (configSyncTime, initialUpdateTime, version, forward_all_exposures, sample_rate) {
+        return new ConfigEvaluation(false, '', null, null, [], {}, undefined, undefined, version, true, forward_all_exposures, sample_rate).withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.unsupported(configSyncTime, initialUpdateTime));
+    };
+    ConfigEvaluation.prototype.toStickyValues = function () {
+        var _a, _b;
+        return {
+            value: this.value,
+            json_value: this.json_value,
+            rule_id: this.rule_id,
+            group_name: this.group_name,
+            secondary_exposures: this.secondary_exposures,
+            undelegated_secondary_exposures: this.undelegated_secondary_exposures,
+            config_delegate: this.config_delegate,
+            explicit_parameters: this.explicit_parameters,
+            time: (_b = (_a = this.evaluation_details) === null || _a === void 0 ? void 0 : _a.configSyncTime) !== null && _b !== void 0 ? _b : Date.now(),
+            configVersion: this.configVersion
+        };
+    };
+    ConfigEvaluation.fromStickyValues = function (stickyValues, initialUpdateTime) {
+        var evaluation = new ConfigEvaluation(stickyValues.value, stickyValues.rule_id, stickyValues.group_name, null, stickyValues.secondary_exposures, stickyValues.json_value, stickyValues.explicit_parameters, stickyValues.config_delegate, stickyValues.configVersion);
+        evaluation.evaluation_details = EvaluationDetails_1.EvaluationDetails.persisted(stickyValues.time, initialUpdateTime);
+        evaluation.undelegated_secondary_exposures =
+            stickyValues.undelegated_secondary_exposures;
+        evaluation.is_experiment_group = true;
+        return evaluation;
     };
     return ConfigEvaluation;
 }());
@@ -3760,6 +5141,9 @@ var ConfigSpec = /** @class */ (function () {
         this.rules = this.parseRules(specJSON.rules);
         this.entity = specJSON.entity;
         this.explicitParameters = specJSON.explicitParameters;
+        if (specJSON.version != null) {
+            this.version = specJSON.version;
+        }
         if (specJSON.isActive !== null) {
             this.isActive = specJSON.isActive === true;
         }
@@ -3769,6 +5153,9 @@ var ConfigSpec = /** @class */ (function () {
                 : false;
         if (specJSON.targetAppIDs != null) {
             this.targetAppIDs = specJSON.targetAppIDs;
+        }
+        if (specJSON.forwardAllExposures !== null) {
+            this.forwardAllExposures = specJSON.forwardAllExposures;
         }
     }
     ConfigSpec.prototype.parseRules = function (rulesJSON) {
@@ -3798,6 +5185,9 @@ var ConfigRule = /** @class */ (function () {
         if (ruleJSON.isExperimentGroup !== null) {
             this.isExperimentGroup = ruleJSON.isExperimentGroup;
         }
+        if (ruleJSON.samplingRate !== null) {
+            this.sampleRate = ruleJSON.samplingRate;
+        }
     }
     ConfigRule.prototype.parseConditions = function (conditionsJSON) {
         var json = conditionsJSON;
@@ -3807,6 +5197,9 @@ var ConfigRule = /** @class */ (function () {
             conditions.push(condition);
         });
         return conditions;
+    };
+    ConfigRule.prototype.isTargetingRule = function () {
+        return this.id === 'inlineTargetingRules' || this.id === 'targetingGate';
     };
     return ConfigRule;
 }());
@@ -3821,6 +5214,26 @@ var ConfigCondition = /** @class */ (function () {
         this.additionalValues =
             (_a = conditionJSON.additionalValues) !== null && _a !== void 0 ? _a : {};
         this.idType = conditionJSON.idType;
+        if (this.operator === 'any' || this.operator === 'none') {
+            if (Array.isArray(this.targetValue)) {
+                this.targetValueSet = new Set();
+                var values = this.targetValue;
+                for (var i = 0; i < values.length; i++) {
+                    this.targetValueSet.add(String(values[i]));
+                    this.targetValueSet.add(String(values[i]).toLowerCase());
+                }
+            }
+        }
+        if (this.operator === 'any_case_sensitive' ||
+            this.operator === 'none_case_sensitive') {
+            if (Array.isArray(this.targetValue)) {
+                this.targetValueSet = new Set();
+                var values = this.targetValue;
+                for (var i = 0; i < values.length; i++) {
+                    this.targetValueSet.add(String(values[i]));
+                }
+            }
+        }
     }
     return ConfigCondition;
 }());
@@ -4053,12 +5466,14 @@ var core_1 = __nccwpck_require__(8122);
  * Returns the data for a DynamicConfig in the statsig console via typed get functions
  */
 var DynamicConfig = /** @class */ (function () {
-    function DynamicConfig(configName, value, ruleID, groupName, secondaryExposures, onDefaultValueFallback) {
+    function DynamicConfig(configName, value, ruleID, groupName, idType, secondaryExposures, onDefaultValueFallback, evaluationDetails) {
         if (value === void 0) { value = {}; }
         if (ruleID === void 0) { ruleID = ''; }
         if (groupName === void 0) { groupName = null; }
+        if (idType === void 0) { idType = null; }
         if (secondaryExposures === void 0) { secondaryExposures = []; }
         if (onDefaultValueFallback === void 0) { onDefaultValueFallback = null; }
+        if (evaluationDetails === void 0) { evaluationDetails = null; }
         var _a;
         this._onDefaultValueFallback = null;
         if (typeof configName !== 'string' || configName.length === 0) {
@@ -4071,10 +5486,12 @@ var DynamicConfig = /** @class */ (function () {
         this.value = (_a = (0, core_1.clone)(value)) !== null && _a !== void 0 ? _a : {};
         this._ruleID = ruleID;
         this._groupName = groupName;
+        this._idType = idType;
         this._secondaryExposures = Array.isArray(secondaryExposures)
             ? secondaryExposures
             : [];
         this._onDefaultValueFallback = onDefaultValueFallback;
+        this._evaluationDetails = evaluationDetails;
     }
     DynamicConfig.prototype.get = function (key, defaultValue, typeGuard) {
         var _a, _b;
@@ -4117,6 +5534,12 @@ var DynamicConfig = /** @class */ (function () {
     DynamicConfig.prototype.getGroupName = function () {
         return this._groupName;
     };
+    DynamicConfig.prototype.getIDType = function () {
+        return this._idType;
+    };
+    DynamicConfig.prototype.getEvaluationDetails = function () {
+        return this._evaluationDetails;
+    };
     DynamicConfig.prototype._getSecondaryExposures = function () {
         return this._secondaryExposures;
     };
@@ -4156,58 +5579,56 @@ var safeFetch_1 = __importDefault(__nccwpck_require__(7817));
 exports.ExceptionEndpoint = 'https://statsigapi.net/v1/sdk_exception';
 var ErrorBoundary = /** @class */ (function () {
     function ErrorBoundary(sdkKey, optionsLoggingCopy, sessionID) {
+        var _a;
         this.statsigMetadata = (0, core_1.getStatsigMetadata)();
         this.seen = new Set();
         this.sdkKey = sdkKey;
         this.optionsLoggingCopy = optionsLoggingCopy;
         this.statsigMetadata['sessionID'] = sessionID;
+        this.networkOverrideFunc = (_a = optionsLoggingCopy.networkOverrideFunc) !== null && _a !== void 0 ? _a : null;
     }
-    ErrorBoundary.prototype.swallow = function (task, extra) {
-        if (extra === void 0) { extra = {}; }
+    ErrorBoundary.prototype.swallow = function (task, ctx) {
         this.capture(task, function () {
             return undefined;
-        }, extra);
+        }, ctx);
     };
-    ErrorBoundary.prototype.capture = function (task, recover, extra) {
+    ErrorBoundary.prototype.capture = function (task, recover, ctx) {
         var _this = this;
-        if (extra === void 0) { extra = {}; }
         var markerID = null;
         try {
-            markerID = this.beginMarker(extra.tag, extra.configName);
-            var result = task();
+            markerID = this.beginMarker(ctx.caller, ctx.configName);
+            var result = task(ctx);
             if (result instanceof Promise) {
                 return result["catch"](function (e) {
-                    return _this.onCaught(e, recover, extra);
+                    return _this.onCaught(e, recover, ctx);
                 });
             }
-            this.endMarker(extra.tag, true, markerID, extra.configName);
+            this.endMarker(ctx.caller, true, markerID, ctx.configName);
             return result;
         }
         catch (error) {
-            this.endMarker(extra.tag, false, markerID, extra.configName);
-            return this.onCaught(error, recover);
+            this.endMarker(ctx.caller, false, markerID, ctx.configName);
+            return this.onCaught(error, recover, ctx);
         }
     };
     ErrorBoundary.prototype.setup = function (sdkKey) {
         this.sdkKey = sdkKey;
     };
-    ErrorBoundary.prototype.onCaught = function (error, recover, extra) {
-        if (extra === void 0) { extra = {}; }
+    ErrorBoundary.prototype.onCaught = function (error, recover, ctx) {
         if (error instanceof Errors_1.StatsigUninitializedError ||
             error instanceof Errors_1.StatsigInvalidArgumentError ||
             error instanceof Errors_1.StatsigTooManyRequestsError) {
             throw error; // Don't catch these
         }
         if (error instanceof Errors_1.StatsigLocalModeNetworkError) {
-            return recover(error);
+            return recover(ctx, error);
         }
         OutputLogger_1["default"].error('[Statsig] An unexpected exception occurred.', error);
-        this.logError(error);
-        return recover(error);
+        this.logError(error, ctx);
+        return recover(ctx, error);
     };
-    ErrorBoundary.prototype.logError = function (error, key, extra) {
+    ErrorBoundary.prototype.logError = function (error, ctx) {
         var _a, _b;
-        if (extra === void 0) { extra = {}; }
         try {
             if (!this.sdkKey || this.optionsLoggingCopy.disableAllLogging) {
                 return;
@@ -4215,15 +5636,15 @@ var ErrorBoundary = /** @class */ (function () {
             var unwrapped = error !== null && error !== void 0 ? error : Error('[Statsig] Error was empty');
             var isError = unwrapped instanceof Error;
             var name_1 = isError && unwrapped.name ? unwrapped.name : 'No Name';
-            var hasSeen = this.seen.has(name_1) || (key != null && this.seen.has(key));
-            if (((_a = extra.nonLoggignArgs) === null || _a === void 0 ? void 0 : _a.bypassDedupe) !== true && hasSeen) {
+            var hasSeen = this.seen.has(name_1);
+            if (ctx.bypassDedupe !== true && hasSeen) {
                 return;
             }
             this.seen.add(name_1);
             var info = isError ? unwrapped.stack : this.getDescription(unwrapped);
-            delete extra.nonLoggignArgs;
-            var body = JSON.stringify(__assign({ exception: name_1, info: info, statsigMetadata: (_b = this.statsigMetadata) !== null && _b !== void 0 ? _b : {}, statsigOptions: this.optionsLoggingCopy, tag: extra.tag }, extra));
-            (0, safeFetch_1["default"])(exports.ExceptionEndpoint, {
+            var body = JSON.stringify(__assign({ exception: name_1, info: info, statsigMetadata: (_a = this.statsigMetadata) !== null && _a !== void 0 ? _a : {}, statsigOptions: this.optionsLoggingCopy }, ctx.getContextForLogging()));
+            var fetcher = (_b = this.networkOverrideFunc) !== null && _b !== void 0 ? _b : safeFetch_1["default"];
+            fetcher(exports.ExceptionEndpoint, {
                 method: 'POST',
                 headers: {
                     'STATSIG-API-KEY': this.sdkKey,
@@ -4439,6 +5860,9 @@ var EvaluationDetails = /** @class */ (function () {
     EvaluationDetails.unsupported = function (configSyncTime, initialUpdateTime) {
         return new EvaluationDetails(configSyncTime, initialUpdateTime, 'Unsupported');
     };
+    EvaluationDetails.persisted = function (configSyncTime, initialUpdateTime) {
+        return new EvaluationDetails(configSyncTime, initialUpdateTime, 'Persisted');
+    };
     EvaluationDetails.make = function (configSyncTime, initialUpdateTime, reason) {
         return new EvaluationDetails(configSyncTime, initialUpdateTime, reason);
     };
@@ -4518,27 +5942,28 @@ var ip3country_1 = __importDefault(__nccwpck_require__(4421));
 var ConfigEvaluation_1 = __importDefault(__nccwpck_require__(9500));
 var EvaluationDetails_1 = __nccwpck_require__(6612);
 var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
-var SpecStore_1 = __importDefault(__nccwpck_require__(3277));
-var StatsigUser_1 = __nccwpck_require__(2157);
+var UserPersistentStorageHandler_1 = __importDefault(__nccwpck_require__(8830));
 var core_1 = __nccwpck_require__(8122);
+var EvaluatorUtils_1 = __nccwpck_require__(1534);
 var Hashing_1 = __nccwpck_require__(6813);
-var parseUserAgent_1 = __importDefault(__nccwpck_require__(3705));
+var StatsigContext_1 = __nccwpck_require__(288);
 var CONDITION_SEGMENT_COUNT = 10 * 1000;
 var USER_BUCKET_COUNT = 1000;
 var Evaluator = /** @class */ (function () {
-    function Evaluator(fetcher, options) {
+    function Evaluator(options, store) {
         this.initialized = false;
-        this.store = new SpecStore_1["default"](fetcher, options);
+        this.store = store;
         this.initStrategyForIP3Country = options.initStrategyForIP3Country;
         this.gateOverrides = {};
         this.configOverrides = {};
         this.layerOverrides = {};
+        this.persistentStore = new UserPersistentStorageHandler_1["default"](options.userPersistentStorage);
     }
-    Evaluator.prototype.init = function () {
+    Evaluator.prototype.init = function (ctx) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.store.init()];
+                    case 0: return [4 /*yield*/, this.store.init(ctx)];
                     case 1:
                         _a.sent();
                         try {
@@ -4560,28 +5985,28 @@ var Evaluator = /** @class */ (function () {
             });
         });
     };
-    Evaluator.prototype.overrideGate = function (gateName, value, userID) {
+    Evaluator.prototype.overrideGate = function (gateName, value, userOrCustomID) {
         var _a;
-        if (userID === void 0) { userID = null; }
+        if (userOrCustomID === void 0) { userOrCustomID = null; }
         var overrides = (_a = this.gateOverrides[gateName]) !== null && _a !== void 0 ? _a : {};
-        overrides[userID == null ? '' : userID] = value;
+        overrides[userOrCustomID == null ? '' : userOrCustomID] = value;
         this.gateOverrides[gateName] = overrides;
     };
-    Evaluator.prototype.overrideConfig = function (configName, value, userID) {
+    Evaluator.prototype.overrideConfig = function (configName, value, userOrCustomID) {
         var _a;
-        if (userID === void 0) { userID = ''; }
+        if (userOrCustomID === void 0) { userOrCustomID = ''; }
         var overrides = (_a = this.configOverrides[configName]) !== null && _a !== void 0 ? _a : {};
-        overrides[userID == null ? '' : userID] = value;
+        overrides[userOrCustomID == null ? '' : userOrCustomID] = value;
         this.configOverrides[configName] = overrides;
     };
-    Evaluator.prototype.overrideLayer = function (layerName, value, userID) {
+    Evaluator.prototype.overrideLayer = function (layerName, value, userOrCustomID) {
         var _a;
-        if (userID === void 0) { userID = ''; }
+        if (userOrCustomID === void 0) { userOrCustomID = ''; }
         var overrides = (_a = this.layerOverrides[layerName]) !== null && _a !== void 0 ? _a : {};
-        overrides[userID == null ? '' : userID] = value;
+        overrides[userOrCustomID == null ? '' : userOrCustomID] = value;
         this.layerOverrides[layerName] = overrides;
     };
-    Evaluator.prototype.checkGate = function (user, gateName) {
+    Evaluator.prototype.checkGate = function (user, gateName, ctx) {
         var override = this.lookupGateOverride(user, gateName);
         if (override) {
             return override.withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.make(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), 'LocalOverride'));
@@ -4594,9 +6019,21 @@ var Evaluator = /** @class */ (function () {
             OutputLogger_1["default"].debug("statsigSDK> Evaluating a non-existent gate ".concat(gateName));
             return this.getUnrecognizedEvaluation();
         }
-        return this._evalSpec(user, gate);
+        var samplingRate;
+        var seenAnalyticalGates = false;
+        if (ctx instanceof StatsigContext_1.EvaluationContext) {
+            samplingRate = ctx.samplingRate;
+            seenAnalyticalGates = ctx.seenAnalyticalGates;
+        }
+        return this._evalSpec(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+            user: user,
+            spec: gate,
+            samplingRate: samplingRate,
+            seenAnalyticalGates: seenAnalyticalGates
+        }));
     };
-    Evaluator.prototype.getConfig = function (user, configName) {
+    Evaluator.prototype.getConfig = function (user, configName, ctx, skipStickyEvaluation) {
+        if (skipStickyEvaluation === void 0) { skipStickyEvaluation = false; }
         var override = this.lookupConfigOverride(user, configName);
         if (override) {
             return override.withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.make(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), 'LocalOverride'));
@@ -4609,9 +6046,12 @@ var Evaluator = /** @class */ (function () {
             OutputLogger_1["default"].debug("statsigSDK> Evaluating a non-existent config ".concat(configName));
             return this.getUnrecognizedEvaluation();
         }
-        return this._evalSpec(user, config);
+        return this._evalConfig(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+            user: user,
+            spec: config
+        }), skipStickyEvaluation);
     };
-    Evaluator.prototype.getLayer = function (user, layerName) {
+    Evaluator.prototype.getLayer = function (user, layerName, ctx) {
         var override = this.lookupLayerOverride(user, layerName);
         if (override) {
             return override.withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.make(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), 'LocalOverride'));
@@ -4624,25 +6064,31 @@ var Evaluator = /** @class */ (function () {
             OutputLogger_1["default"].debug("statsigSDK> Evaluating a non-existent layer ".concat(layerName));
             return this.getUnrecognizedEvaluation();
         }
-        return this._evalSpec(user, layer);
+        return this._evalLayer(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), { user: user, spec: layer }));
     };
-    Evaluator.prototype.getClientInitializeResponse = function (user, clientSDKKey, options) {
+    Evaluator.prototype.getUserPersistedValues = function (user, idType) {
+        var _a;
+        return (_a = this.persistentStore.load(user, idType)) !== null && _a !== void 0 ? _a : {};
+    };
+    Evaluator.prototype.getClientInitializeResponse = function (inputUser, ctx, clientSDKKey, options) {
         var _this = this;
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e;
         if (!this.store.isServingChecks()) {
             return null;
         }
+        var user = (0, core_1.cloneEnforce)(inputUser);
         var clientKeyToAppMap = this.store.getClientKeyToAppMap();
+        var hashAlgo = (_a = options === null || options === void 0 ? void 0 : options.hash) !== null && _a !== void 0 ? _a : 'djb2';
         var targetAppID = null;
         var targetEntities = null;
         if (clientSDKKey != null) {
             var hashedClientKeyToAppMap = this.store.getHashedClientKeyToAppMap();
             var hashedSDKKeysToEntities = this.store.getHashedSDKKeysToEntities();
-            targetAppID = (_a = hashedClientKeyToAppMap[(0, Hashing_1.djb2Hash)(clientSDKKey)]) !== null && _a !== void 0 ? _a : null;
-            targetEntities = (_b = hashedSDKKeysToEntities[(0, Hashing_1.djb2Hash)(clientSDKKey)]) !== null && _b !== void 0 ? _b : null;
+            targetAppID = (_b = hashedClientKeyToAppMap[(0, Hashing_1.djb2Hash)(clientSDKKey)]) !== null && _b !== void 0 ? _b : null;
+            targetEntities = (_c = hashedSDKKeysToEntities[(0, Hashing_1.djb2Hash)(clientSDKKey)]) !== null && _c !== void 0 ? _c : null;
         }
         if (clientSDKKey != null && targetAppID == null) {
-            targetAppID = (_c = clientKeyToAppMap[clientSDKKey]) !== null && _c !== void 0 ? _c : null;
+            targetAppID = (_d = clientKeyToAppMap[clientSDKKey]) !== null && _d !== void 0 ? _d : null;
         }
         var filterTargetAppID = function (spec) {
             var _a;
@@ -4675,15 +6121,18 @@ var Evaluator = /** @class */ (function () {
         })
             .map(function (_a) {
             var gate = _a[0], spec = _a[1];
-            var localOverride = (options === null || options === void 0 ? void 0 : options.includeLocalOverrides)
-                ? _this.lookupGateOverride(user, spec.name)
-                : null;
-            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(user, spec);
+            var localOverride = _this.gateOverrideForClientInitializeResponse(user, spec.name, options);
+            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+                user: user,
+                spec: spec,
+                targetAppID: targetAppID !== null && targetAppID !== void 0 ? targetAppID : undefined
+            }));
             return {
-                name: (0, Hashing_1.hashString)(gate, options === null || options === void 0 ? void 0 : options.hash),
+                name: (0, Hashing_1.hashString)(gate, hashAlgo),
                 value: res.unsupported ? false : res.value,
                 rule_id: res.rule_id,
-                secondary_exposures: _this._cleanExposures(res.secondary_exposures)
+                secondary_exposures: _this.hashSecondaryExposure(res.secondary_exposures, hashAlgo),
+                id_type: spec.idType
             };
         });
         var configs = Object.entries(this.store.getAllConfigs())
@@ -4692,19 +6141,25 @@ var Evaluator = /** @class */ (function () {
             return filterConfig(spec);
         })
             .map(function (_a) {
-            var _b;
+            var _b, _c;
             var spec = _a[1];
-            var localOverride = (options === null || options === void 0 ? void 0 : options.includeLocalOverrides)
-                ? _this.lookupConfigOverride(user, spec.name)
-                : null;
-            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(user, spec);
-            var format = _this._specToInitializeResponse(spec, res, options === null || options === void 0 ? void 0 : options.hash);
+            var localOverride = _this.configOverrideForClientInitializeResponse(user, spec, options);
+            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+                user: user,
+                spec: spec,
+                targetAppID: targetAppID !== null && targetAppID !== void 0 ? targetAppID : undefined
+            }));
+            var format = _this._specToInitializeResponse(spec, res, hashAlgo);
+            format.id_type = (_b = spec.idType) !== null && _b !== void 0 ? _b : null;
+            if (spec.entity === 'dynamic_config') {
+                format.passed = res.value === true;
+            }
             if (spec.entity !== 'dynamic_config' && spec.entity !== 'autotune') {
-                format.is_user_in_experiment = _this._isUserAllocatedToExperiment(user, spec);
+                format.is_user_in_experiment = _this._isUserAllocatedToExperiment(user, spec, ctx);
                 format.is_experiment_active = _this._isExperimentActive(spec);
                 if (spec.hasSharedParams) {
                     format.is_in_layer = true;
-                    format.explicit_parameters = (_b = spec.explicitParameters) !== null && _b !== void 0 ? _b : [];
+                    format.explicit_parameters = (_c = spec.explicitParameters) !== null && _c !== void 0 ? _c : [];
                     var layerValue = {};
                     var layerName = _this.store.getExperimentLayer(spec.name);
                     if (layerName != null) {
@@ -4726,20 +6181,36 @@ var Evaluator = /** @class */ (function () {
             .map(function (_a) {
             var _b, _c, _d;
             var spec = _a[1];
-            var localOverride = (options === null || options === void 0 ? void 0 : options.includeLocalOverrides)
-                ? _this.lookupLayerOverride(user, spec.name)
-                : null;
-            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(user, spec);
-            var format = _this._specToInitializeResponse(spec, res, options === null || options === void 0 ? void 0 : options.hash);
+            var localOverride = _this.layerOverrideForClientInitializeResponse(user, spec, options);
+            var res = localOverride !== null && localOverride !== void 0 ? localOverride : _this._eval(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+                user: user,
+                spec: spec,
+                targetAppID: targetAppID !== null && targetAppID !== void 0 ? targetAppID : undefined
+            }));
+            var format = _this._specToInitializeResponse(spec, res, hashAlgo);
             format.explicit_parameters = (_b = spec.explicitParameters) !== null && _b !== void 0 ? _b : [];
             if (res.config_delegate != null && res.config_delegate !== '') {
                 var delegateSpec = _this.store.getConfig(res.config_delegate);
-                format.allocated_experiment_name = (0, Hashing_1.hashString)(res.config_delegate, options === null || options === void 0 ? void 0 : options.hash);
+                if (delegateSpec != null) {
+                    var delegateRes = _this._eval(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+                        user: user,
+                        spec: delegateSpec,
+                        targetAppID: targetAppID !== null && targetAppID !== void 0 ? targetAppID : undefined
+                    }));
+                    if (delegateRes.group_name != null &&
+                        delegateRes.group_name !== '') {
+                        format.group_name = delegateRes.group_name;
+                    }
+                }
+                format.allocated_experiment_name = (0, Hashing_1.hashString)(res.config_delegate, hashAlgo);
                 format.is_experiment_active = _this._isExperimentActive(delegateSpec);
-                format.is_user_in_experiment = _this._isUserAllocatedToExperiment(user, delegateSpec);
+                format.is_user_in_experiment = _this._isUserAllocatedToExperiment(user, delegateSpec, ctx);
                 format.explicit_parameters = (_c = delegateSpec === null || delegateSpec === void 0 ? void 0 : delegateSpec.explicitParameters) !== null && _c !== void 0 ? _c : [];
             }
-            format.undelegated_secondary_exposures = _this._cleanExposures((_d = res.undelegated_secondary_exposures) !== null && _d !== void 0 ? _d : []);
+            // By this point, undelegated secondary exposure is hashed already because it reuse same
+            // array object as secondary exposures
+            format.undelegated_secondary_exposures =
+                (_d = res.undelegated_secondary_exposures) !== null && _d !== void 0 ? _d : [];
             return format;
         });
         var evaluatedKeys = {};
@@ -4749,7 +6220,9 @@ var Evaluator = /** @class */ (function () {
         if (user.customIDs && Object.keys(user.customIDs).length > 0) {
             evaluatedKeys['customIDs'] = user.customIDs;
         }
-        return {
+        delete user.privateAttributes;
+        this.deleteUndefinedFields(user);
+        var result = {
             feature_gates: Object.assign.apply(Object, __spreadArray([{}], gates.map(function (item) {
                 var _a;
                 return (_a = {}, _a[item.name] = item, _a);
@@ -4765,11 +6238,72 @@ var Evaluator = /** @class */ (function () {
             sdkParams: {},
             has_updates: true,
             generator: 'statsig-node-sdk',
-            time: 0,
+            sdkInfo: {
+                sdkType: (0, core_1.getSDKType)(),
+                sdkVersion: (0, core_1.getSDKVersion)(),
+                sessionId: (0, core_1.getStatsigMetadata)().sessionID
+            },
+            time: this.store.getLastUpdateTime(),
             evaluated_keys: evaluatedKeys,
-            hash_used: (_d = options === null || options === void 0 ? void 0 : options.hash) !== null && _d !== void 0 ? _d : 'sha256',
-            user_hash: (0, StatsigUser_1.getUserHashWithoutStableID)(user)
+            hash_used: hashAlgo,
+            user: user
         };
+        var sessionReplayInfo = this.store.getSessionReplayInfo();
+        if (sessionReplayInfo == null) {
+            return result;
+        }
+        result.recording_blocked = sessionReplayInfo.recording_blocked;
+        result.can_record_session =
+            ((_e = sessionReplayInfo.recording_blocked) !== null && _e !== void 0 ? _e : false) === false;
+        var random = Math.random();
+        if (sessionReplayInfo.sampling_rate != null) {
+            result.session_recording_rate = sessionReplayInfo.sampling_rate;
+            if (random > sessionReplayInfo.sampling_rate) {
+                result.can_record_session = false;
+            }
+        }
+        var targetingGate = sessionReplayInfo.targeting_gate;
+        if (targetingGate != null) {
+            var res = result.feature_gates[(0, Hashing_1.hashString)(targetingGate, hashAlgo)];
+            var passesTargeting = (res === null || res === void 0 ? void 0 : res.value) === true;
+            if (!passesTargeting) {
+                result.can_record_session = false;
+            }
+            result.passes_session_recording_targeting = passesTargeting;
+        }
+        var eventTriggers = sessionReplayInfo.session_recording_event_triggers;
+        if (eventTriggers != null) {
+            result.session_recording_event_triggers = {};
+            for (var eventName in eventTriggers) {
+                var trigger = eventTriggers[eventName];
+                result.session_recording_event_triggers[eventName] = {};
+                if (trigger.values != null) {
+                    result.session_recording_event_triggers[eventName].values =
+                        trigger.values;
+                }
+                if (trigger.sampling_rate != null) {
+                    var passesSampling = trigger.sampling_rate == null || random <= trigger.sampling_rate;
+                    result.session_recording_event_triggers[eventName].passes_sampling =
+                        passesSampling;
+                }
+            }
+        }
+        var exposureTriggers = sessionReplayInfo.session_recording_exposure_triggers;
+        if (exposureTriggers != null) {
+            result.session_recording_exposure_triggers = {};
+            for (var exposureName in exposureTriggers) {
+                var trigger = exposureTriggers[exposureName];
+                result.session_recording_exposure_triggers[(0, Hashing_1.hashString)(exposureName, hashAlgo)] = {};
+                if (trigger.values != null) {
+                    result.session_recording_exposure_triggers[(0, Hashing_1.hashString)(exposureName, hashAlgo)].values = trigger.values;
+                }
+                if (trigger.sampling_rate != null) {
+                    var passesSampling = trigger.sampling_rate == null || random <= trigger.sampling_rate;
+                    result.session_recording_exposure_triggers[(0, Hashing_1.hashString)(exposureName, hashAlgo)].passes_sampling = passesSampling;
+                }
+            }
+        }
+        return result;
     };
     Evaluator.prototype.clearAllGateOverrides = function () {
         this.gateOverrides = {};
@@ -4814,6 +6348,9 @@ var Evaluator = /** @class */ (function () {
             return name;
         });
     };
+    Evaluator.prototype.getExperimentLayer = function (experimentName) {
+        return this.store.getExperimentLayer(experimentName);
+    };
     Evaluator.prototype.getConfigsList = function (entityType) {
         var configs = this.store.getAllConfigs();
         return Object.entries(configs)
@@ -4833,6 +6370,63 @@ var Evaluator = /** @class */ (function () {
             return name;
         });
     };
+    Evaluator.prototype.deleteUndefinedFields = function (obj) {
+        for (var key in obj) {
+            if (obj[key] === undefined) {
+                delete obj[key];
+            }
+            else if (typeof obj[key] === 'object') {
+                this.deleteUndefinedFields(obj[key]);
+            }
+        }
+    };
+    Evaluator.prototype.gateOverrideForClientInitializeResponse = function (user, gateName, options) {
+        var _a, _b;
+        var optionsOverride = (_b = (_a = options === null || options === void 0 ? void 0 : options.overrides) === null || _a === void 0 ? void 0 : _a.featureGates) === null || _b === void 0 ? void 0 : _b[gateName];
+        if (optionsOverride !== undefined) {
+            return new ConfigEvaluation_1["default"](optionsOverride, 'override');
+        }
+        if (options === null || options === void 0 ? void 0 : options.includeLocalOverrides) {
+            return this.lookupGateOverride(user, gateName);
+        }
+        return null;
+    };
+    Evaluator.prototype.configOverrideForClientInitializeResponse = function (user, spec, options) {
+        var _a, _b;
+        var optionsOverride = this.configBasedOverrideForClientInitializeResponse(spec, (_b = (_a = options === null || options === void 0 ? void 0 : options.overrides) === null || _a === void 0 ? void 0 : _a.dynamicConfigs) === null || _b === void 0 ? void 0 : _b[spec.name]);
+        if (optionsOverride) {
+            return optionsOverride;
+        }
+        if (options === null || options === void 0 ? void 0 : options.includeLocalOverrides) {
+            return this.lookupConfigOverride(user, spec.name);
+        }
+        return null;
+    };
+    Evaluator.prototype.layerOverrideForClientInitializeResponse = function (user, spec, options) {
+        var _a, _b;
+        var optionsOverride = this.configBasedOverrideForClientInitializeResponse(spec, (_b = (_a = options === null || options === void 0 ? void 0 : options.overrides) === null || _a === void 0 ? void 0 : _a.layers) === null || _b === void 0 ? void 0 : _b[spec.name]);
+        if (optionsOverride) {
+            return optionsOverride;
+        }
+        if (options === null || options === void 0 ? void 0 : options.includeLocalOverrides) {
+            return this.lookupLayerOverride(user, spec.name);
+        }
+        return null;
+    };
+    Evaluator.prototype.configBasedOverrideForClientInitializeResponse = function (spec, optionsOverride) {
+        var _a, _b, _c;
+        if (!optionsOverride) {
+            return null;
+        }
+        var overrideRule = optionsOverride.groupName
+            ? spec.rules.find(function (rule) { return rule.groupName === optionsOverride.groupName; })
+            : undefined;
+        var value = (_a = optionsOverride.value) !== null && _a !== void 0 ? _a : overrideRule === null || overrideRule === void 0 ? void 0 : overrideRule.returnValue;
+        if (!value || typeof value !== 'object') {
+            return null;
+        }
+        return new ConfigEvaluation_1["default"](true, 'override', (_b = optionsOverride.groupName) !== null && _b !== void 0 ? _b : null, (_c = overrideRule === null || overrideRule === void 0 ? void 0 : overrideRule.idType) !== null && _c !== void 0 ? _c : 'userID', [], value);
+    };
     Evaluator.prototype.lookupGateOverride = function (user, gateName) {
         var overrides = this.gateOverrides[gateName];
         if (overrides == null) {
@@ -4843,6 +6437,17 @@ var Evaluator = /** @class */ (function () {
             var userOverride = overrides[user.userID];
             if (userOverride != null) {
                 return new ConfigEvaluation_1["default"](userOverride, 'override');
+            }
+        }
+        // check if there is a customID override
+        var customIDs = user.customIDs;
+        if (customIDs != null) {
+            for (var customID in customIDs) {
+                var id = customIDs[customID];
+                var customIDOverride = overrides[id];
+                if (customIDOverride != null) {
+                    return new ConfigEvaluation_1["default"](customIDOverride, 'override');
+                }
             }
         }
         // check if there is a global override
@@ -4868,13 +6473,24 @@ var Evaluator = /** @class */ (function () {
             // check for a user level override
             var userOverride = overrides[user.userID];
             if (userOverride != null) {
-                return new ConfigEvaluation_1["default"](true, 'override', null, [], userOverride);
+                return new ConfigEvaluation_1["default"](true, 'override', null, 'userID', [], userOverride);
+            }
+        }
+        // check if there is a customID override
+        var customIDs = user.customIDs;
+        if (customIDs != null) {
+            for (var customID in customIDs) {
+                var id = customIDs[customID];
+                var customIDOverride = overrides[id];
+                if (customIDOverride != null) {
+                    return new ConfigEvaluation_1["default"](true, 'override', null, 'userID', [], customIDOverride);
+                }
             }
         }
         // check if there is a global override
         var allOverride = overrides[''];
         if (allOverride != null) {
-            return new ConfigEvaluation_1["default"](true, 'override', null, [], allOverride);
+            return new ConfigEvaluation_1["default"](true, 'override', null, '', [], allOverride);
         }
         return null;
     };
@@ -4885,25 +6501,38 @@ var Evaluator = /** @class */ (function () {
             group: res.rule_id,
             rule_id: res.rule_id,
             is_device_based: spec.idType != null && spec.idType.toLowerCase() === 'stableid',
-            secondary_exposures: this._cleanExposures(res.secondary_exposures)
+            secondary_exposures: this.hashSecondaryExposure(res.secondary_exposures, hash)
         };
+        if (res.group_name != null) {
+            output.group_name = res.group_name;
+        }
         if (res.explicit_parameters) {
             output.explicit_parameters = res.explicit_parameters;
         }
         return output;
     };
+    Evaluator.prototype.hashSecondaryExposure = function (secondary_exposures, hash) {
+        secondary_exposures.forEach(function (exposure) {
+            exposure.gate = (0, Hashing_1.hashString)(exposure.gate, hash);
+        });
+        return secondary_exposures;
+    };
     Evaluator.prototype._cleanExposures = function (exposures) {
+        if (exposures.length === 0) {
+            return exposures;
+        }
         var seen = {};
-        return exposures
-            .map(function (exposure) {
+        return exposures.filter(function (exposure) {
+            if (exposure.gate.startsWith('segment:')) {
+                return false;
+            }
             var key = "".concat(exposure.gate, "|").concat(exposure.gateValue, "|").concat(exposure.ruleID);
             if (seen[key]) {
-                return null;
+                return false;
             }
             seen[key] = true;
-            return exposure;
-        })
-            .filter(core_1.notEmpty);
+            return true;
+        });
     };
     Evaluator.prototype.shutdown = function () {
         this.store.shutdown();
@@ -4923,41 +6552,145 @@ var Evaluator = /** @class */ (function () {
     Evaluator.prototype.getUnrecognizedEvaluation = function () {
         return new ConfigEvaluation_1["default"](false, '', null).withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.make(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), 'Unrecognized'));
     };
-    Evaluator.prototype._evalSpec = function (user, config) {
-        var evaulation = this._eval(user, config);
+    Evaluator.prototype._evalConfig = function (ctx, skipStickyEvaluation) {
+        if (skipStickyEvaluation === void 0) { skipStickyEvaluation = false; }
+        var user = ctx.user, spec = ctx.spec, userPersistedValues = ctx.userPersistedValues, persistentAssignmentOptions = ctx.persistentAssignmentOptions;
+        if (skipStickyEvaluation) {
+            return this._evalSpec(ctx);
+        }
+        if (userPersistedValues == null || !spec.isActive) {
+            this.persistentStore["delete"](user, spec.idType, spec.name);
+            return this._evalSpec(ctx);
+        }
+        var stickyConfig = userPersistedValues[spec.name];
+        var stickyEvaluation = stickyConfig
+            ? ConfigEvaluation_1["default"].fromStickyValues(stickyConfig, this.store.getInitialUpdateTime())
+            : null;
+        if (stickyEvaluation) {
+            if (persistentAssignmentOptions === null || persistentAssignmentOptions === void 0 ? void 0 : persistentAssignmentOptions.enforceTargeting) {
+                var passesTargeting = this._evalTargeting(ctx);
+                if (passesTargeting) {
+                    return stickyEvaluation;
+                }
+                else {
+                    return this._evalSpec(ctx);
+                }
+            }
+            else {
+                return stickyEvaluation;
+            }
+        }
+        var evaluation = this._evalSpec(ctx);
+        if (evaluation.is_experiment_group) {
+            this.persistentStore.save(user, spec.idType, spec.name, evaluation);
+        }
+        return evaluation;
+    };
+    Evaluator.prototype._evalLayer = function (ctx) {
+        var user = ctx.user, spec = ctx.spec, userPersistedValues = ctx.userPersistedValues, persistentAssignmentOptions = ctx.persistentAssignmentOptions;
+        if (!userPersistedValues) {
+            this.persistentStore["delete"](user, spec.idType, spec.name);
+            return this._evalSpec(ctx);
+        }
+        var stickyConfig = userPersistedValues[spec.name];
+        var stickyEvaluation = stickyConfig
+            ? ConfigEvaluation_1["default"].fromStickyValues(stickyConfig, this.store.getInitialUpdateTime())
+            : null;
+        if (stickyEvaluation) {
+            var delegateSpec_1 = stickyEvaluation.config_delegate
+                ? this.store.getConfig(stickyEvaluation.config_delegate)
+                : null;
+            if (delegateSpec_1 && delegateSpec_1.isActive) {
+                if (persistentAssignmentOptions === null || persistentAssignmentOptions === void 0 ? void 0 : persistentAssignmentOptions.enforceTargeting) {
+                    var passesTargeting = this._evalTargeting(ctx, delegateSpec_1);
+                    if (passesTargeting) {
+                        return stickyEvaluation;
+                    }
+                    else {
+                        return this._evalSpec(ctx);
+                    }
+                }
+                else {
+                    return stickyEvaluation;
+                }
+            }
+            else {
+                this.persistentStore["delete"](user, spec.idType, spec.name);
+                return this._evalSpec(ctx);
+            }
+        }
+        var evaluation = this._evalSpec(ctx);
+        var delegateSpec = evaluation.config_delegate
+            ? this.store.getConfig(evaluation.config_delegate)
+            : null;
+        if (delegateSpec && delegateSpec.isActive) {
+            if (evaluation.is_experiment_group) {
+                this.persistentStore.save(user, spec.idType, spec.name, evaluation);
+            }
+        }
+        else {
+            this.persistentStore["delete"](user, spec.idType, spec.name);
+        }
+        return evaluation;
+    };
+    Evaluator.prototype._evalTargeting = function (ctx, delegateSpec) {
+        return (this._evalSpec(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+            user: ctx.user,
+            spec: delegateSpec !== null && delegateSpec !== void 0 ? delegateSpec : ctx.spec,
+            onlyEvaluateTargeting: true
+        })).value === false); // Fail evaluation means to pass targeting (fall through logic)
+    };
+    Evaluator.prototype._evalSpec = function (ctx) {
+        var evaulation = this._eval(ctx);
         if (evaulation.evaluation_details) {
             return evaulation;
         }
         return evaulation.withEvaluationDetails(EvaluationDetails_1.EvaluationDetails.make(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), this.store.getInitReason()));
     };
-    Evaluator.prototype._eval = function (user, config) {
+    Evaluator.prototype._eval = function (ctx) {
+        var user = ctx.user, config = ctx.spec;
         if (!config.enabled) {
-            return new ConfigEvaluation_1["default"](false, 'disabled', null, [], config.defaultValue);
+            return new ConfigEvaluation_1["default"](false, 'disabled', null, config.idType, [], config.defaultValue, undefined, // explicit parameters
+            undefined, // config delegate
+            config.version, false, // unsupported
+            config.forwardAllExposures);
+        }
+        var rules = config.rules;
+        if (ctx.onlyEvaluateTargeting) {
+            rules = config.rules.filter(function (rule) { return rule.isTargetingRule(); });
+            if (rules.length === 0) {
+                return new ConfigEvaluation_1["default"](false);
+            }
         }
         var secondary_exposures = [];
-        for (var i = 0; i < config.rules.length; i++) {
-            var rule = config.rules[i];
-            var ruleResult = this._evalRule(user, rule);
+        for (var _i = 0, rules_1 = rules; _i < rules_1.length; _i++) {
+            var rule = rules_1[_i];
+            ctx.samplingRate = rule.sampleRate;
+            var ruleResult = this._evalRule(user, rule, ctx);
             if (ruleResult.unsupported) {
-                return ConfigEvaluation_1["default"].unsupported(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime());
+                return ConfigEvaluation_1["default"].unsupported(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), config.version, config.forwardAllExposures, rule.sampleRate);
             }
-            secondary_exposures = secondary_exposures.concat(ruleResult.secondary_exposures);
+            secondary_exposures = this._cleanExposures(secondary_exposures.concat(ruleResult.secondary_exposures));
             if (ruleResult.value === true) {
-                var delegatedResult = this._evalDelegate(user, rule, secondary_exposures);
+                var delegatedResult = this._evalDelegate(rule, secondary_exposures, ctx);
                 if (delegatedResult) {
                     return delegatedResult;
                 }
                 var pass = this._evalPassPercent(user, rule, config);
-                var evaluation = new ConfigEvaluation_1["default"](pass, ruleResult.rule_id, ruleResult.group_name, secondary_exposures, pass
+                var evaluation = new ConfigEvaluation_1["default"](pass, ruleResult.rule_id, ruleResult.group_name, config.idType, secondary_exposures, pass
                     ? ruleResult.json_value
-                    : config.defaultValue, config.explicitParameters, ruleResult.config_delegate);
+                    : config.defaultValue, config.explicitParameters, ruleResult.config_delegate, config.version, false, // unsupported
+                config.forwardAllExposures, ruleResult.sample_rate, ruleResult.seen_analytical_gates);
                 evaluation.setIsExperimentGroup(ruleResult.is_experiment_group);
                 return evaluation;
             }
         }
-        return new ConfigEvaluation_1["default"](false, 'default', null, secondary_exposures, config.defaultValue, config.explicitParameters);
+        return new ConfigEvaluation_1["default"](false, 'default', null, config.idType, secondary_exposures, config.defaultValue, config.explicitParameters, undefined, // config delegate
+        config.version, false, // unsupported
+        config.forwardAllExposures, ctx.samplingRate, // sample_rate
+        ctx.seenAnalyticalGates);
     };
-    Evaluator.prototype._evalDelegate = function (user, rule, exposures) {
+    Evaluator.prototype._evalDelegate = function (rule, exposures, ctx) {
         if (rule.configDelegate == null) {
             return null;
         }
@@ -4965,42 +6698,37 @@ var Evaluator = /** @class */ (function () {
         if (!config) {
             return null;
         }
-        var delegatedResult = this._eval(user, config);
+        var delegatedResult = this.getConfig(ctx.user, rule.configDelegate, ctx, true);
         delegatedResult.config_delegate = rule.configDelegate;
         delegatedResult.undelegated_secondary_exposures = exposures;
         delegatedResult.explicit_parameters = config.explicitParameters;
-        delegatedResult.secondary_exposures = exposures.concat(delegatedResult.secondary_exposures);
+        delegatedResult.secondary_exposures = this._cleanExposures(exposures.concat(delegatedResult.secondary_exposures));
         return delegatedResult;
     };
     Evaluator.prototype._evalPassPercent = function (user, rule, config) {
         var _a, _b;
-        var hash = computeUserHash(config.salt +
+        if (rule.passPercentage === 0.0) {
+            return false;
+        }
+        if (rule.passPercentage === 100.0) {
+            return true;
+        }
+        var hash = (0, EvaluatorUtils_1.computeUserHash)(config.salt +
             '.' +
             ((_a = rule.salt) !== null && _a !== void 0 ? _a : rule.id) +
             '.' +
-            ((_b = this._getUnitID(user, rule.idType)) !== null && _b !== void 0 ? _b : ''));
+            ((_b = (0, EvaluatorUtils_1.getUnitID)(user, rule.idType)) !== null && _b !== void 0 ? _b : ''));
         return (Number(hash % BigInt(CONDITION_SEGMENT_COUNT)) < rule.passPercentage * 100);
     };
-    Evaluator.prototype._getUnitID = function (user, idType) {
-        var _a;
-        if (typeof idType === 'string' && idType.toLowerCase() !== 'userid') {
-            var unitID = (_a = user === null || user === void 0 ? void 0 : user.customIDs) === null || _a === void 0 ? void 0 : _a[idType];
-            if (unitID !== undefined) {
-                return unitID;
-            }
-            return getParameterCaseInsensitive(user === null || user === void 0 ? void 0 : user.customIDs, idType);
-        }
-        return user === null || user === void 0 ? void 0 : user.userID;
-    };
-    Evaluator.prototype._evalRule = function (user, rule) {
+    Evaluator.prototype._evalRule = function (user, rule, ctx) {
         var _a;
         var secondaryExposures = [];
         var pass = true;
         for (var _i = 0, _b = rule.conditions; _i < _b.length; _i++) {
             var condition = _b[_i];
-            var result = this._evalCondition(user, condition);
+            var result = this._evalCondition(user, condition, ctx);
             if (result.unsupported) {
-                return ConfigEvaluation_1["default"].unsupported(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime());
+                return ConfigEvaluation_1["default"].unsupported(this.store.getLastUpdateTime(), this.store.getInitialUpdateTime(), undefined);
             }
             if (!result.passes) {
                 pass = false;
@@ -5009,11 +6737,17 @@ var Evaluator = /** @class */ (function () {
                 secondaryExposures = secondaryExposures.concat(result.exposures);
             }
         }
-        var evaluation = new ConfigEvaluation_1["default"](pass, rule.id, rule.groupName, secondaryExposures, rule.returnValue);
+        var evaluation = new ConfigEvaluation_1["default"](pass, rule.id, rule.groupName, null, secondaryExposures, rule.returnValue, undefined, // explicit_parameters
+        undefined, // config_delegate
+        undefined, // configVersion
+        false, // unsupported
+        undefined, // forward_all_exposures
+        rule.sampleRate, // sample_rate
+        ctx.seenAnalyticalGates);
         evaluation.setIsExperimentGroup((_a = rule.isExperimentGroup) !== null && _a !== void 0 ? _a : false);
         return evaluation;
     };
-    Evaluator.prototype._evalCondition = function (user, condition) {
+    Evaluator.prototype._evalCondition = function (user, condition, ctx) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         var value = null;
         var field = condition.field;
@@ -5024,7 +6758,7 @@ var Evaluator = /** @class */ (function () {
                 return { passes: true };
             case 'fail_gate':
             case 'pass_gate': {
-                var gateResult = this.checkGate(user, target);
+                var gateResult = this.checkGate(user, target, ctx);
                 if (gateResult === null || gateResult === void 0 ? void 0 : gateResult.unsupported) {
                     return { passes: false, unsupported: true };
                 }
@@ -5035,6 +6769,15 @@ var Evaluator = /** @class */ (function () {
                     gateValue: String(value),
                     ruleID: (_b = gateResult === null || gateResult === void 0 ? void 0 : gateResult.rule_id) !== null && _b !== void 0 ? _b : ''
                 });
+                ctx.samplingRate = gateResult === null || gateResult === void 0 ? void 0 : gateResult.sample_rate;
+                ctx.seenAnalyticalGates = gateResult === null || gateResult === void 0 ? void 0 : gateResult.seen_analytical_gates;
+                if ((ctx.samplingRate === null ||
+                    ctx.samplingRate === undefined ||
+                    ctx.samplingRate === 0) &&
+                    typeof target === 'string' &&
+                    !target.startsWith('segment:')) {
+                    ctx.seenAnalyticalGates = true;
+                }
                 return {
                     passes: condition.type.toLowerCase() === 'fail_gate' ? !value : !!value,
                     exposures: allExposures
@@ -5050,7 +6793,7 @@ var Evaluator = /** @class */ (function () {
                 var exposures = [];
                 for (var _i = 0, gateNames_1 = gateNames; _i < gateNames_1.length; _i++) {
                     var gateName = gateNames_1[_i];
-                    var gateResult = this.checkGate(user, gateName);
+                    var gateResult = this.checkGate(user, gateName, ctx);
                     if (gateResult === null || gateResult === void 0 ? void 0 : gateResult.unsupported) {
                         return { passes: false, unsupported: true };
                     }
@@ -5063,6 +6806,11 @@ var Evaluator = /** @class */ (function () {
                         ruleID: (_c = gateResult === null || gateResult === void 0 ? void 0 : gateResult.rule_id) !== null && _c !== void 0 ? _c : ''
                     });
                     exposures = exposures.concat(gateResult.secondary_exposures);
+                    if (ctx.samplingRate === null &&
+                        typeof gateName === 'string' &&
+                        !gateName.startsWith('segment:')) {
+                        ctx.seenAnalyticalGates = true;
+                    }
                     if (resValue === true) {
                         value_1 = true;
                         break;
@@ -5075,29 +6823,34 @@ var Evaluator = /** @class */ (function () {
             }
             case 'ip_based':
                 // this would apply to things like 'country', 'region', etc.
-                value = (_d = getFromUser(user, field)) !== null && _d !== void 0 ? _d : this.getFromIP(user, field);
+                value = (_d = (0, EvaluatorUtils_1.getFromUser)(user, field)) !== null && _d !== void 0 ? _d : this.getFromIP(user, field);
                 break;
             case 'ua_based':
                 // this would apply to things like 'os', 'browser', etc.
-                value = (_e = getFromUser(user, field)) !== null && _e !== void 0 ? _e : getFromUserAgent(user, field);
+                value = (_e = (0, EvaluatorUtils_1.getFromUser)(user, field)) !== null && _e !== void 0 ? _e : (0, EvaluatorUtils_1.getFromUserAgent)(user, field);
                 break;
             case 'user_field':
-                value = getFromUser(user, field);
+                value = (0, EvaluatorUtils_1.getFromUser)(user, field);
                 break;
             case 'environment_field':
-                value = getFromEnvironment(user, field);
+                value = (0, EvaluatorUtils_1.getFromEnvironment)(user, field);
                 break;
             case 'current_time':
                 value = Date.now();
                 break;
             case 'user_bucket': {
                 var salt = (_f = condition.additionalValues) === null || _f === void 0 ? void 0 : _f.salt;
-                var userHash = computeUserHash((_g = salt + '.' + this._getUnitID(user, idType)) !== null && _g !== void 0 ? _g : '');
+                var userHash = (0, EvaluatorUtils_1.computeUserHash)(salt + '.' + ((_g = (0, EvaluatorUtils_1.getUnitID)(user, idType)) !== null && _g !== void 0 ? _g : ''));
                 value = Number(userHash % BigInt(USER_BUCKET_COUNT));
                 break;
             }
             case 'unit_id':
-                value = this._getUnitID(user, idType);
+                value = (0, EvaluatorUtils_1.getUnitID)(user, idType);
+                break;
+            case 'target_app':
+                value = ctx.clientKey
+                    ? ctx.targetAppID
+                    : this.store.getPrimaryTargetAppID();
                 break;
             default:
                 return { passes: false, unsupported: true };
@@ -5107,61 +6860,85 @@ var Evaluator = /** @class */ (function () {
         switch (op) {
             // numerical
             case 'gt':
-                evalResult = numberCompare(function (a, b) { return a > b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.numberCompare)(function (a, b) { return a > b; })(value, target);
                 break;
             case 'gte':
-                evalResult = numberCompare(function (a, b) { return a >= b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.numberCompare)(function (a, b) { return a >= b; })(value, target);
                 break;
             case 'lt':
-                evalResult = numberCompare(function (a, b) { return a < b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.numberCompare)(function (a, b) { return a < b; })(value, target);
                 break;
             case 'lte':
-                evalResult = numberCompare(function (a, b) { return a <= b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.numberCompare)(function (a, b) { return a <= b; })(value, target);
                 break;
             // version
             case 'version_gt':
-                evalResult = versionCompareHelper(function (result) { return result > 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result > 0; })(value, target);
                 break;
             case 'version_gte':
-                evalResult = versionCompareHelper(function (result) { return result >= 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result >= 0; })(value, target);
                 break;
             case 'version_lt':
-                evalResult = versionCompareHelper(function (result) { return result < 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result < 0; })(value, target);
                 break;
             case 'version_lte':
-                evalResult = versionCompareHelper(function (result) { return result <= 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result <= 0; })(value, target);
                 break;
             case 'version_eq':
-                evalResult = versionCompareHelper(function (result) { return result === 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result === 0; })(value, target);
                 break;
             case 'version_neq':
-                evalResult = versionCompareHelper(function (result) { return result !== 0; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.versionCompareHelper)(function (result) { return result !== 0; })(value, target);
                 break;
             // array
             case 'any':
-                evalResult = arrayAny(value, target, stringCompare(true, function (a, b) { return a === b; }));
+                if (condition.targetValueSet != null) {
+                    evalResult =
+                        condition.targetValueSet.has(String(value)) ||
+                            condition.targetValueSet.has(String(value).toLowerCase());
+                }
+                else {
+                    evalResult = (0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a === b; }));
+                }
                 break;
             case 'none':
-                evalResult = !arrayAny(value, target, stringCompare(true, function (a, b) { return a === b; }));
+                if (condition.targetValueSet != null) {
+                    evalResult =
+                        !condition.targetValueSet.has(String(value)) &&
+                            !condition.targetValueSet.has(String(value).toLowerCase());
+                }
+                else {
+                    evalResult = !(0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a === b; }));
+                }
                 break;
             case 'any_case_sensitive':
-                evalResult = arrayAny(value, target, stringCompare(false, function (a, b) { return a === b; }));
+                if (condition.targetValueSet != null) {
+                    evalResult = condition.targetValueSet.has(String(value));
+                }
+                else {
+                    evalResult = (0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(false, function (a, b) { return a === b; }));
+                }
                 break;
             case 'none_case_sensitive':
-                evalResult = !arrayAny(value, target, stringCompare(false, function (a, b) { return a === b; }));
+                if (condition.targetValueSet != null) {
+                    evalResult = !condition.targetValueSet.has(String(value));
+                }
+                else {
+                    evalResult = !(0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(false, function (a, b) { return a === b; }));
+                }
                 break;
             // string
             case 'str_starts_with_any':
-                evalResult = arrayAny(value, target, stringCompare(true, function (a, b) { return a.startsWith(b); }));
+                evalResult = (0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a.startsWith(b); }));
                 break;
             case 'str_ends_with_any':
-                evalResult = arrayAny(value, target, stringCompare(true, function (a, b) { return a.endsWith(b); }));
+                evalResult = (0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a.endsWith(b); }));
                 break;
             case 'str_contains_any':
-                evalResult = arrayAny(value, target, stringCompare(true, function (a, b) { return a.includes(b); }));
+                evalResult = (0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a.includes(b); }));
                 break;
             case 'str_contains_none':
-                evalResult = !arrayAny(value, target, stringCompare(true, function (a, b) { return a.includes(b); }));
+                evalResult = !(0, EvaluatorUtils_1.arrayAny)(value, target, (0, EvaluatorUtils_1.stringCompare)(true, function (a, b) { return a.includes(b); }));
                 break;
             case 'str_matches':
                 try {
@@ -5185,13 +6962,13 @@ var Evaluator = /** @class */ (function () {
                 break;
             // dates
             case 'before':
-                evalResult = dateCompare(function (a, b) { return a < b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.dateCompare)(function (a, b) { return a < b; })(value, target);
                 break;
             case 'after':
-                evalResult = dateCompare(function (a, b) { return a > b; })(value, target);
+                evalResult = (0, EvaluatorUtils_1.dateCompare)(function (a, b) { return a > b; })(value, target);
                 break;
             case 'on':
-                evalResult = dateCompare(function (a, b) {
+                evalResult = (0, EvaluatorUtils_1.dateCompare)(function (a, b) {
                     a === null || a === void 0 ? void 0 : a.setHours(0, 0, 0, 0);
                     b === null || b === void 0 ? void 0 : b.setHours(0, 0, 0, 0);
                     return (a === null || a === void 0 ? void 0 : a.getTime()) === (b === null || b === void 0 ? void 0 : b.getTime());
@@ -5205,6 +6982,54 @@ var Evaluator = /** @class */ (function () {
                 evalResult = op === 'in_segment_list' ? inList : !inList;
                 break;
             }
+            case 'array_contains_any': {
+                if (!Array.isArray(target)) {
+                    evalResult = false;
+                    break;
+                }
+                if (!Array.isArray(value)) {
+                    evalResult = false;
+                    break;
+                }
+                evalResult = (0, EvaluatorUtils_1.arrayHasValue)(value, target);
+                break;
+            }
+            case 'array_contains_none': {
+                if (!Array.isArray(target)) {
+                    evalResult = false;
+                    break;
+                }
+                if (!Array.isArray(value)) {
+                    evalResult = false;
+                    break;
+                }
+                evalResult = !(0, EvaluatorUtils_1.arrayHasValue)(value, target);
+                break;
+            }
+            case 'array_contains_all': {
+                if (!Array.isArray(target)) {
+                    evalResult = false;
+                    break;
+                }
+                if (!Array.isArray(value)) {
+                    evalResult = false;
+                    break;
+                }
+                evalResult = (0, EvaluatorUtils_1.arrayHasAllValues)(value, target);
+                break;
+            }
+            case 'not_array_contains_all': {
+                if (!Array.isArray(target)) {
+                    evalResult = false;
+                    break;
+                }
+                if (!Array.isArray(value)) {
+                    evalResult = false;
+                    break;
+                }
+                evalResult = !(0, EvaluatorUtils_1.arrayHasAllValues)(value, target);
+                break;
+            }
             default:
                 return { passes: false, unsupported: true };
         }
@@ -5216,15 +7041,21 @@ var Evaluator = /** @class */ (function () {
         }
         return experimentConfig.isActive === true;
     };
-    Evaluator.prototype._isUserAllocatedToExperiment = function (user, experimentConfig) {
+    Evaluator.prototype._isUserAllocatedToExperiment = function (user, experimentConfig, ctx) {
         if (experimentConfig == null) {
             return false;
         }
-        var evalResult = this._eval(user, experimentConfig);
+        var evalResult = this._eval(StatsigContext_1.EvaluationContext.get(ctx.getRequestContext(), {
+            user: user,
+            spec: experimentConfig
+        }));
         return evalResult.is_experiment_group;
     };
     Evaluator.prototype.getFromIP = function (user, field) {
-        var ip = getFromUser(user, 'ip');
+        if (field == null) {
+            return null;
+        }
+        var ip = (0, EvaluatorUtils_1.getFromUser)(user, 'ip');
         if (ip == null || field !== 'country') {
             return null;
         }
@@ -5250,181 +7081,6 @@ var Evaluator = /** @class */ (function () {
     return Evaluator;
 }());
 exports["default"] = Evaluator;
-var hashLookupTable = new Map();
-function computeUserHash(userHash) {
-    var existingHash = hashLookupTable.get(userHash);
-    if (existingHash) {
-        return existingHash;
-    }
-    var hash = (0, Hashing_1.sha256Hash)(userHash).getBigUint64(0, false);
-    if (hashLookupTable.size > 100000) {
-        hashLookupTable.clear();
-    }
-    hashLookupTable.set(userHash, hash);
-    return hash;
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getFromUser(user, field) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-    if (typeof user !== 'object') {
-        return null;
-    }
-    var indexableUser = user;
-    return ((_h = (_f = (_d = (_b = (_a = indexableUser[field]) !== null && _a !== void 0 ? _a : indexableUser[field.toLowerCase()]) !== null && _b !== void 0 ? _b : (_c = user === null || user === void 0 ? void 0 : user.custom) === null || _c === void 0 ? void 0 : _c[field]) !== null && _d !== void 0 ? _d : (_e = user === null || user === void 0 ? void 0 : user.custom) === null || _e === void 0 ? void 0 : _e[field.toLowerCase()]) !== null && _f !== void 0 ? _f : (_g = user === null || user === void 0 ? void 0 : user.privateAttributes) === null || _g === void 0 ? void 0 : _g[field]) !== null && _h !== void 0 ? _h : (_j = user === null || user === void 0 ? void 0 : user.privateAttributes) === null || _j === void 0 ? void 0 : _j[field.toLowerCase()]);
-}
-function getFromUserAgent(user, field) {
-    var _a, _b, _c, _d;
-    var ua = getFromUser(user, 'userAgent');
-    if (ua == null) {
-        return null;
-    }
-    if (typeof ua !== 'string' || ua.length > 1000) {
-        return null;
-    }
-    var res = (0, parseUserAgent_1["default"])(ua);
-    switch (field.toLowerCase()) {
-        case 'os_name':
-        case 'osname':
-            return (_a = res.os.name) !== null && _a !== void 0 ? _a : null;
-        case 'os_version':
-        case 'osversion':
-            return (_b = res.os.version) !== null && _b !== void 0 ? _b : null;
-        case 'browser_name':
-        case 'browsername':
-            return (_c = res.browser.name) !== null && _c !== void 0 ? _c : null;
-        case 'browser_version':
-        case 'browserversion':
-            return (_d = res.browser.version) !== null && _d !== void 0 ? _d : null;
-        default:
-            return null;
-    }
-}
-function getFromEnvironment(user, field) {
-    return getParameterCaseInsensitive(user === null || user === void 0 ? void 0 : user.statsigEnvironment, field);
-}
-function getParameterCaseInsensitive(object, key) {
-    if (object == null) {
-        return undefined;
-    }
-    var asLowercase = key.toLowerCase();
-    var keyMatch = Object.keys(object).find(function (k) { return k.toLowerCase() === asLowercase; });
-    if (keyMatch === undefined) {
-        return undefined;
-    }
-    return object[keyMatch];
-}
-function numberCompare(fn) {
-    return function (a, b) {
-        if (a == null || b == null) {
-            return false;
-        }
-        var numA = Number(a);
-        var numB = Number(b);
-        if (isNaN(numA) || isNaN(numB)) {
-            return false;
-        }
-        return fn(numA, numB);
-    };
-}
-function versionCompareHelper(fn) {
-    return function (a, b) {
-        var comparison = versionCompare(a, b);
-        if (comparison == null) {
-            return false;
-        }
-        return fn(comparison);
-    };
-}
-// Compare two version strings without the extensions.
-// returns -1, 0, or 1 if first is smaller than, equal to, or larger than second.
-// returns false if any of the version strings is not valid.
-function versionCompare(first, second) {
-    if (typeof first !== 'string' || typeof second !== 'string') {
-        return null;
-    }
-    var version1 = removeVersionExtension(first);
-    var version2 = removeVersionExtension(second);
-    if (version1.length === 0 || version2.length === 0) {
-        return null;
-    }
-    var parts1 = version1.split('.');
-    var parts2 = version2.split('.');
-    for (var i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-        if (parts1[i] === undefined) {
-            parts1[i] = '0';
-        }
-        if (parts2[i] === undefined) {
-            parts2[i] = '0';
-        }
-        var n1 = Number(parts1[i]);
-        var n2 = Number(parts2[i]);
-        if (typeof n1 !== 'number' ||
-            typeof n2 !== 'number' ||
-            isNaN(n1) ||
-            isNaN(n2)) {
-            return null;
-        }
-        if (n1 < n2) {
-            return -1;
-        }
-        else if (n1 > n2) {
-            return 1;
-        }
-    }
-    return 0;
-}
-function removeVersionExtension(version) {
-    var hyphenIndex = version.indexOf('-');
-    if (hyphenIndex >= 0) {
-        return version.substr(0, hyphenIndex);
-    }
-    return version;
-}
-function stringCompare(ignoreCase, fn) {
-    return function (a, b) {
-        if (a == null || b == null) {
-            return false;
-        }
-        return ignoreCase
-            ? fn(String(a).toLowerCase(), String(b).toLowerCase())
-            : fn(String(a), String(b));
-    };
-}
-function dateCompare(fn) {
-    return function (a, b) {
-        if (a == null || b == null) {
-            return false;
-        }
-        try {
-            // Try to parse into date as a string first, if not, try unixtime
-            var dateA = new Date(a);
-            if (isNaN(dateA.getTime())) {
-                dateA = new Date(Number(a));
-            }
-            var dateB = new Date(b);
-            if (isNaN(dateB.getTime())) {
-                dateB = new Date(Number(b));
-            }
-            return (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime()) && fn(dateA, dateB));
-        }
-        catch (e) {
-            // malformatted input, returning false
-            return false;
-        }
-    };
-}
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function arrayAny(value, array, fn) {
-    if (!Array.isArray(array)) {
-        return false;
-    }
-    for (var i = 0; i < array.length; i++) {
-        if (fn(value, array[i])) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 /***/ }),
@@ -5436,12 +7092,19 @@ function arrayAny(value, array, fn) {
 
 exports.__esModule = true;
 exports.makeEmptyFeatureGate = exports.makeFeatureGate = void 0;
-function makeFeatureGate(name, ruleID, value, groupName) {
-    return { name: name, ruleID: ruleID, value: value, groupName: groupName };
+function makeFeatureGate(name, ruleID, value, groupName, idType, evaluationDetails) {
+    return { name: name, ruleID: ruleID, value: value, groupName: groupName, idType: idType, evaluationDetails: evaluationDetails };
 }
 exports.makeFeatureGate = makeFeatureGate;
 function makeEmptyFeatureGate(name) {
-    return { name: name, ruleID: '', value: false, groupName: null };
+    return {
+        name: name,
+        ruleID: '',
+        value: false,
+        groupName: null,
+        idType: null,
+        evaluationDetails: null
+    };
 }
 exports.makeEmptyFeatureGate = makeEmptyFeatureGate;
 
@@ -5459,12 +7122,14 @@ var core_1 = __nccwpck_require__(8122);
  * Returns the data for a Layer in the statsig console via typed get functions
  */
 var Layer = /** @class */ (function () {
-    function Layer(layerName, value, ruleID, groupName, allocatedExperimentName, logExposure) {
+    function Layer(layerName, value, ruleID, groupName, allocatedExperimentName, logExposure, evaluationDetails, idType) {
         if (value === void 0) { value = {}; }
         if (ruleID === void 0) { ruleID = ''; }
         if (groupName === void 0) { groupName = null; }
         if (allocatedExperimentName === void 0) { allocatedExperimentName = null; }
         if (logExposure === void 0) { logExposure = null; }
+        if (evaluationDetails === void 0) { evaluationDetails = null; }
+        if (idType === void 0) { idType = null; }
         var _a;
         if (typeof layerName !== 'string' || layerName.length === 0) {
             layerName = '';
@@ -5478,6 +7143,8 @@ var Layer = /** @class */ (function () {
         this._groupName = groupName;
         this._allocatedExperimentName = allocatedExperimentName;
         this._logExposure = logExposure;
+        this._evaluationDetails = evaluationDetails;
+        this._idType = idType;
     }
     Layer.prototype.get = function (key, defaultValue, typeGuard) {
         var _this = this;
@@ -5521,11 +7188,17 @@ var Layer = /** @class */ (function () {
     Layer.prototype.getRuleID = function () {
         return this._ruleID;
     };
+    Layer.prototype.getIDType = function () {
+        return this._idType;
+    };
     Layer.prototype.getGroupName = function () {
         return this._groupName;
     };
     Layer.prototype.getAllocatedExperimentName = function () {
         return this._allocatedExperimentName;
+    };
+    Layer.prototype.getEvaluationDetails = function () {
+        return this._evaluationDetails;
     };
     return Layer;
 }());
@@ -5572,6 +7245,7 @@ var LogEvent = /** @class */ (function () {
         this.value = null;
         this.metadata = null;
         this.secondaryExposures = [];
+        this.statsigMetadata = {};
         this.time = Date.now();
         this.eventName =
             (_a = LogEventValidator_1["default"].validateEventName(eventName)) !== null && _a !== void 0 ? _a : 'invalid_event';
@@ -5599,6 +7273,17 @@ var LogEvent = /** @class */ (function () {
             return;
         }
         this.metadata = (0, core_1.clone)(validatedMetadata);
+    };
+    LogEvent.prototype.setSamplingDecision = function (samplingDecision) {
+        if (samplingDecision.samplingRate) {
+            this.statsigMetadata['samplingRate'] = samplingDecision.samplingRate;
+        }
+        if (samplingDecision.shadowLogged) {
+            this.statsigMetadata['shadowLogged'] = samplingDecision.shadowLogged;
+        }
+        if (samplingDecision.samplingMode) {
+            this.statsigMetadata['samplingMode'] = samplingDecision.samplingMode;
+        }
     };
     LogEvent.prototype.setDiagnosticsMetadata = function (metadata) {
         var metadataSize = LogEventValidator_1["default"].approximateObjectSize(metadata);
@@ -5640,7 +7325,8 @@ var LogEvent = /** @class */ (function () {
             time: this.time,
             user: this.user,
             value: this.value,
-            secondaryExposures: this.secondaryExposures
+            secondaryExposures: this.secondaryExposures,
+            statsigMetadata: this.statsigMetadata
         };
     };
     return LogEvent;
@@ -5706,10 +7392,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+exports.SamplingDecision = void 0;
 var Diagnostics_1 = __importDefault(__nccwpck_require__(7413));
 var LogEvent_1 = __importDefault(__nccwpck_require__(9765));
 var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
+var SDKConfigs_1 = __nccwpck_require__(70);
 var core_1 = __nccwpck_require__(8122);
+var samplingHelpers_1 = __nccwpck_require__(947);
+var StatsigContext_1 = __nccwpck_require__(288);
 var CONFIG_EXPOSURE_EVENT = 'config_exposure';
 var LAYER_EXPOSURE_EVENT = 'layer_exposure';
 var GATE_EXPOSURE_EVENT = 'gate_exposure';
@@ -5723,6 +7413,25 @@ var ignoredMetadataKeys = new Set([
     'initTime',
     'reason',
 ]);
+var SamplingKeyType;
+(function (SamplingKeyType) {
+    SamplingKeyType["Gate"] = "gate";
+    SamplingKeyType["Config"] = "config";
+    SamplingKeyType["Layer"] = "layer";
+})(SamplingKeyType || (SamplingKeyType = {}));
+var SamplingDecision = /** @class */ (function () {
+    function SamplingDecision(shouldLog, samplingRate, shadowLogged, samplingMode) {
+        this.shouldLog = shouldLog;
+        this.samplingRate = samplingRate;
+        this.shadowLogged = shadowLogged;
+        this.samplingMode = samplingMode;
+    }
+    SamplingDecision.createForceLog = function (samplingMode) {
+        return new SamplingDecision(true, undefined, undefined, samplingMode !== null && samplingMode !== void 0 ? samplingMode : undefined);
+    };
+    return SamplingDecision;
+}());
+exports.SamplingDecision = SamplingDecision;
 var LogEventProcessor = /** @class */ (function () {
     function LogEventProcessor(fetcher, errorBoundry, explicitOptions, optionsLoggiingCopy, sessionID) {
         var _this = this;
@@ -5731,6 +7440,7 @@ var LogEventProcessor = /** @class */ (function () {
         this.fetcher = fetcher;
         this.sessionID = sessionID;
         this.errorBoundary = errorBoundry;
+        this._sampling_key_set = new Set();
         this.queue = [];
         this.deduper = new Set();
         this.loggedErrors = new Set();
@@ -5740,6 +7450,9 @@ var LogEventProcessor = /** @class */ (function () {
         this.deduperTimer = (0, core_1.poll)(function () {
             _this.deduper.clear();
         }, deduperInterval);
+        this.samplingKeyTimer = (0, core_1.poll)(function () {
+            _this._sampling_key_set.clear();
+        }, 60 * 1000); // Reset every 60 seconds
     }
     LogEventProcessor.prototype.log = function (event, errorKey) {
         if (errorKey === void 0) { errorKey = null; }
@@ -5786,7 +7499,8 @@ var LogEventProcessor = /** @class */ (function () {
                         retries: fireAndForget ? 0 : this.explicitOptions.postLogsRetryLimit,
                         backoff: this.explicitOptions.postLogsRetryBackoff,
                         signal: abortSignal,
-                        compress: false,
+                        compress: !StatsigContext_1.GlobalContext.isEdgeEnvironment &&
+                            SDKConfigs_1.SDKConfigs.on('stop_log_event_compression') === false,
                         additionalHeaders: {
                             'STATSIG-EVENT-COUNT': String(oldQueue.length)
                         }
@@ -5794,11 +7508,11 @@ var LogEventProcessor = /** @class */ (function () {
                         .then(function () {
                         return Promise.resolve();
                     })["catch"](function (e) {
-                        _this.errorBoundary.logError(new Error('Log event failed'), undefined, {
-                            tag: 'statsig::log_event_failed',
+                        _this.errorBoundary.logError(new Error('Log event failed'), StatsigContext_1.StatsigContext["new"]({
+                            caller: 'statsig::log_event_failed',
                             eventCount: oldQueue.length,
-                            nonLoggignArgs: { bypassDedupe: true }
-                        });
+                            bypassDedupe: true
+                        }));
                         if ((e === null || e === void 0 ? void 0 : e.name) === 'AbortError') {
                             OutputLogger_1["default"].debug('Request to log_event aborted');
                         }
@@ -5821,6 +7535,10 @@ var LogEventProcessor = /** @class */ (function () {
                             clearInterval(this.deduperTimer);
                             this.deduperTimer = null;
                         }
+                        if (this.samplingKeyTimer != null) {
+                            clearInterval(this.samplingKeyTimer);
+                            this.samplingKeyTimer = null;
+                        }
                         if (!(timeout != null)) return [3 /*break*/, 2];
                         controller_1 = new AbortController();
                         handle = setTimeout(function () { return controller_1.abort(); }, timeout);
@@ -5838,7 +7556,7 @@ var LogEventProcessor = /** @class */ (function () {
             });
         });
     };
-    LogEventProcessor.prototype.logStatsigInternal = function (user, eventName, metadata, secondaryExposures, value) {
+    LogEventProcessor.prototype.logStatsigInternal = function (user, eventName, metadata, secondaryExposures, value, samplingDecision) {
         if (secondaryExposures === void 0) { secondaryExposures = null; }
         if (value === void 0) { value = null; }
         if (!this.isUniqueExposure(user, eventName, metadata)) {
@@ -5857,6 +7575,9 @@ var LogEventProcessor = /** @class */ (function () {
         if (value != null) {
             event.setValue(value);
         }
+        if (samplingDecision) {
+            event.setSamplingDecision(samplingDecision);
+        }
         if ((metadata === null || metadata === void 0 ? void 0 : metadata.error) != null) {
             this.log(event, eventName + metadata.error);
         }
@@ -5865,32 +7586,82 @@ var LogEventProcessor = /** @class */ (function () {
         }
     };
     LogEventProcessor.prototype.logGateExposure = function (user, gateName, evaluation, isManualExposure) {
+        var samplingDecision = this.determineSamplingDecision(SamplingKeyType.Gate, gateName, evaluation, user);
+        if (!samplingDecision.shouldLog) {
+            return;
+        }
+        var metadata = this.getGateExposureMetadata(gateName, evaluation, isManualExposure);
+        this.logStatsigInternal(user, GATE_EXPOSURE_EVENT, metadata, evaluation.secondary_exposures, null, samplingDecision);
+    };
+    LogEventProcessor.prototype.getGateExposureMetadata = function (gateName, evaluation, isManualExposure) {
         var metadata = {
             gate: gateName,
             gateValue: String(evaluation.value),
             ruleID: evaluation.rule_id
         };
+        if (evaluation.configVersion != null) {
+            metadata['configVersion'] = String(evaluation.configVersion);
+        }
         this.maybeAddManualExposureFlagToMetadata(metadata, isManualExposure);
         this.safeAddEvaulationDetailsToEvent(metadata, evaluation.evaluation_details);
-        this.logStatsigInternal(user, GATE_EXPOSURE_EVENT, metadata, evaluation.secondary_exposures);
+        return metadata;
+    };
+    LogEventProcessor.prototype.getGateExposure = function (user, gateName, evaluation, isManualExposure) {
+        var metadata = this.getGateExposureMetadata(gateName, evaluation, isManualExposure);
+        var event = new LogEvent_1["default"](INTERNAL_EVENT_PREFIX + GATE_EXPOSURE_EVENT);
+        event.setUser(user);
+        event.setMetadata(metadata);
+        event.setSecondaryExposures(evaluation.secondary_exposures);
+        return event;
     };
     LogEventProcessor.prototype.logConfigExposure = function (user, configName, evaluation, isManualExposure) {
+        var samplingDecision = this.determineSamplingDecision(SamplingKeyType.Config, configName, evaluation, user);
+        if (!samplingDecision.shouldLog) {
+            return;
+        }
+        var metadata = this.getConfigExposureMetadata(configName, evaluation, isManualExposure);
+        this.logStatsigInternal(user, CONFIG_EXPOSURE_EVENT, metadata, evaluation.secondary_exposures, null, samplingDecision);
+    };
+    LogEventProcessor.prototype.getConfigExposure = function (user, configName, evaluation, isManualExposure) {
+        var event = new LogEvent_1["default"](INTERNAL_EVENT_PREFIX + CONFIG_EXPOSURE_EVENT);
+        event.setUser(user);
+        event.setMetadata(this.getConfigExposureMetadata(configName, evaluation, isManualExposure));
+        event.setSecondaryExposures(evaluation.secondary_exposures);
+        return event;
+    };
+    LogEventProcessor.prototype.getConfigExposureMetadata = function (configName, evaluation, isManualExposure) {
         var metadata = {
             config: configName,
-            ruleID: evaluation.rule_id
+            ruleID: evaluation.rule_id,
+            rulePassed: String(evaluation.value)
         };
+        if (evaluation.configVersion != null) {
+            metadata['configVersion'] = String(evaluation.configVersion);
+        }
         this.maybeAddManualExposureFlagToMetadata(metadata, isManualExposure);
         this.safeAddEvaulationDetailsToEvent(metadata, evaluation.evaluation_details);
-        this.logStatsigInternal(user, CONFIG_EXPOSURE_EVENT, metadata, evaluation.secondary_exposures);
+        return metadata;
     };
     LogEventProcessor.prototype.logLayerExposure = function (user, layerName, parameterName, evaluation, isManualExposure) {
-        var _a, _b, _c;
-        var allocatedExperiment = '';
+        var _a, _b, _c, _d;
         var exposures = evaluation.undelegated_secondary_exposures;
         var isExplicit = (_b = (_a = evaluation.explicit_parameters) === null || _a === void 0 ? void 0 : _a.includes(parameterName)) !== null && _b !== void 0 ? _b : false;
         if (isExplicit) {
-            allocatedExperiment = (_c = evaluation.config_delegate) !== null && _c !== void 0 ? _c : '';
             exposures = evaluation.secondary_exposures;
+        }
+        var metadata = this.getLayerExposureMetadata(layerName, parameterName, evaluation, isManualExposure);
+        var samplingDecision = this.determineSamplingDecision(SamplingKeyType.Layer, layerName, evaluation, user, (_d = (_c = metadata['allocatedExperiment']) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : undefined, parameterName);
+        if (!samplingDecision.shouldLog) {
+            return;
+        }
+        this.logStatsigInternal(user, LAYER_EXPOSURE_EVENT, metadata, exposures, null, samplingDecision);
+    };
+    LogEventProcessor.prototype.getLayerExposureMetadata = function (layerName, parameterName, evaluation, isManualExposure) {
+        var _a, _b, _c;
+        var allocatedExperiment = '';
+        var isExplicit = (_b = (_a = evaluation.explicit_parameters) === null || _a === void 0 ? void 0 : _a.includes(parameterName)) !== null && _b !== void 0 ? _b : false;
+        if (isExplicit) {
+            allocatedExperiment = (_c = evaluation.config_delegate) !== null && _c !== void 0 ? _c : '';
         }
         var metadata = {
             config: layerName,
@@ -5899,9 +7670,25 @@ var LogEventProcessor = /** @class */ (function () {
             parameterName: parameterName,
             isExplicitParameter: String(isExplicit)
         };
+        if (evaluation.configVersion != null) {
+            metadata['configVersion'] = String(evaluation.configVersion);
+        }
         this.maybeAddManualExposureFlagToMetadata(metadata, isManualExposure);
         this.safeAddEvaulationDetailsToEvent(metadata, evaluation.evaluation_details);
-        this.logStatsigInternal(user, LAYER_EXPOSURE_EVENT, metadata, exposures);
+        return metadata;
+    };
+    LogEventProcessor.prototype.getLayerExposure = function (user, layerName, parameterName, evaluation, isManualExposure) {
+        var _a, _b;
+        var exposures = evaluation.undelegated_secondary_exposures;
+        var isExplicit = (_b = (_a = evaluation.explicit_parameters) === null || _a === void 0 ? void 0 : _a.includes(parameterName)) !== null && _b !== void 0 ? _b : false;
+        if (isExplicit) {
+            exposures = evaluation.secondary_exposures;
+        }
+        var event = new LogEvent_1["default"](INTERNAL_EVENT_PREFIX + LAYER_EXPOSURE_EVENT);
+        event.setMetadata(this.getLayerExposureMetadata(layerName, parameterName, evaluation, isManualExposure));
+        event.setSecondaryExposures(exposures);
+        event.setUser(user);
+        return event;
     };
     LogEventProcessor.prototype.logConfigDefaultValueFallback = function (user, message, metadata) {
         this.logStatsigInternal(user, DEFAULT_VALUE_WARNING, metadata, null, message);
@@ -5975,6 +7762,79 @@ var LogEventProcessor = /** @class */ (function () {
         }
         Diagnostics_1["default"].instance.clearMarker(context);
     };
+    LogEventProcessor.prototype.determineSamplingDecision = function (entityType, entityName, evaluation, user, allocatedExperiment, parameterName) {
+        var _a, _b, _c;
+        try {
+            var shadowShouldLog = true;
+            var loggedSamplingRate = void 0;
+            var env = this.get_sdk_environment_tier();
+            var samplingMode = SDKConfigs_1.SDKConfigs.getConfigStrValue('sampling_mode');
+            var specialCaseSamplingRate = SDKConfigs_1.SDKConfigs.getConfigIntValue('special_case_sampling_rate');
+            var specialCaseRules = ['disabled', 'default', ''];
+            if (samplingMode === null ||
+                samplingMode === 'none' ||
+                env !== 'production') {
+                return SamplingDecision.createForceLog(samplingMode);
+            }
+            if (evaluation.forward_all_exposures) {
+                return SamplingDecision.createForceLog(samplingMode);
+            }
+            var samplingSetKey = "".concat(entityName, "_").concat(evaluation.rule_id);
+            if (!this._sampling_key_set.has(samplingSetKey)) {
+                this._sampling_key_set.add(samplingSetKey);
+                return SamplingDecision.createForceLog(samplingMode);
+            }
+            if (evaluation.seen_analytical_gates) {
+                return SamplingDecision.createForceLog(samplingMode);
+            }
+            var shouldSample = evaluation.sample_rate !== null ||
+                specialCaseRules.includes(evaluation.rule_id);
+            if (!shouldSample) {
+                return SamplingDecision.createForceLog(samplingMode);
+            }
+            var exposureKey = '';
+            if (entityType === SamplingKeyType.Gate) {
+                exposureKey = (0, samplingHelpers_1.compute_dedupe_key_for_gate)(entityName, evaluation.rule_id, evaluation.value, (_a = user.userID) !== null && _a !== void 0 ? _a : '', user.customIDs || {});
+            }
+            else if (entityType === SamplingKeyType.Config) {
+                exposureKey = (0, samplingHelpers_1.compute_dedupe_key_for_config)(entityName, evaluation.rule_id, (_b = user.userID) !== null && _b !== void 0 ? _b : '', user.customIDs || {});
+            }
+            else if (entityType === SamplingKeyType.Layer) {
+                exposureKey = (0, samplingHelpers_1.compute_dedupe_key_for_layer)(entityName, allocatedExperiment !== null && allocatedExperiment !== void 0 ? allocatedExperiment : '', parameterName !== null && parameterName !== void 0 ? parameterName : '', evaluation.rule_id, (_c = user.userID) !== null && _c !== void 0 ? _c : '', user.customIDs || {});
+            }
+            if (evaluation.sample_rate !== undefined) {
+                shadowShouldLog = (0, samplingHelpers_1.is_hash_in_sampling_rate)(exposureKey, evaluation.sample_rate);
+                loggedSamplingRate = evaluation.sample_rate;
+            }
+            else if (specialCaseRules.includes(evaluation.rule_id) &&
+                specialCaseSamplingRate !== null) {
+                shadowShouldLog = (0, samplingHelpers_1.is_hash_in_sampling_rate)(exposureKey, specialCaseSamplingRate);
+                loggedSamplingRate = specialCaseSamplingRate;
+            }
+            var shadowLogged = loggedSamplingRate
+                ? shadowShouldLog
+                    ? 'logged'
+                    : 'dropped'
+                : undefined;
+            if (samplingMode === 'on') {
+                return new SamplingDecision(shadowShouldLog, loggedSamplingRate, shadowLogged, samplingMode);
+            }
+            if (samplingMode === 'shadow') {
+                return new SamplingDecision(true, loggedSamplingRate, shadowLogged, samplingMode);
+            }
+            return SamplingDecision.createForceLog(samplingMode);
+        }
+        catch (e) {
+            this.errorBoundary.logError(new Error('determineSamplingDecision failed'), StatsigContext_1.StatsigContext["new"]({
+                caller: 'determineSamplingDecision'
+            }));
+            return SamplingDecision.createForceLog(null);
+        }
+    };
+    LogEventProcessor.prototype.get_sdk_environment_tier = function () {
+        var _a, _b;
+        return (_b = (_a = this.explicitOptions.environment) === null || _a === void 0 ? void 0 : _a.tier) !== null && _b !== void 0 ? _b : 'production';
+    };
     return LogEventProcessor;
 }());
 exports["default"] = LogEventProcessor;
@@ -6009,6 +7869,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 exports.__esModule = true;
 var _logger = __assign(__assign({}, console), { logLevel: 'warn' });
+var _sdkKey = null;
 var OutputLogger = /** @class */ (function () {
     function OutputLogger() {
     }
@@ -6020,8 +7881,9 @@ var OutputLogger = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             optionalParams[_i - 1] = arguments[_i];
         }
-        if (_logger.logLevel !== 'none') {
-            _logger.debug && _logger.debug.apply(_logger, __spreadArray([message], optionalParams, false));
+        if (_logger.logLevel === 'debug') {
+            var sanitizedMessage = this.sanitizeError(message);
+            _logger.debug && _logger.debug.apply(_logger, __spreadArray([sanitizedMessage], optionalParams, false));
         }
     };
     OutputLogger.info = function (message) {
@@ -6029,10 +7891,9 @@ var OutputLogger = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             optionalParams[_i - 1] = arguments[_i];
         }
-        if (_logger.logLevel === 'info' ||
-            _logger.logLevel === 'warn' ||
-            _logger.logLevel === 'error') {
-            _logger.info && _logger.info.apply(_logger, __spreadArray([message], optionalParams, false));
+        if (_logger.logLevel === 'debug' || _logger.logLevel === 'info') {
+            var sanitizedMessage = this.sanitizeError(message);
+            _logger.info && _logger.info.apply(_logger, __spreadArray([sanitizedMessage], optionalParams, false));
         }
     };
     OutputLogger.warn = function (message) {
@@ -6040,8 +7901,11 @@ var OutputLogger = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             optionalParams[_i - 1] = arguments[_i];
         }
-        if (_logger.logLevel === 'warn' || _logger.logLevel === 'error') {
-            _logger.warn.apply(_logger, __spreadArray([message], optionalParams, false));
+        if (_logger.logLevel === 'debug' ||
+            _logger.logLevel === 'info' ||
+            _logger.logLevel === 'warn') {
+            var sanitizedMessage = this.sanitizeError(message);
+            _logger.warn.apply(_logger, __spreadArray([sanitizedMessage], optionalParams, false));
         }
     };
     OutputLogger.error = function (message) {
@@ -6049,15 +7913,37 @@ var OutputLogger = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             optionalParams[_i - 1] = arguments[_i];
         }
-        if (_logger.logLevel === 'error') {
-            _logger.error.apply(_logger, __spreadArray([message], optionalParams, false));
+        if (_logger.logLevel === 'debug' ||
+            _logger.logLevel === 'info' ||
+            _logger.logLevel === 'warn' ||
+            _logger.logLevel === 'error') {
+            var sanitizedMessage = this.sanitizeError(message);
+            _logger.error.apply(_logger, __spreadArray([sanitizedMessage], optionalParams, false));
         }
     };
-    OutputLogger.setLogger = function (logger) {
+    OutputLogger.setLogger = function (logger, sdkKey) {
         _logger = logger;
+        _sdkKey = sdkKey;
     };
     OutputLogger.resetLogger = function () {
         _logger = __assign(__assign({}, console), { logLevel: 'warn' });
+    };
+    OutputLogger.sanitizeError = function (message) {
+        if (_sdkKey === null) {
+            return message;
+        }
+        try {
+            if (typeof message === 'string') {
+                return message.replace(new RegExp(_sdkKey, 'g'), '******');
+            }
+            else if (message instanceof Error) {
+                return message.toString().replace(new RegExp(_sdkKey, 'g'), '******');
+            }
+        }
+        catch (_e) {
+            // ignore
+        }
+        return message;
     };
     return OutputLogger;
 }());
@@ -6066,26 +7952,53 @@ exports["default"] = OutputLogger;
 
 /***/ }),
 
-/***/ 2566:
+/***/ 70:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 exports.__esModule = true;
-var SDKFlags = /** @class */ (function () {
-    function SDKFlags() {
+exports.SDKConfigs = void 0;
+var SDKConfigs = /** @class */ (function () {
+    function SDKConfigs() {
     }
-    SDKFlags.setFlags = function (newFlags) {
+    SDKConfigs.setFlags = function (newFlags) {
         var typedFlags = newFlags && typeof newFlags === 'object' ? newFlags : {};
-        this._flags = typedFlags;
+        SDKConfigs._flags = typedFlags;
     };
-    SDKFlags.on = function (key) {
-        return this._flags[key] === true;
+    SDKConfigs.setConfigs = function (newConfigs) {
+        var typedConfigs = newConfigs && typeof newConfigs === 'object' ? newConfigs : {};
+        SDKConfigs._configs = typedConfigs;
     };
-    SDKFlags._flags = {};
-    return SDKFlags;
+    SDKConfigs.on = function (key) {
+        return SDKConfigs._flags[key] === true;
+    };
+    SDKConfigs.getConfigNumValue = function (config) {
+        var value = SDKConfigs._configs[config];
+        if (typeof value === 'number') {
+            return value;
+        }
+        return null;
+    };
+    SDKConfigs.getConfigIntValue = function (config) {
+        var value = SDKConfigs._configs[config];
+        if (typeof value === 'number') {
+            return Math.floor(value);
+        }
+        return null;
+    };
+    SDKConfigs.getConfigStrValue = function (config) {
+        var value = SDKConfigs._configs[config];
+        if (typeof value === 'string') {
+            return value;
+        }
+        return null;
+    };
+    SDKConfigs._flags = {};
+    SDKConfigs._configs = {};
+    return SDKConfigs;
 }());
-exports["default"] = SDKFlags;
+exports.SDKConfigs = SDKConfigs;
 
 
 /***/ }),
@@ -6140,14 +8053,15 @@ var Diagnostics_1 = __importDefault(__nccwpck_require__(7413));
 var Errors_1 = __nccwpck_require__(484);
 var IDataAdapter_1 = __nccwpck_require__(536);
 var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
-var SDKFlags_1 = __importDefault(__nccwpck_require__(2566));
+var SDKConfigs_1 = __nccwpck_require__(70);
 var core_1 = __nccwpck_require__(8122);
+var Hashing_1 = __nccwpck_require__(6813);
 var IDListUtil_1 = __importDefault(__nccwpck_require__(261));
 var safeFetch_1 = __importDefault(__nccwpck_require__(7817));
 var SYNC_OUTDATED_MAX = 120 * 1000;
 var SpecStore = /** @class */ (function () {
-    function SpecStore(fetcher, options) {
-        var _a;
+    function SpecStore(secretKey, fetcher, options) {
+        var _a, _b;
         this.rulesetsSyncTimerLastActiveTime = Date.now();
         this.idListsSyncTimerLastActiveTime = Date.now();
         this.rulesetsSyncPromise = function () { return Promise.resolve(); };
@@ -6167,8 +8081,12 @@ var SpecStore = /** @class */ (function () {
             configs: {},
             idLists: {},
             layers: {},
-            experimentToLayer: {}
+            experimentToLayer: {},
+            promptConfigs: {}
         };
+        this.networkOverrideFunc = (_b = options.networkOverrideFunc) !== null && _b !== void 0 ? _b : null;
+        this.hashedSDKKey =
+            secretKey != null ? (0, Hashing_1.sha256HashBase64)(secretKey) : 'undefined';
         this.rulesetsSyncInterval = options.rulesetsSyncIntervalMs;
         this.idListsSyncInterval = options.idListsSyncIntervalMs;
         this.disableRulesetsSync = options.disableRulesetsSync;
@@ -6182,6 +8100,9 @@ var SpecStore = /** @class */ (function () {
         this.initStrategyForIDLists = options.initStrategyForIDLists;
         this.clientSDKKeyToAppMap = {};
         this.hashedClientSDKKeyToAppMap = {};
+        this.primaryTargetAppID = null;
+        this.defaultEnvironemnt = null;
+        this.sessionReplayInfo = null;
     }
     SpecStore.prototype.getInitReason = function () {
         return this.initReason;
@@ -6208,6 +8129,24 @@ var SpecStore = /** @class */ (function () {
         var _a;
         return (_a = this.store.experimentToLayer[experimentName]) !== null && _a !== void 0 ? _a : null;
     };
+    SpecStore.prototype.getPromptSet = function (aiConfigName) {
+        var _this = this;
+        var _a;
+        var aiConfig = (_a = this.store.promptConfigs) === null || _a === void 0 ? void 0 : _a[aiConfigName];
+        if (aiConfig == null) {
+            return null;
+        }
+        return aiConfig.promptVersionIds
+            .map(function (id) {
+            var _a;
+            var config = _this.getConfig(id);
+            if (config == null) {
+                return null;
+            }
+            return ((_a = config === null || config === void 0 ? void 0 : config.defaultValue) !== null && _a !== void 0 ? _a : {});
+        })
+            .filter(function (v) { return v !== null; });
+    };
     SpecStore.prototype.getIDList = function (listName) {
         var _a;
         return (_a = this.store.idLists[listName]) !== null && _a !== void 0 ? _a : null;
@@ -6230,12 +8169,21 @@ var SpecStore = /** @class */ (function () {
     SpecStore.prototype.getHashedSDKKeysToEntities = function () {
         return this.hashedSDKKeysToEntities;
     };
-    SpecStore.prototype.init = function () {
+    SpecStore.prototype.getPrimaryTargetAppID = function () {
+        return this.primaryTargetAppID;
+    };
+    SpecStore.prototype.getDefaultEnvironment = function () {
+        return this.defaultEnvironemnt;
+    };
+    SpecStore.prototype.getSessionReplayInfo = function () {
+        return this.sessionReplayInfo;
+    };
+    SpecStore.prototype.init = function (ctx) {
         return __awaiter(this, void 0, void 0, function () {
-            var specsJSON, error;
+            var specsJSON, _a, synced, error, error, _b, synced, error, maskedUrl, err;
             var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         specsJSON = null;
                         if (!this.dataAdapter) return [3 /*break*/, 3];
@@ -6244,11 +8192,17 @@ var SpecStore = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.dataAdapter.initialize()];
                     case 1:
-                        _a.sent();
+                        _c.sent();
                         return [4 /*yield*/, this._fetchConfigSpecsFromAdapter()];
                     case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        _a = _c.sent(), synced = _a.synced, error = _a.error;
+                        if (synced) {
+                            ctx.setSuccess('DataAdapter');
+                        }
+                        if (error) {
+                            ctx.setFailed(error);
+                        }
+                        _c.label = 3;
                     case 3:
                         if (this.initReason === 'Uninitialized' && this.bootstrapValues != null) {
                             try {
@@ -6257,10 +8211,13 @@ var SpecStore = /** @class */ (function () {
                                 this._process(specsJSON);
                                 if (this.lastUpdateTime !== 0) {
                                     this.initReason = 'Bootstrap';
+                                    ctx.setSuccess('Bootstrap');
                                 }
                             }
-                            catch (e) {
-                                OutputLogger_1["default"].error(new Errors_1.StatsigInvalidBootstrapValuesError());
+                            catch (_d) {
+                                error = new Errors_1.StatsigInvalidBootstrapValuesError();
+                                OutputLogger_1["default"].error(error);
+                                ctx.setFailed(error);
                             }
                             Diagnostics_1["default"].mark.bootstrap.process.end({
                                 success: this.initReason === 'Bootstrap'
@@ -6269,11 +8226,22 @@ var SpecStore = /** @class */ (function () {
                         if (!(this.initReason === 'Uninitialized')) return [3 /*break*/, 5];
                         return [4 /*yield*/, this._fetchConfigSpecsFromServer()];
                     case 4:
-                        error = (_a.sent()).error;
-                        if (error) {
-                            OutputLogger_1["default"].error(new Errors_1.StatsigInitializeFromNetworkError(error));
+                        _b = _c.sent(), synced = _b.synced, error = _b.error;
+                        if (synced) {
+                            ctx.setSuccess('Network');
                         }
-                        _a.label = 5;
+                        if (error) {
+                            maskedUrl = error.message.replace(/\/download_config_specs\/([^/]+)\.json/, function (match, secretKey) {
+                                var maskedKey = secretKey.length > 13
+                                    ? "".concat(secretKey.slice(0, 13), "****")
+                                    : 'REDACTED';
+                                return "/download_config_specs/".concat(maskedKey, ".json");
+                            });
+                            err = new Errors_1.StatsigInitializeFromNetworkError(new Error(maskedUrl));
+                            OutputLogger_1["default"].error(err);
+                            ctx.setFailed(err);
+                        }
+                        _c.label = 5;
                     case 5:
                         this.setInitialUpdateTime();
                         if (!(this.initStrategyForIDLists === 'lazy')) return [3 /*break*/, 6];
@@ -6292,8 +8260,8 @@ var SpecStore = /** @class */ (function () {
                         if (!(this.initStrategyForIDLists !== 'none')) return [3 /*break*/, 8];
                         return [4 /*yield*/, this._initIDLists()];
                     case 7:
-                        _a.sent();
-                        _a.label = 8;
+                        _c.sent();
+                        _c.label = 8;
                     case 8:
                         this.pollForUpdates();
                         this.initialized = true;
@@ -6366,7 +8334,7 @@ var SpecStore = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
+                        _b.trys.push([0, 5, , 6]);
                         response = undefined;
                         return [4 /*yield*/, this.fetcher.downloadConfigSpecs(this.lastUpdateTime)];
                     case 1:
@@ -6387,14 +8355,16 @@ var SpecStore = /** @class */ (function () {
                             typeof this.rulesUpdatedCallback === 'function') {
                             this.rulesUpdatedCallback(specsString, this.lastUpdateTime);
                         }
-                        if (hasUpdates) {
-                            this._saveConfigSpecsToAdapter(specsString);
-                            Diagnostics_1["default"].mark.downloadConfigSpecs.process.end({
-                                success: this.initReason === 'Network'
-                            });
-                        }
-                        return [2 /*return*/, { synced: true }];
+                        if (!hasUpdates) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this._saveConfigSpecsToAdapter(specsString)];
                     case 3:
+                        _b.sent();
+                        Diagnostics_1["default"].mark.downloadConfigSpecs.process.end({
+                            success: this.initReason === 'Network'
+                        });
+                        _b.label = 4;
+                    case 4: return [2 /*return*/, { synced: true }];
+                    case 5:
                         e_1 = _b.sent();
                         if (e_1 instanceof Errors_1.StatsigLocalModeNetworkError) {
                             return [2 /*return*/, { synced: false }];
@@ -6402,8 +8372,8 @@ var SpecStore = /** @class */ (function () {
                         else {
                             return [2 /*return*/, { synced: false, error: e_1 }];
                         }
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -6418,11 +8388,11 @@ var SpecStore = /** @class */ (function () {
                         if (!this.dataAdapter) {
                             return [2 /*return*/, { synced: false }];
                         }
-                        return [4 /*yield*/, this.dataAdapter.get(IDataAdapter_1.DataAdapterKey.Rulesets)];
+                        return [4 /*yield*/, this.dataAdapter.get((0, IDataAdapter_1.getDataAdapterKey)(this.hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.V1Rulesets))];
                     case 1:
                         _a = _b.sent(), result = _a.result, error = _a.error;
                         if (result && !error) {
-                            configSpecs = JSON.parse(result);
+                            configSpecs = typeof result === 'string' ? JSON.parse(result) : result;
                             success = this._process(configSpecs).success;
                             if (success) {
                                 this.initReason = 'DataAdapter';
@@ -6431,7 +8401,7 @@ var SpecStore = /** @class */ (function () {
                         }
                         return [2 /*return*/, {
                                 synced: false,
-                                error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKey.Rulesets)
+                                error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKeyPath.V1Rulesets)
                             }];
                     case 2:
                         e_2 = _b.sent();
@@ -6449,7 +8419,7 @@ var SpecStore = /** @class */ (function () {
                         if (!this.dataAdapter) {
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, this.dataAdapter.set(IDataAdapter_1.DataAdapterKey.Rulesets, specString, this.lastUpdateTime)];
+                        return [4 /*yield*/, this.dataAdapter.set((0, IDataAdapter_1.getDataAdapterKey)(this.hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.V1Rulesets), specString, this.lastUpdateTime)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -6517,7 +8487,8 @@ var SpecStore = /** @class */ (function () {
                 switch (_d.label) {
                     case 0:
                         adapter = this.dataAdapter;
-                        shouldSyncFromAdapter = ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.supportsPollingUpdatesFor) === null || _a === void 0 ? void 0 : _a.call(adapter, IDataAdapter_1.DataAdapterKey.Rulesets)) === true;
+                        shouldSyncFromAdapter = ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.supportsPollingUpdatesFor) === null || _a === void 0 ? void 0 : _a.call(adapter, IDataAdapter_1.DataAdapterKeyPath.V1Rulesets)) ===
+                            true;
                         if (!shouldSyncFromAdapter) return [3 /*break*/, 2];
                         return [4 /*yield*/, this._fetchConfigSpecsFromAdapter()];
                     case 1:
@@ -6537,7 +8508,7 @@ var SpecStore = /** @class */ (function () {
                             this.rulesetsSyncFailureCount++;
                             if (this.rulesetsSyncFailureCount * this.rulesetsSyncInterval >
                                 SYNC_OUTDATED_MAX) {
-                                OutputLogger_1["default"].warn("statsigSDK::sync> Syncing the server SDK from the ".concat(shouldSyncFromAdapter ? 'data adapter' : 'network', " has failed for  ").concat(this.rulesetsSyncFailureCount * this.rulesetsSyncInterval, "ms. Your sdk will continue to serve gate/config/experiment definitions as of the last successful sync. See https://docs.statsig.com/messages/serverSDKConnection for more information"));
+                                OutputLogger_1["default"].warn("statsigSDK::sync> Syncing the server SDK from the \n          ".concat(shouldSyncFromAdapter ? 'data adapter' : 'network', "\n           has failed for  \n           ").concat(this.rulesetsSyncFailureCount * this.rulesetsSyncInterval, "\n          ms. Your sdk will continue to serve gate/config/experiment definitions as of the last successful sync. See https://docs.statsig.com/messages/serverSDKConnection for more information"));
                                 this.rulesetsSyncFailureCount = 0;
                             }
                         }
@@ -6558,7 +8529,8 @@ var SpecStore = /** @class */ (function () {
                             return [2 /*return*/];
                         }
                         adapter = this.dataAdapter;
-                        shouldSyncFromAdapter = ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.supportsPollingUpdatesFor) === null || _a === void 0 ? void 0 : _a.call(adapter, IDataAdapter_1.DataAdapterKey.IDLists)) === true;
+                        shouldSyncFromAdapter = ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.supportsPollingUpdatesFor) === null || _a === void 0 ? void 0 : _a.call(adapter, IDataAdapter_1.DataAdapterKeyPath.V1IDLists)) ===
+                            true;
                         if (!shouldSyncFromAdapter) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.syncIdListsFromDataAdapter()];
                     case 1:
@@ -6586,7 +8558,7 @@ var SpecStore = /** @class */ (function () {
                             this.idListsSyncFailureCount++;
                             if (this.idListsSyncFailureCount * this.idListsSyncInterval >
                                 SYNC_OUTDATED_MAX) {
-                                OutputLogger_1["default"].warn("statsigSDK::sync> Syncing ID lists from the ".concat(shouldSyncFromAdapter ? 'data adapter' : 'network', " has failed for  ").concat(this.idListsSyncFailureCount * this.idListsSyncInterval, "ms. The SDK will continue to serve gate/config/experiment definitions that depend on ID lists as of the last successful sync. See https://docs.statsig.com/messages/serverSDKConnection for more information"));
+                                OutputLogger_1["default"].warn("statsigSDK::sync> Syncing ID lists from the \n          ".concat(shouldSyncFromAdapter ? 'data adapter' : 'network', " \n          has failed for  ").concat(this.idListsSyncFailureCount * this.idListsSyncInterval, "\n          ms. The SDK will continue to serve gate/config/experiment definitions that depend on ID lists as of the last successful sync. See https://docs.statsig.com/messages/serverSDKConnection for more information"));
                                 this.idListsSyncFailureCount = 0;
                             }
                         }
@@ -6598,7 +8570,7 @@ var SpecStore = /** @class */ (function () {
     };
     // returns a boolean indicating whether specsJSON has was successfully parsed
     SpecStore.prototype._process = function (specsJSON) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         var hashedSDKKeyUsed = specsJSON.hashed_sdk_key_used;
         if (hashedSDKKeyUsed != null && typeof hashedSDKKeyUsed === 'string') {
             if (!this.fetcher.validateSDKKeyUsed(hashedSDKKeyUsed)) {
@@ -6607,6 +8579,10 @@ var SpecStore = /** @class */ (function () {
         }
         if (!(specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.has_updates)) {
             return { success: true, hasUpdates: false };
+        }
+        if ((specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.time) !== undefined &&
+            specsJSON.time < this.lastUpdateTime) {
+            return { success: true, hasUpdates: true };
         }
         var updatedGates = {};
         var updatedConfigs = {};
@@ -6632,8 +8608,8 @@ var SpecStore = /** @class */ (function () {
                 return { success: false, hasUpdates: true };
             }
         }
-        for (var _e = 0, configArray_1 = configArray; _e < configArray_1.length; _e++) {
-            var configJSON = configArray_1[_e];
+        for (var _j = 0, configArray_1 = configArray; _j < configArray_1.length; _j++) {
+            var configJSON = configArray_1[_j];
             try {
                 var config = new ConfigSpec_1.ConfigSpec(configJSON);
                 updatedConfigs[config.name] = config;
@@ -6642,8 +8618,8 @@ var SpecStore = /** @class */ (function () {
                 return { success: false, hasUpdates: true };
             }
         }
-        for (var _f = 0, layersArray_1 = layersArray; _f < layersArray_1.length; _f++) {
-            var layerJSON = layersArray_1[_f];
+        for (var _k = 0, layersArray_1 = layersArray; _k < layersArray_1.length; _k++) {
+            var layerJSON = layersArray_1[_k];
             try {
                 var config = new ConfigSpec_1.ConfigSpec(layerJSON);
                 updatedLayers[config.name] = config;
@@ -6652,16 +8628,21 @@ var SpecStore = /** @class */ (function () {
                 return { success: false, hasUpdates: true };
             }
         }
-        SDKFlags_1["default"].setFlags(specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.sdk_flags);
+        SDKConfigs_1.SDKConfigs.setConfigs(specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.sdk_configs);
+        SDKConfigs_1.SDKConfigs.setFlags(specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.sdk_flags);
         var updatedExpToLayer = this._reverseLayerExperimentMapping(layerToExperimentMap);
         this.store.gates = updatedGates;
         this.store.configs = updatedConfigs;
         this.store.layers = updatedLayers;
         this.store.experimentToLayer = updatedExpToLayer;
-        this.lastUpdateTime = (_a = specsJSON.time) !== null && _a !== void 0 ? _a : this.lastUpdateTime;
-        this.clientSDKKeyToAppMap = ((_b = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.sdk_keys_to_app_ids) !== null && _b !== void 0 ? _b : {});
-        this.hashedClientSDKKeyToAppMap = ((_c = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.hashed_sdk_keys_to_app_ids) !== null && _c !== void 0 ? _c : {});
-        this.hashedSDKKeysToEntities = ((_d = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.hashed_sdk_keys_to_entities) !== null && _d !== void 0 ? _d : {});
+        this.store.promptConfigs = ((_a = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.prompt_configs) !== null && _a !== void 0 ? _a : {});
+        this.lastUpdateTime = (_b = specsJSON.time) !== null && _b !== void 0 ? _b : this.lastUpdateTime;
+        this.clientSDKKeyToAppMap = ((_c = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.sdk_keys_to_app_ids) !== null && _c !== void 0 ? _c : {});
+        this.hashedClientSDKKeyToAppMap = ((_d = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.hashed_sdk_keys_to_app_ids) !== null && _d !== void 0 ? _d : {});
+        this.hashedSDKKeysToEntities = ((_e = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.hashed_sdk_keys_to_entities) !== null && _e !== void 0 ? _e : {});
+        this.primaryTargetAppID = ((_f = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.app_id) !== null && _f !== void 0 ? _f : null);
+        this.defaultEnvironemnt = ((_g = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.default_environment) !== null && _g !== void 0 ? _g : null);
+        this.sessionReplayInfo = ((_h = specsJSON === null || specsJSON === void 0 ? void 0 : specsJSON.session_replay_info) !== null && _h !== void 0 ? _h : null);
         return { success: true, hasUpdates: true };
     };
     /**
@@ -6683,7 +8664,7 @@ var SpecStore = /** @class */ (function () {
     };
     SpecStore.prototype.syncIdListsFromDataAdapter = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dataAdapter_1, adapterIdLists, listsLookupString, lookup, tasks, _loop_1, _i, lookup_1, name_1, e_3;
+            var dataAdapter_1, adapterIdLists, lookup, tasks, _loop_1, _i, lookup_1, name_1, e_3;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -6693,31 +8674,31 @@ var SpecStore = /** @class */ (function () {
                         if (!dataAdapter_1) {
                             return [2 /*return*/, { synced: false }];
                         }
-                        return [4 /*yield*/, dataAdapter_1.get(IDataAdapter_1.DataAdapterKey.IDLists)];
+                        return [4 /*yield*/, dataAdapter_1.get((0, IDataAdapter_1.getDataAdapterKey)(this.hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.V1IDLists))];
                     case 1:
-                        adapterIdLists = _a.sent();
-                        listsLookupString = adapterIdLists.result;
-                        if (!listsLookupString) {
+                        adapterIdLists = (_a.sent()).result;
+                        if (!adapterIdLists) {
                             return [2 /*return*/, {
                                     synced: false,
-                                    error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKey.IDLists)
+                                    error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKeyPath.V1IDLists)
                                 }];
                         }
-                        lookup = IDListUtil_1["default"].parseBootstrapLookup(listsLookupString);
+                        lookup = IDListUtil_1["default"].parseBootstrapLookup(adapterIdLists);
                         if (!lookup) {
                             return [2 /*return*/, {
                                     synced: false,
-                                    error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKey.IDLists)
+                                    error: new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKeyPath.V1IDLists)
                                 }];
                         }
                         tasks = [];
                         _loop_1 = function (name_1) {
                             tasks.push(new Promise(function (resolve, reject) {
                                 dataAdapter_1
-                                    .get(IDListUtil_1["default"].getIdListDataStoreKey(name_1))
-                                    .then(function (data) {
-                                    if (!data.result) {
-                                        return reject(new Errors_1.StatsigInvalidDataAdapterValuesError(IDListUtil_1["default"].getIdListDataStoreKey(name_1)));
+                                    .get((0, IDataAdapter_1.getDataAdapterKey)(_this.hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.IDList, IDataAdapter_1.CompressFormat.PlainText, name_1))
+                                    .then(function (_a) {
+                                    var data = _a.result;
+                                    if (!data || typeof data !== 'string') {
+                                        return reject(new Errors_1.StatsigInvalidDataAdapterValuesError(IDataAdapter_1.DataAdapterKeyPath.V1Rulesets));
                                     }
                                     _this.store.idLists[name_1] = {
                                         ids: {},
@@ -6726,7 +8707,7 @@ var SpecStore = /** @class */ (function () {
                                         fileID: 'bootstrap',
                                         creationTime: 0
                                     };
-                                    IDListUtil_1["default"].updateIdList(_this.store.idLists, name_1, data.result);
+                                    IDListUtil_1["default"].updateIdList(_this.store.idLists, name_1, data);
                                 })["catch"](function (e) {
                                     OutputLogger_1["default"].debug(e);
                                 })["finally"](function () { return resolve(); });
@@ -6830,7 +8811,7 @@ var SpecStore = /** @class */ (function () {
                     case 7:
                         _h.sent();
                         if (!this.dataAdapter) return [3 /*break*/, 9];
-                        return [4 /*yield*/, IDListUtil_1["default"].saveToDataAdapter(this.dataAdapter, this.store.idLists)];
+                        return [4 /*yield*/, IDListUtil_1["default"].saveToDataAdapter(this.hashedSDKKey, this.dataAdapter, this.store.idLists, lookup)];
                     case 8:
                         _h.sent();
                         _h.label = 9;
@@ -6850,11 +8831,11 @@ var SpecStore = /** @class */ (function () {
         });
     };
     SpecStore.prototype.genFetchIDList = function (name, url, readSize) {
-        var _a;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var threwNetworkError, res, markerID, shouldLog, diagnostics, e_6, contentLength, length_1, _b, _c, _d, e_7;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var threwNetworkError, res, markerID, shouldLog, diagnostics, fetcher, e_6, contentLength, length_1, _c, _d, _e, e_7;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         threwNetworkError = false;
                         res = null;
@@ -6862,30 +8843,31 @@ var SpecStore = /** @class */ (function () {
                         markerID = String(this.getIDListCallCount);
                         shouldLog = this.getIDListCallCount % 50 === 1;
                         diagnostics = shouldLog ? Diagnostics_1["default"].mark.getIDList : null;
-                        _e.label = 1;
+                        _f.label = 1;
                     case 1:
-                        _e.trys.push([1, 3, 4, 5]);
+                        _f.trys.push([1, 3, 4, 5]);
                         diagnostics === null || diagnostics === void 0 ? void 0 : diagnostics.networkRequest.start({
                             url: url,
                             markerID: markerID
                         });
-                        return [4 /*yield*/, (0, safeFetch_1["default"])(url, {
+                        fetcher = (_a = this.networkOverrideFunc) !== null && _a !== void 0 ? _a : safeFetch_1["default"];
+                        return [4 /*yield*/, fetcher(url, {
                                 method: 'GET',
                                 headers: {
                                     Range: "bytes=".concat(readSize, "-")
                                 }
                             })];
                     case 2:
-                        res = _e.sent();
+                        res = _f.sent();
                         return [3 /*break*/, 5];
                     case 3:
-                        e_6 = _e.sent();
+                        e_6 = _f.sent();
                         threwNetworkError = true;
                         return [3 /*break*/, 5];
                     case 4:
                         diagnostics === null || diagnostics === void 0 ? void 0 : diagnostics.networkRequest.end({
                             statusCode: res === null || res === void 0 ? void 0 : res.status,
-                            success: (_a = res === null || res === void 0 ? void 0 : res.ok) !== null && _a !== void 0 ? _a : false,
+                            success: (_b = res === null || res === void 0 ? void 0 : res.ok) !== null && _b !== void 0 ? _b : false,
                             markerID: markerID
                         });
                         return [7 /*endfinally*/];
@@ -6893,9 +8875,9 @@ var SpecStore = /** @class */ (function () {
                         if (threwNetworkError || !res) {
                             return [2 /*return*/];
                         }
-                        _e.label = 6;
+                        _f.label = 6;
                     case 6:
-                        _e.trys.push([6, 8, , 9]);
+                        _f.trys.push([6, 8, , 9]);
                         diagnostics === null || diagnostics === void 0 ? void 0 : diagnostics.process.start({ markerID: markerID });
                         contentLength = res.headers.get('content-length');
                         if (contentLength == null) {
@@ -6909,18 +8891,18 @@ var SpecStore = /** @class */ (function () {
                             delete this.store.idLists[name];
                             throw new Error('Content-Length for the id list is invalid.');
                         }
-                        _c = (_b = IDListUtil_1["default"]).updateIdList;
-                        _d = [this.store.idLists, name];
+                        _d = (_c = IDListUtil_1["default"]).updateIdList;
+                        _e = [this.store.idLists, name];
                         return [4 /*yield*/, res.text()];
                     case 7:
-                        _c.apply(_b, _d.concat([_e.sent()]));
+                        _d.apply(_c, _e.concat([_f.sent()]));
                         diagnostics === null || diagnostics === void 0 ? void 0 : diagnostics.process.end({
                             success: true,
                             markerID: markerID
                         });
                         return [3 /*break*/, 9];
                     case 8:
-                        e_7 = _e.sent();
+                        e_7 = _f.sent();
                         OutputLogger_1["default"].debug(e_7);
                         diagnostics === null || diagnostics === void 0 ? void 0 : diagnostics.process.end({
                             success: false,
@@ -7005,7 +8987,7 @@ exports["default"] = StatsigInstanceUtils;
 /***/ }),
 
 /***/ 8512:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -7022,8 +9004,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 exports.OptionsLoggingCopy = exports.OptionsWithDefaults = void 0;
-var DEFAULT_API = 'https://statsigapi.net/v1';
-var DEFAULT_API_FOR_DOWNLOAD_CONFIG_SPECS = 'https://api.statsigcdn.com/v1';
+var StatsigFetcher_1 = __nccwpck_require__(2384);
 var DEFAULT_RULESETS_SYNC_INTERVAL = 10 * 1000;
 var MIN_RULESETS_SYNC_INTERVAL = 5 * 1000;
 var DEFAULT_ID_LISTS_SYNC_INTERVAL = 60 * 1000;
@@ -7034,11 +9015,13 @@ var DEFAULT_LOG_DIAGNOSTICS = false;
 var DEFAULT_POST_LOGS_RETRY_LIMIT = 5;
 var DEFAULT_POST_LOGS_RETRY_BACKOFF = 1000;
 function OptionsWithDefaults(opts) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
     return {
-        api: normalizeUrl((_a = getString(opts, 'api', DEFAULT_API)) !== null && _a !== void 0 ? _a : DEFAULT_API),
-        apiForDownloadConfigSpecs: (_c = normalizeUrl(getString(opts, 'apiForDownloadConfigSpecs', (_b = opts.api) !== null && _b !== void 0 ? _b : null))) !== null && _c !== void 0 ? _c : DEFAULT_API_FOR_DOWNLOAD_CONFIG_SPECS,
-        apiForGetIdLists: (_e = normalizeUrl(getString(opts, 'apiForGetIdLists', (_d = opts.api) !== null && _d !== void 0 ? _d : null))) !== null && _e !== void 0 ? _e : DEFAULT_API,
+        api: normalizeUrl((_a = getString(opts, 'api', StatsigFetcher_1.STATSIG_API)) !== null && _a !== void 0 ? _a : StatsigFetcher_1.STATSIG_API),
+        apiForDownloadConfigSpecs: (_c = normalizeUrl(getString(opts, 'apiForDownloadConfigSpecs', (_b = opts.api) !== null && _b !== void 0 ? _b : null))) !== null && _c !== void 0 ? _c : StatsigFetcher_1.STATSIG_CDN,
+        apiForGetIdLists: (_e = normalizeUrl(getString(opts, 'apiForGetIdLists', (_d = opts.api) !== null && _d !== void 0 ? _d : null))) !== null && _e !== void 0 ? _e : StatsigFetcher_1.STATSIG_API,
+        fallbackToStatsigAPI: getBoolean(opts, 'fallbackToStatsigAPI', false),
+        networkOverrideFunc: (_f = opts.networkOverrideFunc) !== null && _f !== void 0 ? _f : null,
         bootstrapValues: getString(opts, 'bootstrapValues', null),
         environment: opts.environment
             ? getObject(opts, 'environment', {})
@@ -7048,20 +9031,23 @@ function OptionsWithDefaults(opts) {
             : null,
         localMode: getBoolean(opts, 'localMode', false),
         initTimeoutMs: getNumber(opts, 'initTimeoutMs', 0),
-        logger: (_f = opts.logger) !== null && _f !== void 0 ? _f : __assign(__assign({}, console), { logLevel: 'warn' }),
-        dataAdapter: (_g = opts.dataAdapter) !== null && _g !== void 0 ? _g : null,
+        logger: (_g = opts.logger) !== null && _g !== void 0 ? _g : __assign(__assign({}, console), { logLevel: 'warn' }),
+        dataAdapter: (_h = opts.dataAdapter) !== null && _h !== void 0 ? _h : null,
         rulesetsSyncIntervalMs: Math.max(getNumber(opts, 'rulesetsSyncIntervalMs', DEFAULT_RULESETS_SYNC_INTERVAL), MIN_RULESETS_SYNC_INTERVAL),
         idListsSyncIntervalMs: Math.max(getNumber(opts, 'idListsSyncIntervalMs', DEFAULT_ID_LISTS_SYNC_INTERVAL), MIN_ID_LISTS_SYNC_INTERVAL),
         loggingIntervalMs: getNumber(opts, 'loggingIntervalMs', DEFAULT_LOGGING_INTERVAL),
         loggingMaxBufferSize: Math.min(getNumber(opts, 'loggingMaxBufferSize', DEFAULT_MAX_LOGGING_BUFFER_SIZE), DEFAULT_MAX_LOGGING_BUFFER_SIZE),
         disableDiagnostics: getBoolean(opts, 'disableDiagnostics', DEFAULT_LOG_DIAGNOSTICS),
-        initStrategyForIP3Country: (_h = getString(opts, 'initStrategyForIP3Country', 'await')) !== null && _h !== void 0 ? _h : 'await',
-        initStrategyForIDLists: (_j = getString(opts, 'initStrategyForIDLists', 'await')) !== null && _j !== void 0 ? _j : 'await',
+        initStrategyForIP3Country: (_j = getString(opts, 'initStrategyForIP3Country', 'await')) !== null && _j !== void 0 ? _j : 'await',
+        initStrategyForIDLists: (_k = getString(opts, 'initStrategyForIDLists', 'await')) !== null && _k !== void 0 ? _k : 'await',
         postLogsRetryLimit: getNumber(opts, 'postLogsRetryLimit', DEFAULT_POST_LOGS_RETRY_LIMIT),
-        postLogsRetryBackoff: (_k = opts.postLogsRetryBackoff) !== null && _k !== void 0 ? _k : DEFAULT_POST_LOGS_RETRY_BACKOFF,
-        disableRulesetsSync: (_l = opts.disableRulesetsSync) !== null && _l !== void 0 ? _l : false,
-        disableIdListsSync: (_m = opts.disableIdListsSync) !== null && _m !== void 0 ? _m : false,
-        disableAllLogging: (_o = opts.disableAllLogging) !== null && _o !== void 0 ? _o : false
+        postLogsRetryBackoff: (_l = opts.postLogsRetryBackoff) !== null && _l !== void 0 ? _l : DEFAULT_POST_LOGS_RETRY_BACKOFF,
+        disableRulesetsSync: (_m = opts.disableRulesetsSync) !== null && _m !== void 0 ? _m : false,
+        disableIdListsSync: (_o = opts.disableIdListsSync) !== null && _o !== void 0 ? _o : false,
+        disableAllLogging: (_p = opts.disableAllLogging) !== null && _p !== void 0 ? _p : false,
+        userPersistentStorage: (_q = opts.userPersistentStorage) !== null && _q !== void 0 ? _q : null,
+        evaluationCallback: (_r = opts.evaluationCallback) !== null && _r !== void 0 ? _r : undefined,
+        evaluationCallbacks: (_s = opts.evaluationCallbacks) !== null && _s !== void 0 ? _s : {}
     };
 }
 exports.OptionsWithDefaults = OptionsWithDefaults;
@@ -7202,10 +9188,11 @@ var Layer_1 = __importDefault(__nccwpck_require__(4267));
 var LogEvent_1 = __importDefault(__nccwpck_require__(9765));
 var LogEventProcessor_1 = __importDefault(__nccwpck_require__(6908));
 var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
+var SpecStore_1 = __importDefault(__nccwpck_require__(3277));
 var StatsigOptions_1 = __nccwpck_require__(8512);
-var asyncify_1 = __importDefault(__nccwpck_require__(5673));
 var core_1 = __nccwpck_require__(8122);
 var LogEventValidator_1 = __importDefault(__nccwpck_require__(6275));
+var StatsigContext_1 = __nccwpck_require__(288);
 var StatsigFetcher_1 = __importDefault(__nccwpck_require__(2384));
 var hasLoggedNoUserIdWarning = false;
 var ExposureLogging;
@@ -7239,65 +9226,90 @@ var StatsigServer = /** @class */ (function () {
             logger: this._logger,
             options: this._options
         });
-        this._evaluator = new Evaluator_1["default"](this._fetcher, this._options);
+        this._store = new SpecStore_1["default"](this._secretKey, this._fetcher, this._options);
+        this._evaluator = new Evaluator_1["default"](this._options, this._store);
     }
+    StatsigServer.prototype.initializeAsync = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.initializeImpl()];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.getInitDetails()];
+                }
+            });
+        });
+    };
     /**
      * Initializes the statsig server SDK. This must be called before checking gates/configs or logging events.
      * @throws Error if a Server Secret Key is not provided
      */
-    StatsigServer.prototype.initializeAsync = function () {
-        var _this = this;
-        return this._errorBoundary.capture(function () {
-            var _a;
-            if (_this._pendingInitPromise != null) {
-                return _this._pendingInitPromise;
-            }
-            if (_this._ready === true) {
-                return Promise.resolve();
-            }
-            if (!_this._options.localMode &&
-                (typeof _this._secretKey !== 'string' ||
-                    _this._secretKey.length === 0 ||
-                    !_this._secretKey.startsWith('secret-'))) {
-                return Promise.reject(new Errors_1.StatsigInvalidArgumentError('Invalid key provided.  You must use a Server Secret Key from the Statsig console with the node-js-server-sdk'));
-            }
-            Diagnostics_1["default"].setContext('initialize');
-            Diagnostics_1["default"].mark.overall.start({});
-            var initPromise = _this._evaluator.init()["finally"](function () {
-                _this._ready = true;
-                _this._pendingInitPromise = null;
-                Diagnostics_1["default"].mark.overall.end({ success: true });
-                Diagnostics_1["default"].logDiagnostics('initialize');
-                Diagnostics_1["default"].setContext('config_sync');
-            });
-            if (_this._options.initTimeoutMs != null &&
-                _this._options.initTimeoutMs > 0) {
-                _this._pendingInitPromise = Promise.race([
-                    initPromise,
-                    new Promise(function (resolve) {
-                        setTimeout(function () {
-                            Diagnostics_1["default"].mark.overall.end({
-                                success: false,
-                                reason: 'timeout'
-                            });
-                            Diagnostics_1["default"].logDiagnostics('initialize');
-                            Diagnostics_1["default"].setContext('config_sync');
+    StatsigServer.prototype.initializeImpl = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._errorBoundary.capture(function (ctx) {
+                        var _a;
+                        if (_this._pendingInitPromise != null) {
+                            return _this._pendingInitPromise;
+                        }
+                        if (_this._ready === true) {
+                            return Promise.resolve(ctx);
+                        }
+                        if (!_this._options.localMode &&
+                            (typeof _this._secretKey !== 'string' ||
+                                _this._secretKey.length === 0 ||
+                                !_this._secretKey.startsWith('secret-'))) {
+                            return Promise.reject(new Errors_1.StatsigInvalidArgumentError('Invalid key provided.  You must use a Server Secret Key from the Statsig console with the node-js-server-sdk'));
+                        }
+                        Diagnostics_1["default"].setContext('initialize');
+                        Diagnostics_1["default"].mark.overall.start({});
+                        var initPromise = _this._evaluator
+                            .init(ctx)
+                            .then(function () { return Promise.resolve(ctx); })["finally"](function () {
                             _this._ready = true;
                             _this._pendingInitPromise = null;
-                            resolve();
-                        }, _this._options.initTimeoutMs);
-                    }),
-                ]);
-            }
-            else {
-                _this._pendingInitPromise = initPromise;
-            }
-            return (_a = _this._pendingInitPromise) !== null && _a !== void 0 ? _a : Promise.resolve();
-        }, function () {
-            _this._ready = true;
-            _this._pendingInitPromise = null;
-            return Promise.resolve();
-        }, { tag: 'initializeAsync' });
+                            Diagnostics_1["default"].mark.overall.end({ success: true });
+                            Diagnostics_1["default"].logDiagnostics('initialize');
+                            Diagnostics_1["default"].setContext('config_sync');
+                        });
+                        if (_this._options.initTimeoutMs != null &&
+                            _this._options.initTimeoutMs > 0) {
+                            _this._pendingInitPromise = Promise.race([
+                                initPromise,
+                                new Promise(function (resolve) {
+                                    setTimeout(function () {
+                                        Diagnostics_1["default"].mark.overall.end({
+                                            success: false,
+                                            reason: 'timeout'
+                                        });
+                                        Diagnostics_1["default"].logDiagnostics('initialize');
+                                        Diagnostics_1["default"].setContext('config_sync');
+                                        _this._ready = true;
+                                        _this._pendingInitPromise = null;
+                                        ctx.setFailed(new Error('Timed out waiting for initialize'));
+                                        resolve(ctx);
+                                    }, _this._options.initTimeoutMs);
+                                }),
+                            ]);
+                        }
+                        else {
+                            _this._pendingInitPromise = initPromise;
+                        }
+                        return (_a = _this._pendingInitPromise) !== null && _a !== void 0 ? _a : Promise.resolve(ctx);
+                    }, function (ctx, err) {
+                        _this._ready = true;
+                        _this._pendingInitPromise = null;
+                        ctx.setFailed(err instanceof Error ? err : undefined);
+                        return Promise.resolve(ctx);
+                    }, StatsigContext_1.InitializeContext["new"]({
+                        caller: 'initializeAsync',
+                        sdkKey: this._secretKey
+                    }))];
+            });
+        });
     };
     // #region Check Gate
     /**
@@ -7305,50 +9317,54 @@ var StatsigServer = /** @class */ (function () {
      * @throws Error if initialize() was not called first
      * @throws Error if the gateName is not provided or not a non-empty string
      */
-    StatsigServer.prototype.checkGateSync = function (user, gateName) {
-        return this.getFeatureGateSync(user, gateName).value;
+    StatsigServer.prototype.checkGate = function (user, gateName, options) {
+        return this.getFeatureGate(user, gateName, options).value;
     };
-    StatsigServer.prototype.getFeatureGateSync = function (user, gateName) {
+    StatsigServer.prototype.getFeatureGate = function (user, gateName, options) {
         var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getGateImpl(user, gateName, ExposureLogging.Enabled); }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, { configName: gateName, tag: 'checkGate' });
-    };
-    StatsigServer.prototype.checkGateWithExposureLoggingDisabledSync = function (user, gateName) {
-        return this.getFeatureGateWithExposureLoggingDisabledSync(user, gateName)
-            .value;
-    };
-    StatsigServer.prototype.getFeatureGateWithExposureLoggingDisabledSync = function (user, gateName) {
-        var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getGateImpl(user, gateName, ExposureLogging.Disabled); }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, {
-            configName: gateName,
-            tag: 'getFeatureGateWithExposureLoggingDisabled'
-        });
+        var res = this._errorBoundary.capture(function (ctx) {
+            return _this.getGateImpl(user, gateName, (options === null || options === void 0 ? void 0 : options.disableExposureLogging) == true
+                ? ExposureLogging.Disabled
+                : ExposureLogging.Enabled, ctx);
+        }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, StatsigContext_1.StatsigContext["new"]({ caller: 'checkGate', configName: gateName }));
+        if (this._options.evaluationCallback != null) {
+            this._options.evaluationCallback(res);
+        }
+        return res;
     };
     StatsigServer.prototype.logGateExposure = function (inputUser, gateName) {
         var _this = this;
-        return this._errorBoundary.swallow(function () {
-            var _a = _this.evalGate(inputUser, gateName), evaluation = _a.evaluation, user = _a.user;
+        return this._errorBoundary.swallow(function (ctx) {
+            var _a = _this.evalGate(inputUser, gateName, ctx), evaluation = _a.evaluation, user = _a.user;
             _this.logGateExposureImpl(user, gateName, evaluation, ExposureCause.Manual);
-        });
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'logGateExposure', configName: gateName }));
     };
     //#endregion
     // #region Get Config
     /**
      * Checks the value of a config for a given user
      */
-    StatsigServer.prototype.getConfigSync = function (user, configName) {
+    StatsigServer.prototype.getConfig = function (user, configName, options) {
         var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getConfigImpl(user, configName, ExposureLogging.Enabled); }, function () { return new DynamicConfig_1["default"](configName); }, { configName: configName, tag: 'getConfig' });
-    };
-    StatsigServer.prototype.getConfigWithExposureLoggingDisabledSync = function (user, configName) {
-        var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getConfigImpl(user, configName, ExposureLogging.Disabled); }, function () { return new DynamicConfig_1["default"](configName); }, { configName: configName, tag: 'getConfigWithExposureLoggingDisabled' });
+        var res = this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, configName, (options === null || options === void 0 ? void 0 : options.disableExposureLogging) == true
+                ? ExposureLogging.Disabled
+                : ExposureLogging.Enabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](configName); }, StatsigContext_1.StatsigContext["new"]({ caller: 'getConfig', configName: configName }));
+        if (this._options.evaluationCallback != null) {
+            this._options.evaluationCallback(res);
+        }
+        return res;
     };
     StatsigServer.prototype.logConfigExposure = function (inputUser, experimentName) {
         var _this = this;
-        this._errorBoundary.swallow(function () {
-            var _a = _this.evalConfig(inputUser, experimentName), evaluation = _a.evaluation, user = _a.user;
+        this._errorBoundary.swallow(function (ctx) {
+            var _a = _this.evalConfig(inputUser, experimentName, ctx), evaluation = _a.evaluation, user = _a.user;
             _this.logConfigExposureImpl(user, experimentName, evaluation, ExposureCause.Manual);
-        });
+        }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'logConfigExposure',
+            configName: experimentName
+        }));
     };
     //#endregion
     // #region Get Experiment
@@ -7357,23 +9373,42 @@ var StatsigServer = /** @class */ (function () {
      * @throws Error if initialize() was not called first
      * @throws Error if the experimentName is not provided or not a non-empty string
      */
-    StatsigServer.prototype.getExperimentSync = function (user, experimentName) {
+    StatsigServer.prototype.getExperiment = function (user, experimentName, options) {
         var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getConfigImpl(user, experimentName, ExposureLogging.Enabled); }, function () { return new DynamicConfig_1["default"](experimentName); }, { configName: experimentName, tag: 'getExperiment' });
-    };
-    StatsigServer.prototype.getExperimentWithExposureLoggingDisabledSync = function (user, experimentName) {
-        var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getConfigImpl(user, experimentName, ExposureLogging.Disabled); }, function () { return new DynamicConfig_1["default"](experimentName); }, {
+        var _a;
+        var res = this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, experimentName, (options === null || options === void 0 ? void 0 : options.disableExposureLogging) == true
+                ? ExposureLogging.Disabled
+                : ExposureLogging.Enabled, ctx, true);
+        }, function () { return new DynamicConfig_1["default"](experimentName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getExperiment',
             configName: experimentName,
-            tag: 'getExperimentWithExposureLoggingDisabled'
-        });
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+        if (((_a = this._options) === null || _a === void 0 ? void 0 : _a.evaluationCallback) != null) {
+            this._options.evaluationCallback(res);
+        }
+        return res;
     };
     StatsigServer.prototype.logExperimentExposure = function (inputUser, experimentName) {
         var _this = this;
-        this._errorBoundary.swallow(function () {
-            var _a = _this.evalConfig(inputUser, experimentName), evaluation = _a.evaluation, user = _a.user;
+        this._errorBoundary.swallow(function (ctx) {
+            var _a = _this.evalConfig(inputUser, experimentName, ctx), evaluation = _a.evaluation, user = _a.user;
             _this.logConfigExposureImpl(user, experimentName, evaluation, ExposureCause.Manual);
-        });
+        }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'logExperimentExposure',
+            configName: experimentName
+        }));
+    };
+    StatsigServer.prototype.getExperimentLayer = function (experiment) {
+        var _this = this;
+        return this._errorBoundary.capture(function () {
+            return _this._evaluator.getExperimentLayer(experiment);
+        }, function () { return null; }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getExperimentLayer',
+            configName: experiment
+        }));
     };
     //#endregion
     // #region Get Layer
@@ -7382,25 +9417,45 @@ var StatsigServer = /** @class */ (function () {
      * @throws Error if initialize() was not called first
      * @throws Error if the layerName is not provided or not a non-empty string
      */
-    StatsigServer.prototype.getLayerSync = function (user, layerName) {
+    StatsigServer.prototype.getLayer = function (user, layerName, options) {
         var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getLayerImpl(user, layerName, ExposureLogging.Enabled); }, function () { return new Layer_1["default"](layerName); }, {
+        var res = this._errorBoundary.capture(function (ctx) {
+            return _this.getLayerImpl(user, layerName, (options === null || options === void 0 ? void 0 : options.disableExposureLogging) == true
+                ? ExposureLogging.Disabled
+                : ExposureLogging.Enabled, ctx);
+        }, function () { return new Layer_1["default"](layerName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getLayer',
             configName: layerName,
-            tag: 'getLayer'
-        });
-    };
-    StatsigServer.prototype.getLayerWithExposureLoggingDisabledSync = function (user, layerName) {
-        var _this = this;
-        return this._errorBoundary.capture(function () { return _this.getLayerImpl(user, layerName, ExposureLogging.Disabled); }, function () { return new Layer_1["default"](layerName); }, { configName: layerName, tag: 'getLayerWithExposureLoggingDisabled' });
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+        if (this._options.evaluationCallback != null) {
+            this._options.evaluationCallback(res);
+        }
+        return res;
     };
     StatsigServer.prototype.logLayerParameterExposure = function (inputUser, layerName, parameterName) {
         var _this = this;
-        this._errorBoundary.swallow(function () {
-            var _a = _this.evalLayer(inputUser, layerName), evaluation = _a.evaluation, user = _a.user;
+        this._errorBoundary.swallow(function (ctx) {
+            var _a = _this.evalLayer(inputUser, layerName, ctx), evaluation = _a.evaluation, user = _a.user;
             _this.logLayerParameterExposureImpl(user, layerName, parameterName, evaluation, ExposureCause.Manual);
-        });
+        }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'logLayerParameterExposure',
+            configName: layerName
+        }));
     };
     //#endregion
+    StatsigServer.prototype.getPromptSet = function (aiConfigName) {
+        var _this = this;
+        return this._errorBoundary.capture(function () { return _this._store.getPromptSet(aiConfigName); }, function () { return null; }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getPromptSet',
+            configName: aiConfigName
+        }));
+    };
+    StatsigServer.prototype.getUserPersistedValues = function (user, idType) {
+        var _this = this;
+        return this._errorBoundary.capture(function () { return _this._evaluator.getUserPersistedValues(user, idType); }, function () { return ({}); }, StatsigContext_1.StatsigContext["new"]({ caller: 'getUserPersistedValues' }));
+    };
     /**
      * Log an event for data analysis and alerting or to measure the impact of an experiment
      * @throws Error if initialize() was not called first
@@ -7416,7 +9471,7 @@ var StatsigServer = /** @class */ (function () {
                 value: value,
                 metadata: metadata
             });
-        }, { tag: 'logEvent' });
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'logEvent' }));
     };
     StatsigServer.prototype.logEventObject = function (eventObject) {
         var _this = this;
@@ -7437,7 +9492,7 @@ var StatsigServer = /** @class */ (function () {
                 hasLoggedNoUserIdWarning = true;
                 OutputLogger_1["default"].warn('statsigSDK::logEvent> No valid userID was provided. Event will be logged but not associated with an identifiable user. This message is only logged once.');
             }
-            user = normalizeUser(user, _this._options);
+            user = _this._normalizeUser(user, _this._options);
             var event = new LogEvent_1["default"](eventName);
             event.setUser(user);
             event.setValue(value);
@@ -7446,7 +9501,7 @@ var StatsigServer = /** @class */ (function () {
                 event.setTime(time);
             }
             _this._logger.log(event);
-        });
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'logEventObject' }));
     };
     /**
      * Informs the statsig SDK that the server is closing or shutting down
@@ -7462,9 +9517,7 @@ var StatsigServer = /** @class */ (function () {
             _this._logger.shutdown(timeout);
             _this._fetcher.shutdown();
             _this._evaluator.shutdown();
-        }, {
-            tag: 'shutdown'
-        });
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'shutdown' }));
     };
     /**
      * Informs the statsig SDK that the server is closing or shutting down
@@ -7495,7 +9548,7 @@ var StatsigServer = /** @class */ (function () {
                                             return [2 /*return*/];
                                     }
                                 });
-                            }); }, function () { return Promise.resolve(); }, { tag: 'shutdownAsync' })];
+                            }); }, function () { return Promise.resolve(); }, StatsigContext_1.StatsigContext["new"]({ caller: 'shutdownAsync' }))];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -7516,14 +9569,14 @@ var StatsigServer = /** @class */ (function () {
                             var controller_1 = new AbortController();
                             var handle_1 = setTimeout(function () { return controller_1.abort(); }, timeout);
                             flushPromise = _this._logger
-                                .flush(false, controller_1.signal)
+                                .flush(true, controller_1.signal)
                                 .then(function () { return clearTimeout(handle_1); });
                         }
                         else {
                             flushPromise = _this._logger.flush(false);
                         }
                         return flushPromise;
-                    }, function () { return Promise.resolve(); }, { tag: 'flush' })];
+                    }, function () { return Promise.resolve(); }, StatsigContext_1.StatsigContext["new"]({ caller: 'flush' }))];
             });
         });
     };
@@ -7563,7 +9616,7 @@ var StatsigServer = /** @class */ (function () {
     StatsigServer.prototype.getClientInitializeResponse = function (user, clientSDKKey, options) {
         var _this = this;
         var markerID = '';
-        return this._errorBoundary.capture(function () {
+        return this._errorBoundary.capture(function (ctx) {
             if (_this._ready !== true) {
                 throw new Errors_1.StatsigUninitializedError();
             }
@@ -7571,59 +9624,59 @@ var StatsigServer = /** @class */ (function () {
             Diagnostics_1["default"].mark.getClientInitializeResponse.start({ markerID: markerID }, 'get_client_initialize_response');
             var normalizedUser = user;
             if (user.statsigEnvironment == null) {
-                normalizedUser = normalizeUser(user, _this._options);
+                normalizedUser = _this._normalizeUser(user, _this._options);
             }
-            var response = _this._evaluator.getClientInitializeResponse(normalizedUser, clientSDKKey, options);
+            var response = _this._evaluator.getClientInitializeResponse(normalizedUser, ctx, clientSDKKey, options);
             var invalidResponse = response == null ||
                 (!(0, core_1.notEmptyObject)(response.feature_gates) &&
-                    !(0, core_1.notEmptyObject)(response.dynamic_config) &&
+                    !(0, core_1.notEmptyObject)(response.dynamic_configs) &&
                     !(0, core_1.notEmptyObject)(response.layer_configs));
             if (invalidResponse) {
-                _this._errorBoundary.logError(new Error('getClientInitializeResponse returns empty response'), undefined, {
-                    clientKey: clientSDKKey,
-                    hash: options === null || options === void 0 ? void 0 : options.hash,
-                    tag: 'getClientInitializeResponse'
-                });
+                _this._errorBoundary.logError(new Error('getClientInitializeResponse returns empty response'), ctx);
             }
             Diagnostics_1["default"].mark.getClientInitializeResponse.end({ markerID: markerID, success: !invalidResponse }, 'get_client_initialize_response');
             return response;
         }, function () {
             Diagnostics_1["default"].mark.getClientInitializeResponse.end({ markerID: markerID, success: false }, 'get_client_initialize_response');
             return null;
-        }, { tag: 'getClientInitializeResponse' });
+        }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getClientInitializeResponse',
+            clientKey: clientSDKKey,
+            hash: options === null || options === void 0 ? void 0 : options.hash
+        }));
     };
-    StatsigServer.prototype.overrideGate = function (gateName, value, userID) {
+    StatsigServer.prototype.overrideGate = function (gateName, value, userOrCustomID) {
         var _this = this;
-        if (userID === void 0) { userID = ''; }
+        if (userOrCustomID === void 0) { userOrCustomID = ''; }
         this._errorBoundary.swallow(function () {
             if (typeof value !== 'boolean') {
                 OutputLogger_1["default"].warn('statsigSDK> Attempted to override a gate with a non boolean value');
                 return;
             }
-            _this._evaluator.overrideGate(gateName, value, userID);
-        });
+            _this._evaluator.overrideGate(gateName, value, userOrCustomID);
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'overrideGate' }));
     };
-    StatsigServer.prototype.overrideConfig = function (configName, value, userID) {
+    StatsigServer.prototype.overrideConfig = function (configName, value, userOrCustomID) {
         var _this = this;
-        if (userID === void 0) { userID = ''; }
+        if (userOrCustomID === void 0) { userOrCustomID = ''; }
         this._errorBoundary.swallow(function () {
             if (typeof value !== 'object') {
                 OutputLogger_1["default"].warn('statsigSDK> Attempted to override a config with a non object value');
                 return;
             }
-            _this._evaluator.overrideConfig(configName, value, userID);
-        }, { tag: 'overrideConfig' });
+            _this._evaluator.overrideConfig(configName, value, userOrCustomID);
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'overrideConfig' }));
     };
-    StatsigServer.prototype.overrideLayer = function (layerName, value, userID) {
+    StatsigServer.prototype.overrideLayer = function (layerName, value, userOrCustomID) {
         var _this = this;
-        if (userID === void 0) { userID = ''; }
+        if (userOrCustomID === void 0) { userOrCustomID = ''; }
         this._errorBoundary.swallow(function () {
             if (typeof value !== 'object') {
                 OutputLogger_1["default"].warn('statsigSDK> Attempted to override a layer with a non object value');
                 return;
             }
-            _this._evaluator.overrideLayer(layerName, value, userID);
-        }, { tag: 'overrideConfig' });
+            _this._evaluator.overrideLayer(layerName, value, userOrCustomID);
+        }, StatsigContext_1.StatsigContext["new"]({ caller: 'overrideLayer' }));
     };
     StatsigServer.prototype.getFeatureGateList = function () {
         return this._evaluator.getFeatureGateList();
@@ -7640,176 +9693,271 @@ var StatsigServer = /** @class */ (function () {
     StatsigServer.prototype.getLayerList = function () {
         return this._evaluator.getLayerList();
     };
-    //#region Deprecated Async Methods
+    //#region Deprecated _sync and withExposureDisabled Methods
     /**
-     * @deprecated Please use checkGateSync instead.
+     * @deprecated Please use checkGate instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    StatsigServer.prototype.checkGate = function (user, gateName) {
-        var _this = this;
-        return (0, asyncify_1["default"])(function () { return _this.getFeatureGateSync(user, gateName).value; });
+    StatsigServer.prototype.checkGateSync = function (user, gateName) {
+        return this.getFeatureGateSync(user, gateName).value;
     };
     /**
-     * @deprecated Please use getFeatureGateSync instead.
+     * @deprecated Please use getFeatureGate instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    StatsigServer.prototype.getFeatureGate = function (user, gateName) {
+    StatsigServer.prototype.getFeatureGateSync = function (user, gateName) {
         var _this = this;
-        return (0, asyncify_1["default"])(function () { return _this.getFeatureGateSync(user, gateName); });
+        return this._errorBoundary.capture(function (ctx) { return _this.getGateImpl(user, gateName, ExposureLogging.Enabled, ctx); }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, StatsigContext_1.StatsigContext["new"]({ caller: 'checkGate', configName: gateName }));
     };
     /**
-     * @deprecated Please use checkGateWithExposureLoggingDisabledSync instead.
+     * @deprecated Please use checkGate() with CheckGateOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.checkGateWithExposureLoggingDisabledSync = function (user, gateName) {
+        return this.getFeatureGateWithExposureLoggingDisabledSync(user, gateName)
+            .value;
+    };
+    /**
+     * @deprecated Please use getFeatureGate with CheckGateOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getFeatureGateWithExposureLoggingDisabledSync = function (user, gateName) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) { return _this.getGateImpl(user, gateName, ExposureLogging.Disabled, ctx); }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getFeatureGateWithExposureLoggingDisabled',
+            configName: gateName
+        }));
+    };
+    /**
+     * @deprecated Please use getConfig instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getConfigSync = function (user, configName) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, configName, ExposureLogging.Enabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](configName); }, StatsigContext_1.StatsigContext["new"]({ caller: 'getConfig', configName: configName }));
+    };
+    /**
+     * @deprecated Please use getConfigWithExposureLoggingDisabled instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getConfigWithExposureLoggingDisabledSync = function (user, configName) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, configName, ExposureLogging.Disabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](configName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getConfigWithExposureLoggingDisabled',
+            configName: configName
+        }));
+    };
+    /**
+     * @deprecated Please use getExperiment instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getExperimentSync = function (user, experimentName, options) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, experimentName, ExposureLogging.Enabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](experimentName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getExperiment',
+            configName: experimentName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+    };
+    /**
+     * @deprecated Please use getExperimentWithExposureLoggingDisabled instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getExperimentWithExposureLoggingDisabledSync = function (user, experimentName, options) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, experimentName, ExposureLogging.Disabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](experimentName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getExperimentWithExposureLoggingDisabled',
+            configName: experimentName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+    };
+    /**
+     * @deprecated Please use getLayer instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getLayerSync = function (user, layerName, options) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) { return _this.getLayerImpl(user, layerName, ExposureLogging.Enabled, ctx); }, function () { return new Layer_1["default"](layerName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getLayer',
+            configName: layerName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+    };
+    /**
+     * @deprecated Please use getLayer with GetLayerOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    StatsigServer.prototype.getLayerWithExposureLoggingDisabledSync = function (user, layerName, options) {
+        var _this = this;
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getLayerImpl(user, layerName, ExposureLogging.Disabled, ctx);
+        }, function () { return new Layer_1["default"](layerName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getLayerWithExposureLoggingDisabled',
+            configName: layerName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
+    };
+    /**
+     * @deprecated Please use checkGate with CheckGateOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
     StatsigServer.prototype.checkGateWithExposureLoggingDisabled = function (user, gateName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, (0, asyncify_1["default"])(function () {
-                        return _this.getFeatureGateWithExposureLoggingDisabledSync(user, gateName)
-                            .value;
-                    })];
-            });
-        });
+        return this.getFeatureGateWithExposureLoggingDisabled(user, gateName).value;
     };
     /**
-     * @deprecated Please use getFeatureGateWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
+     * @deprecated use getFeatureGate() with CheckGateOptions instead
      */
     StatsigServer.prototype.getFeatureGateWithExposureLoggingDisabled = function (user, gateName) {
         var _this = this;
-        return (0, asyncify_1["default"])(function () {
-            return _this.getFeatureGateWithExposureLoggingDisabledSync(user, gateName);
-        });
+        return this._errorBoundary.capture(function (ctx) { return _this.getGateImpl(user, gateName, ExposureLogging.Disabled, ctx); }, function () { return (0, FeatureGate_1.makeEmptyFeatureGate)(gateName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getFeatureGateWithExposureLoggingDisabled',
+            configName: gateName
+        }));
     };
     /**
-     * @deprecated Please use getConfigSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    StatsigServer.prototype.getConfig = function (user, configName) {
-        var _this = this;
-        return (0, asyncify_1["default"])(function () { return _this.getConfigSync(user, configName); });
-    };
-    /**
-     * @deprecated Please use getConfigWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
+     * @deprecated use getConfig() with GetConfigOptions instead
      */
     StatsigServer.prototype.getConfigWithExposureLoggingDisabled = function (user, configName) {
         var _this = this;
-        return (0, asyncify_1["default"])(function () {
-            return _this.getConfigWithExposureLoggingDisabledSync(user, configName);
-        });
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, configName, ExposureLogging.Disabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](configName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getConfigWithExposureLoggingDisabled',
+            configName: configName
+        }));
     };
     /**
-     * @deprecated Please use getExperimentSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
+     * @deprecated use getExperiment() with GetExperimentOptions instead
+     * GetExperimentOptions.disableExposureDisabled will be ignored
      */
-    StatsigServer.prototype.getExperiment = function (user, experimentName) {
+    StatsigServer.prototype.getExperimentWithExposureLoggingDisabled = function (user, experimentName, options) {
         var _this = this;
-        return (0, asyncify_1["default"])(function () { return _this.getExperimentSync(user, experimentName); });
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getConfigImpl(user, experimentName, ExposureLogging.Disabled, ctx);
+        }, function () { return new DynamicConfig_1["default"](experimentName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getExperimentWithExposureLoggingDisabled',
+            configName: experimentName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
     };
     /**
-     * @deprecated Please use getExperimentWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
+     * @deprecated use getLayer() with GetLayerOptions instead
+     * GetLayerOptions.disableExposureDisabled will be ignored
      */
-    StatsigServer.prototype.getExperimentWithExposureLoggingDisabled = function (user, experimentName) {
+    StatsigServer.prototype.getLayerWithExposureLoggingDisabled = function (user, layerName, options) {
         var _this = this;
-        return (0, asyncify_1["default"])(function () {
-            return _this.getExperimentWithExposureLoggingDisabledSync(user, experimentName);
-        });
-    };
-    /**
-     * @deprecated Please use getLayerSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    StatsigServer.prototype.getLayer = function (user, layerName) {
-        var _this = this;
-        return (0, asyncify_1["default"])(function () { return _this.getLayerSync(user, layerName); });
-    };
-    /**
-     * @deprecated Please use getLayerWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    StatsigServer.prototype.getLayerWithExposureLoggingDisabled = function (user, layerName) {
-        var _this = this;
-        return (0, asyncify_1["default"])(function () {
-            return _this.getLayerWithExposureLoggingDisabledSync(user, layerName);
-        });
+        return this._errorBoundary.capture(function (ctx) {
+            return _this.getLayerImpl(user, layerName, ExposureLogging.Disabled, ctx);
+        }, function () { return new Layer_1["default"](layerName); }, StatsigContext_1.StatsigContext["new"]({
+            caller: 'getLayerWithExposureLoggingDisabled',
+            configName: layerName,
+            userPersistedValues: options === null || options === void 0 ? void 0 : options.userPersistedValues,
+            persistentAssignmentOptions: options === null || options === void 0 ? void 0 : options.persistentAssignmentOptions
+        }));
     };
     //#endregion
-    /**
-     * Check the value of a gate configured in the statsig console
-     * @deprecated Use checkGateSync instead
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    StatsigServer.prototype.checkGateWithoutServerFallback = function (user, gateName) {
-        return this.checkGateSync(user, gateName);
-    };
     //
     // PRIVATE
     //
     StatsigServer.prototype.logGateExposureImpl = function (user, gateName, evaluation, exposureCause) {
         this._logger.logGateExposure(user, gateName, evaluation, exposureCause === ExposureCause.Manual);
     };
-    StatsigServer.prototype.evalGate = function (inputUser, gateName) {
+    StatsigServer.prototype.evalGate = function (inputUser, gateName, ctx) {
         var _a = this._validateInputs(inputUser, gateName), error = _a.error, user = _a.normalizedUser;
         if (error) {
             throw error;
         }
         return {
-            evaluation: this._evaluator.checkGate(user, gateName),
+            evaluation: this._evaluator.checkGate(user, gateName, ctx),
             user: user
         };
     };
-    StatsigServer.prototype.getGateImpl = function (inputUser, gateName, exposureLogging) {
-        var _a = this.evalGate(inputUser, gateName), evaluation = _a.evaluation, user = _a.user;
+    StatsigServer.prototype.getGateImpl = function (inputUser, gateName, exposureLogging, ctx) {
+        var _a, _b;
+        var _c = this.evalGate(inputUser, gateName, ctx), evaluation = _c.evaluation, user = _c.user;
         if (exposureLogging !== ExposureLogging.Disabled) {
             this.logGateExposureImpl(user, gateName, evaluation, ExposureCause.Automatic);
         }
-        return (0, FeatureGate_1.makeFeatureGate)(gateName, evaluation.rule_id, evaluation.value === true, evaluation.group_name);
+        var gate = (0, FeatureGate_1.makeFeatureGate)(gateName, evaluation.rule_id, evaluation.value === true, evaluation.group_name, evaluation.id_type, (_a = evaluation.evaluation_details) !== null && _a !== void 0 ? _a : null);
+        if (((_b = this._options.evaluationCallbacks) === null || _b === void 0 ? void 0 : _b.gateCallback) != null) {
+            this._options.evaluationCallbacks.gateCallback(gate, user, this._logger.getGateExposure(user, gateName, evaluation, true));
+        }
+        return gate;
     };
     StatsigServer.prototype.logConfigExposureImpl = function (user, configName, evaluation, exposureCause) {
         this._logger.logConfigExposure(user, configName, evaluation, exposureCause === ExposureCause.Manual);
     };
-    StatsigServer.prototype.evalConfig = function (inputUser, configName) {
+    StatsigServer.prototype.evalConfig = function (inputUser, configName, ctx) {
         var _a = this._validateInputs(inputUser, configName), error = _a.error, user = _a.normalizedUser;
         if (error) {
             throw error;
         }
-        var evaluation = this._evaluator.getConfig(user, configName);
+        var evaluation = this._evaluator.getConfig(user, configName, ctx);
         return {
             evaluation: evaluation,
             user: user
         };
     };
-    StatsigServer.prototype.getConfigImpl = function (inputUser, configName, exposureLogging) {
-        var _a = this.evalConfig(inputUser, configName), evaluation = _a.evaluation, user = _a.user;
-        var config = new DynamicConfig_1["default"](configName, evaluation.json_value, evaluation.rule_id, evaluation.group_name, evaluation.secondary_exposures, evaluation.rule_id !== ''
+    StatsigServer.prototype.getConfigImpl = function (inputUser, configName, exposureLogging, ctx, isExperiment) {
+        var _a, _b, _c;
+        if (isExperiment === void 0) { isExperiment = false; }
+        var _d = this.evalConfig(inputUser, configName, ctx), evaluation = _d.evaluation, user = _d.user;
+        var config = new DynamicConfig_1["default"](configName, evaluation.json_value, evaluation.rule_id, evaluation.group_name, evaluation.id_type, evaluation.secondary_exposures, evaluation.rule_id !== ''
             ? this._makeOnDefaultValueFallbackFunction(user)
-            : null);
+            : null, (_a = evaluation.evaluation_details) !== null && _a !== void 0 ? _a : null);
         if (exposureLogging !== ExposureLogging.Disabled) {
             this.logConfigExposureImpl(user, configName, evaluation, ExposureCause.Automatic);
         }
+        var callback = isExperiment
+            ? (_b = this._options.evaluationCallbacks) === null || _b === void 0 ? void 0 : _b.experimentCallback
+            : (_c = this._options.evaluationCallbacks) === null || _c === void 0 ? void 0 : _c.dynamicConfigCallback;
+        if (callback != null) {
+            callback(config, user, this._logger.getConfigExposure(user, configName, evaluation, true));
+        }
         return config;
     };
-    StatsigServer.prototype.evalLayer = function (inputUser, layerName) {
+    StatsigServer.prototype.evalLayer = function (inputUser, layerName, ctx) {
         var _a = this._validateInputs(inputUser, layerName), error = _a.error, user = _a.normalizedUser;
         if (error) {
             throw error;
         }
-        var evaluation = this._evaluator.getLayer(user, layerName);
+        var evaluation = this._evaluator.getLayer(user, layerName, ctx);
         return {
             evaluation: evaluation,
             user: user
         };
     };
-    StatsigServer.prototype.getLayerImpl = function (inputUser, layerName, exposureLogging) {
+    StatsigServer.prototype.getLayerImpl = function (inputUser, layerName, exposureLogging, ctx) {
         var _this = this;
-        var _a = this.evalLayer(inputUser, layerName), evaluation = _a.evaluation, user = _a.user;
+        var _a;
+        var _b = this.evalLayer(inputUser, layerName, ctx), evaluation = _b.evaluation, user = _b.user;
         var logFunc = function (layer, parameterName) {
-            _this.logLayerParameterExposureImpl(user, layerName, parameterName, evaluation, ExposureCause.Automatic);
+            var _a;
+            if (((_a = _this._options.evaluationCallbacks) === null || _a === void 0 ? void 0 : _a.layerParamCallback) != null) {
+                _this._options.evaluationCallbacks.layerParamCallback(layer, parameterName, user, _this._logger.getLayerExposure(user, layerName, parameterName, evaluation, true));
+            }
+            if (exposureLogging !== ExposureLogging.Disabled) {
+                _this.logLayerParameterExposureImpl(user, layerName, parameterName, evaluation, ExposureCause.Automatic);
+            }
         };
-        return new Layer_1["default"](layerName, evaluation === null || evaluation === void 0 ? void 0 : evaluation.json_value, evaluation === null || evaluation === void 0 ? void 0 : evaluation.rule_id, evaluation === null || evaluation === void 0 ? void 0 : evaluation.group_name, evaluation === null || evaluation === void 0 ? void 0 : evaluation.config_delegate, exposureLogging === ExposureLogging.Disabled ? null : logFunc);
+        var layer = new Layer_1["default"](layerName, evaluation === null || evaluation === void 0 ? void 0 : evaluation.json_value, evaluation === null || evaluation === void 0 ? void 0 : evaluation.rule_id, evaluation === null || evaluation === void 0 ? void 0 : evaluation.group_name, evaluation === null || evaluation === void 0 ? void 0 : evaluation.config_delegate, logFunc, evaluation === null || evaluation === void 0 ? void 0 : evaluation.evaluation_details, evaluation === null || evaluation === void 0 ? void 0 : evaluation.id_type);
+        if (((_a = this._options.evaluationCallbacks) === null || _a === void 0 ? void 0 : _a.layerCallback) != null) {
+            this._options.evaluationCallbacks.layerCallback(layer, user);
+        }
+        return layer;
     };
     StatsigServer.prototype.logLayerParameterExposureImpl = function (user, layerName, parameterName, evaluation, exposureCause) {
         if (this._logger == null) {
@@ -7829,7 +9977,7 @@ var StatsigServer = /** @class */ (function () {
             result.error = new Errors_1.StatsigInvalidArgumentError('Must pass a valid user with a userID or customID for the server SDK to work. See https://docs.statsig.com/messages/serverRequiredUserID/ for more details.');
         }
         else {
-            result.normalizedUser = normalizeUser(user, this._options);
+            result.normalizedUser = this._normalizeUser(user, this._options);
         }
         this._evaluator.resetSyncTimerIfExited();
         return result;
@@ -7849,59 +9997,99 @@ var StatsigServer = /** @class */ (function () {
             });
         };
     };
+    StatsigServer.prototype._normalizeUser = function (user, options) {
+        if (user == null) {
+            user = { customIDs: {} }; // Being defensive here
+        }
+        if ((options === null || options === void 0 ? void 0 : options.environment) != null) {
+            user['statsigEnvironment'] = options === null || options === void 0 ? void 0 : options.environment;
+        }
+        else {
+            var storeEnv = this._store.getDefaultEnvironment();
+            if (storeEnv != null) {
+                user['statsigEnvironment'] = { tier: storeEnv };
+            }
+        }
+        return user;
+    };
     return StatsigServer;
 }());
 exports["default"] = StatsigServer;
-function normalizeUser(user, options) {
-    if (user == null) {
-        user = { customIDs: {} }; // Being defensive here
-    }
-    if ((options === null || options === void 0 ? void 0 : options.environment) != null) {
-        user['statsigEnvironment'] = options === null || options === void 0 ? void 0 : options.environment;
-    }
-    return user;
-}
 
 
 /***/ }),
 
-/***/ 2157:
+/***/ 8830:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.getUserHashWithoutStableID = void 0;
-var Hashing_1 = __nccwpck_require__(6813);
-function getUserHashWithoutStableID(user) {
-    var customIDs = user.customIDs, rest = __rest(user, ["customIDs"]);
-    var copyCustomIDs = __assign({}, customIDs);
-    delete copyCustomIDs.stableID;
-    return (0, Hashing_1.djb2HashForObject)(__assign(__assign({}, rest), { customIDs: copyCustomIDs }));
-}
-exports.getUserHashWithoutStableID = getUserHashWithoutStableID;
+var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
+var EvaluatorUtils_1 = __nccwpck_require__(1534);
+var UserPersistentStorageHandler = /** @class */ (function () {
+    function UserPersistentStorageHandler(storage) {
+        this.storage = storage;
+    }
+    UserPersistentStorageHandler.prototype.load = function (user, idType) {
+        if (this.storage == null) {
+            return null;
+        }
+        var key = UserPersistentStorageHandler.getStorageKey(user, idType);
+        if (!key) {
+            return null;
+        }
+        try {
+            return this.storage.load(key);
+        }
+        catch (e) {
+            OutputLogger_1["default"].error("statsigSDK> Failed to load persisted values for key ".concat(key, " (").concat(e.message, ")"));
+            return null;
+        }
+    };
+    UserPersistentStorageHandler.prototype.save = function (user, idType, configName, evaluation) {
+        if (this.storage == null) {
+            return;
+        }
+        var key = UserPersistentStorageHandler.getStorageKey(user, idType);
+        if (!key) {
+            return;
+        }
+        try {
+            this.storage.save(key, configName, evaluation.toStickyValues());
+        }
+        catch (e) {
+            OutputLogger_1["default"].error("statsigSDK> Failed to save persisted values for key ".concat(key, " (").concat(e.message, ")"));
+        }
+    };
+    UserPersistentStorageHandler.prototype["delete"] = function (user, idType, configName) {
+        if (this.storage == null) {
+            return;
+        }
+        var key = UserPersistentStorageHandler.getStorageKey(user, idType);
+        if (!key) {
+            return;
+        }
+        try {
+            this.storage["delete"](key, configName);
+        }
+        catch (e) {
+            OutputLogger_1["default"].error("statsigSDK> Failed to delete persisted values for key ".concat(key, " (").concat(e.message, ")"));
+        }
+    };
+    UserPersistentStorageHandler.getStorageKey = function (user, idType) {
+        var unitID = (0, EvaluatorUtils_1.getUnitID)(user, idType);
+        if (!unitID) {
+            OutputLogger_1["default"].warn("statsigSDK> No unit ID found for ID type ".concat(idType));
+        }
+        return "".concat(unitID !== null && unitID !== void 0 ? unitID : '', ":").concat(idType);
+    };
+    return UserPersistentStorageHandler;
+}());
+exports["default"] = UserPersistentStorageHandler;
 
 
 /***/ }),
@@ -7921,6 +10109,20 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -7962,22 +10164,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.Statsig = exports.StatsigServer = exports.Layer = exports.DataAdapterKey = exports.DynamicConfig = void 0;
+exports.Statsig = exports.StatsigServer = exports.Layer = exports.DataAdapterKeyPath = exports.DynamicConfig = void 0;
 var DynamicConfig_1 = __importDefault(__nccwpck_require__(4358));
 exports.DynamicConfig = DynamicConfig_1["default"];
 var Errors_1 = __nccwpck_require__(484);
 var IDataAdapter_1 = __nccwpck_require__(536);
-exports.DataAdapterKey = IDataAdapter_1.DataAdapterKey;
+exports.DataAdapterKeyPath = IDataAdapter_1.DataAdapterKeyPath;
 var Layer_1 = __importDefault(__nccwpck_require__(4267));
 exports.Layer = Layer_1["default"];
 var OutputLogger_1 = __importDefault(__nccwpck_require__(7062));
 var StatsigInstanceUtils_1 = __importDefault(__nccwpck_require__(1695));
 var StatsigServer_1 = __importDefault(__nccwpck_require__(5288));
 exports.StatsigServer = StatsigServer_1["default"];
+__exportStar(__nccwpck_require__(8512), exports);
 // These need to be exported, and we currently export a top level Statsig object
 // So in order to not make a breaking change, they must be exported as members of
 // that top level object
 var EXPORTS = {
+    StatsigServer: StatsigServer_1["default"],
+    DataAdapterKeyPath: IDataAdapter_1.DataAdapterKeyPath,
     DynamicConfig: DynamicConfig_1["default"],
     Layer: Layer_1["default"],
     StatsigInvalidArgumentError: Errors_1.StatsigInvalidArgumentError,
@@ -7998,14 +10203,31 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
     initialize: function (secretKey, options) {
         var _a;
         if (options === void 0) { options = {}; }
-        if (options.logger) {
-            OutputLogger_1["default"].setLogger(options.logger);
-        }
-        var inst = (_a = StatsigInstanceUtils_1["default"].getInstance()) !== null && _a !== void 0 ? _a : new StatsigServer_1["default"](secretKey, options);
-        if (StatsigInstanceUtils_1["default"].getInstance() == null) {
-            StatsigInstanceUtils_1["default"].setInstance(inst);
-        }
-        return inst.initializeAsync();
+        return __awaiter(this, void 0, void 0, function () {
+            var inst, e_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (options.logger) {
+                            OutputLogger_1["default"].setLogger(options.logger, secretKey);
+                        }
+                        inst = (_a = StatsigInstanceUtils_1["default"].getInstance()) !== null && _a !== void 0 ? _a : new StatsigServer_1["default"](secretKey, options);
+                        if (StatsigInstanceUtils_1["default"].getInstance() == null) {
+                            StatsigInstanceUtils_1["default"].setInstance(inst);
+                        }
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, inst.initializeAsync()];
+                    case 2: return [2 /*return*/, _b.sent()];
+                    case 3:
+                        e_1 = _b.sent();
+                        StatsigInstanceUtils_1["default"].setInstance(null);
+                        return [2 /*return*/, Promise.reject(e_1)];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
     }, 
     /**
      * Gets the boolean result of a gate, evaluated against the given user.
@@ -8013,27 +10235,14 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
      *
      * @param {StatsigUser} user - the user to check this gate value for
      * @param {string} gateName - the name of the gate to check
+     * @param {CheckGateOptions} options - the options on how gate should be checkced
      * @returns {boolean} - The value of the gate for the user.  Gates are off (return false) by default
      * @throws Error if initialize() was not called first
      */
-    checkGateSync: function (user, gateName) {
-        return this._enforceServer().checkGateSync(user, gateName);
-    }, getFeatureGateSync: function (user, gateName) {
-        return this._enforceServer().getFeatureGateSync(user, gateName);
-    }, 
-    /**
-     * Gets the boolean result of a gate, evaluated against the given user.
-     * No exposure event will be logged.
-     *
-     * @param {StatsigUser} user - the user to check this gate value for
-     * @param {string} gateName - the name of the gate to check
-     * @returns {boolean} - The value of the gate for the user.  Gates are off (return false) by default
-     * @throws Error if initialize() was not called first
-     */
-    checkGateWithExposureLoggingDisabledSync: function (user, gateName) {
-        return this._enforceServer().checkGateWithExposureLoggingDisabledSync(user, gateName);
-    }, getFeatureGateWithExposureLoggingDisabledSync: function (user, gateName) {
-        return this._enforceServer().getFeatureGateWithExposureLoggingDisabledSync(user, gateName);
+    checkGate: function (user, gateName, options) {
+        return this._enforceServer().checkGate(user, gateName, options);
+    }, getFeatureGate: function (user, gateName, options) {
+        return this._enforceServer().getFeatureGate(user, gateName, options);
     }, 
     /**
      * Logs an exposure event for the gate
@@ -8050,23 +10259,12 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
      *
      * @param {StatsigUser} user - the user to evaluate for the dyamic config
      * @param {string} configName - the name of the dynamic config to get
+     * @param {GetConfigOptions} options - options for config evaluation
      * @returns {DynamicConfig} - the config for the user
      * @throws Error if initialize() was not called first
      */
-    getConfigSync: function (user, configName) {
-        return this._enforceServer().getConfigSync(user, configName);
-    }, 
-    /**
-     * Get the values of a dynamic config, evaluated against the given user.
-     * No exposure event will be logged.
-     *
-     * @param {StatsigUser} user - the user to evaluate for the dyamic config
-     * @param {string} configName - the name of the dynamic config to get
-     * @returns {DynamicConfig} - the config for the user
-     * @throws Error if initialize() was not called first
-     */
-    getConfigWithExposureLoggingDisabledSync: function (user, configName) {
-        return this._enforceServer().getConfigWithExposureLoggingDisabledSync(user, configName);
+    getConfig: function (user, configName, options) {
+        return this._enforceServer().getConfig(user, configName, options);
     }, 
     /**
      * Logs an exposure event for the dynamic config
@@ -8083,26 +10281,26 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
      *
      * @param {StatsigUser} user - the user to evaluate for the experiment
      * @param {string} experimentName - the name of the experiment to get
+     * @param {GetExperimentOptions} options - options for experiment evaluation
      * @returns {DynamicConfig} - the experiment for the user, represented by a Dynamic Config object
      * @throws Error if initialize() was not called first
      */
-    getExperimentSync: function (user, experimentName) {
-        return this._enforceServer().getExperimentSync(user, experimentName);
+    getExperiment: function (user, experimentName, options) {
+        return this._enforceServer().getExperiment(user, experimentName, options);
     }, 
     /**
-     * Get the values of an experiment, evaluated against the given user.
+     * Get the name of an layer an experiment is in
      * No exposure event will be logged.
      *
-     * @param {StatsigUser} user - the user to evaluate for the experiment
      * @param {string} experimentName - the name of the experiment to get
-     * @returns {DynamicConfig} - the experiment for the user, represented by a Dynamic Config object
+     * @returns {string} - the layer name the experiment belongs to
      * @throws Error if initialize() was not called first
      */
-    getExperimentWithExposureLoggingDisabledSync: function (user, experimentName) {
-        return this._enforceServer().getExperimentWithExposureLoggingDisabledSync(user, experimentName);
+    getExperimentLayer: function (experimentName) {
+        return this._enforceServer().getExperimentLayer(experimentName);
     }, 
     /**
-     * Logs an exposure event for the experiment
+     * Logs an exposure event for the experiment.
      *
      * @param {StatsigUser} user - the user to log the exposure against
      * @param {string} experimentName - the name of the experiment to expose
@@ -8116,24 +10314,12 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
      *
      * @param {StatsigUser} user - the user to evaluate for the layer
      * @param {string} layerName - the name of the layer to get
+     * @param {GetLayerOptions} options - options for layer evaluation
      * @returns {Layer} - the layer for the user, represented by a Layer
      * @throws Error if initialize() was not called first
      */
-    getLayerSync: function (user, layerName) {
-        return this._enforceServer().getLayerSync(user, layerName);
-    }, 
-    /**
-     * Get the values of a layer, evaluated against the given user.
-     * No exposure events will be logged from the resulting Layer class.
-     *
-     * @param {StatsigUser} user - the user to evaluate for the layer
-     * @param {string} layerName - the name of the layer to get
-     * @returns {Layer} - the layer for the user, represented by a Layer
-     * @throws Error if initialize() was not called first
-     * @throws Error if the layerName is not provided or not a non-empty string
-     */
-    getLayerWithExposureLoggingDisabledSync: function (user, layerName) {
-        return this._enforceServer().getLayerWithExposureLoggingDisabledSync(user, layerName);
+    getLayer: function (user, layerName, options) {
+        return this._enforceServer().getLayer(user, layerName, options);
     }, 
     /**
      * Logs an exposure event for the parameter in the given layer
@@ -8144,6 +10330,10 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
      */
     manuallyLogLayerParameterExposure: function (user, layerName, parameterName) {
         this._enforceServer().logLayerParameterExposure(user, layerName, parameterName);
+    }, getUserPersistedValues: function (user, idType) {
+        return this._enforceServer().getUserPersistedValues(user, idType);
+    }, getPromptSet: function (aiConfigName) {
+        return this._enforceServer().getPromptSet(aiConfigName);
     }, 
     /**
      * Log an event for data analysis and alerting or to measure the impact of an experiment
@@ -8303,97 +10493,104 @@ exports.Statsig = __assign(__assign({}, EXPORTS), {
     }, syncIdLists: function () {
         return this._enforceServer().syncStoreIdLists();
     }, 
-    //#region Deprecated Async Methods
+    //#region Deprecated _sync and _withExposureDisabled Methods
     /**
      * @deprecated Please use checkGateSync instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    checkGate: function (user, gateName) {
-        return this._enforceServer().checkGate(user, gateName);
+    checkGateSync: function (user, gateName) {
+        return this._enforceServer().checkGateSync(user, gateName);
     }, 
     /**
-     * @deprecated Please use getFeatureGateSync instead.
+     * @deprecated Please use getFeatureGate instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    getFeatureGate: function (user, gateName) {
-        return this._enforceServer().getFeatureGate(user, gateName);
+    getFeatureGateSync: function (user, gateName) {
+        return this._enforceServer().getFeatureGateSync(user, gateName);
     }, 
     /**
-     * @deprecated Please use checkGateWithExposureLoggingDisabledSync instead.
+     * @deprecated Please use checkGate() with CheckGateOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    checkGateWithExposureLoggingDisabledSync: function (user, gateName) {
+        return this._enforceServer().checkGateWithExposureLoggingDisabledSync(user, gateName);
+    }, 
+    /**
+     * @deprecated Please use getConfig instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getConfigSync: function (user, configName) {
+        return this._enforceServer().getConfigSync(user, configName);
+    }, 
+    /**
+     * @deprecated Please use getConfig() with GetConfigOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getConfigWithExposureLoggingDisabledSync: function (user, configName) {
+        return this._enforceServer().getConfigWithExposureLoggingDisabledSync(user, configName);
+    }, 
+    /**
+     * @deprecated Please use getExperiment instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getExperimentSync: function (user, experimentName, options) {
+        return this._enforceServer().getExperimentSync(user, experimentName, options);
+    }, 
+    /**
+     * @deprecated Please use getExperiment() with GetExperimentOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getExperimentWithExposureLoggingDisabledSync: function (user, experimentName, options) {
+        return this._enforceServer().getExperimentWithExposureLoggingDisabledSync(user, experimentName, options);
+    }, 
+    /**
+     * @deprecated Please use getLayer instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getLayerSync: function (user, layerName, options) {
+        return this._enforceServer().getLayerSync(user, layerName, options);
+    }, 
+    /**
+     * @deprecated Please use getLayer with GetLayerOptions instead.
+     * @see https://docs.statsig.com/server/deprecation-notices
+     */
+    getLayerWithExposureLoggingDisabledSync: function (user, layerName, options) {
+        return this._enforceServer().getLayerWithExposureLoggingDisabledSync(user, layerName, options);
+    }, 
+    /**
+     * @deprecated Please use checkGate with CheckGateOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
     checkGateWithExposureLoggingDisabled: function (user, gateName) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this._enforceServer().checkGateWithExposureLoggingDisabled(user, gateName)];
-            });
-        });
+        return this._enforceServer().checkGateWithExposureLoggingDisabled(user, gateName);
     }, 
     /**
-     * @deprecated Please use getFeatureGateWithExposureLoggingDisabledSync instead.
+     * @deprecated Please use getFeatureGate with CheckGateOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
     getFeatureGateWithExposureLoggingDisabled: function (user, gateName) {
         return this._enforceServer().getFeatureGateWithExposureLoggingDisabled(user, gateName);
     }, 
     /**
-     * @deprecated Please use getConfigSync instead.
+     * @deprecated Please use getExperiment with GetExperimentOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    getConfig: function (user, configName) {
-        return this._enforceServer().getConfig(user, configName);
+    getExperimentWithExposureLoggingDisabled: function (user, experimentName, options) {
+        return this._enforceServer().getExperimentWithExposureLoggingDisabled(user, experimentName, options);
     }, 
     /**
-     * @deprecated Please use getConfigWithExposureLoggingDisabledSync instead.
+     * @deprecated Please use getConfig with GetConfigOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
     getConfigWithExposureLoggingDisabled: function (user, configName) {
         return this._enforceServer().getConfigWithExposureLoggingDisabled(user, configName);
     }, 
     /**
-     * @deprecated Please use getExperimentSync instead.
+     * @deprecated Please use getLayer with GetLayerOptions instead.
      * @see https://docs.statsig.com/server/deprecation-notices
      */
-    getExperiment: function (user, experimentName) {
-        return this._enforceServer().getExperiment(user, experimentName);
-    }, 
-    /**
-     * @deprecated Please use getExperimentWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    getExperimentWithExposureLoggingDisabled: function (user, experimentName) {
-        return this._enforceServer().getExperimentWithExposureLoggingDisabled(user, experimentName);
-    }, 
-    /**
-     * @deprecated Please use getLayerSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    getLayer: function (user, layerName) {
-        return this._enforceServer().getLayer(user, layerName);
-    }, 
-    /**
-     * @deprecated Please use getLayerWithExposureLoggingDisabledSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     */
-    getLayerWithExposureLoggingDisabled: function (user, layerName) {
-        return this._enforceServer().getLayerWithExposureLoggingDisabled(user, layerName);
-    }, 
-    //#endregion
-    /**
-     * Gets the boolean result of a gate, evaluated against the given user.
-     * An exposure event will automatically be logged for the gate.
-     * This is a synchronous version of checkGate, and will return false value if a condition
-     * needs to fallback to the server.
-     *
-     * @param {StatsigUser} user - the user to check this gate value for
-     * @param {string} gateName - the name of the gate to check
-     * @returns {boolean} - The value of the gate for the user.  Gates are off (return false) by default
-     * @deprecated Please use checkGateSync instead.
-     * @see https://docs.statsig.com/server/deprecation-notices
-     * @throws Error if initialize() was not called first
-     */
-    checkGateWithoutServerFallback: function (user, gateName) {
-        return this._enforceServer().checkGateSync(user, gateName);
+    getLayerWithExposureLoggingDisabled: function (user, layerName, options) {
+        return this._enforceServer().getLayerWithExposureLoggingDisabled(user, layerName, options);
     }, _enforceServer: function () {
         var instance = StatsigInstanceUtils_1["default"].getInstance();
         if (instance == null) {
@@ -8413,12 +10610,31 @@ module.exports = __assign({ "default": exports.Statsig }, exports.Statsig);
 "use strict";
 
 exports.__esModule = true;
-exports.DataAdapterKey = void 0;
-var DataAdapterKey;
-(function (DataAdapterKey) {
-    DataAdapterKey["Rulesets"] = "statsig.cache";
-    DataAdapterKey["IDLists"] = "statsig.id_lists";
-})(DataAdapterKey = exports.DataAdapterKey || (exports.DataAdapterKey = {}));
+exports.getDataAdapterKey = exports.CompressFormat = exports.DataAdapterKeyPath = void 0;
+var STATSIG_PREFIX = 'statsig';
+var DataAdapterKeyPath;
+(function (DataAdapterKeyPath) {
+    DataAdapterKeyPath["V1Rulesets"] = "/v1/download_config_specs";
+    DataAdapterKeyPath["V2Rulesets"] = "/v2/download_config_specs";
+    DataAdapterKeyPath["V1IDLists"] = "/v1/get_id_lists";
+    DataAdapterKeyPath["IDList"] = "id_list";
+})(DataAdapterKeyPath = exports.DataAdapterKeyPath || (exports.DataAdapterKeyPath = {}));
+var CompressFormat;
+(function (CompressFormat) {
+    CompressFormat["PlainText"] = "plain_text";
+    CompressFormat["Gzip"] = "gzip";
+})(CompressFormat = exports.CompressFormat || (exports.CompressFormat = {}));
+function getDataAdapterKey(hashedSDKKey, path, format, idListName) {
+    if (format === void 0) { format = CompressFormat.PlainText; }
+    if (idListName === void 0) { idListName = undefined; }
+    if (path == DataAdapterKeyPath.IDList) {
+        return "".concat(STATSIG_PREFIX, "|").concat(path, "::").concat(String(idListName), "|").concat(format, "|").concat(hashedSDKKey);
+    }
+    else {
+        return "".concat(STATSIG_PREFIX, "|").concat(path, "|").concat(format, "|").concat(hashedSDKKey);
+    }
+}
+exports.getDataAdapterKey = getDataAdapterKey;
 
 
 /***/ }),
@@ -8566,13 +10782,277 @@ exports["default"] = Dispatcher;
 
 /***/ }),
 
+/***/ 1534:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+exports.__esModule = true;
+exports.arrayHasAllValues = exports.arrayHasValue = exports.arrayAny = exports.dateCompare = exports.stringCompare = exports.removeVersionExtension = exports.versionCompare = exports.versionCompareHelper = exports.numberCompare = exports.getParameterCaseInsensitive = exports.getFromEnvironment = exports.getFromUserAgent = exports.getFromUser = exports.computeUserHash = exports.getUnitID = void 0;
+var Hashing_1 = __nccwpck_require__(6813);
+var parseUserAgent_1 = __importDefault(__nccwpck_require__(3705));
+function getUnitID(user, idType) {
+    var _a;
+    if (typeof idType === 'string' && idType.toLowerCase() !== 'userid') {
+        var unitID = (_a = user === null || user === void 0 ? void 0 : user.customIDs) === null || _a === void 0 ? void 0 : _a[idType];
+        if (unitID !== undefined) {
+            return unitID;
+        }
+        return getParameterCaseInsensitive(user === null || user === void 0 ? void 0 : user.customIDs, idType);
+    }
+    return user === null || user === void 0 ? void 0 : user.userID;
+}
+exports.getUnitID = getUnitID;
+var hashLookupTable = new Map();
+function computeUserHash(userHash) {
+    var existingHash = hashLookupTable.get(userHash);
+    if (existingHash) {
+        return existingHash;
+    }
+    var hash = (0, Hashing_1.sha256Hash)(userHash).getBigUint64(0, false);
+    if (hashLookupTable.size > 100000) {
+        hashLookupTable.clear();
+    }
+    hashLookupTable.set(userHash, hash);
+    return hash;
+}
+exports.computeUserHash = computeUserHash;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getFromUser(user, field) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    if (typeof user !== 'object' || field == null) {
+        return null;
+    }
+    var indexableUser = user;
+    return ((_h = (_f = (_d = (_b = (_a = indexableUser[field]) !== null && _a !== void 0 ? _a : indexableUser[field.toLowerCase()]) !== null && _b !== void 0 ? _b : (_c = user === null || user === void 0 ? void 0 : user.custom) === null || _c === void 0 ? void 0 : _c[field]) !== null && _d !== void 0 ? _d : (_e = user === null || user === void 0 ? void 0 : user.custom) === null || _e === void 0 ? void 0 : _e[field.toLowerCase()]) !== null && _f !== void 0 ? _f : (_g = user === null || user === void 0 ? void 0 : user.privateAttributes) === null || _g === void 0 ? void 0 : _g[field]) !== null && _h !== void 0 ? _h : (_j = user === null || user === void 0 ? void 0 : user.privateAttributes) === null || _j === void 0 ? void 0 : _j[field.toLowerCase()]);
+}
+exports.getFromUser = getFromUser;
+function getFromUserAgent(user, field) {
+    var _a, _b, _c, _d;
+    if (field == null) {
+        return null;
+    }
+    var ua = getFromUser(user, 'userAgent');
+    if (ua == null) {
+        return null;
+    }
+    if (typeof ua !== 'string' || ua.length > 1000) {
+        return null;
+    }
+    var res = (0, parseUserAgent_1["default"])(ua);
+    switch (field.toLowerCase()) {
+        case 'os_name':
+        case 'osname':
+            return (_a = res.os.name) !== null && _a !== void 0 ? _a : null;
+        case 'os_version':
+        case 'osversion':
+            return (_b = res.os.version) !== null && _b !== void 0 ? _b : null;
+        case 'browser_name':
+        case 'browsername':
+            return (_c = res.browser.name) !== null && _c !== void 0 ? _c : null;
+        case 'browser_version':
+        case 'browserversion':
+            return (_d = res.browser.version) !== null && _d !== void 0 ? _d : null;
+        default:
+            return null;
+    }
+}
+exports.getFromUserAgent = getFromUserAgent;
+function getFromEnvironment(user, field) {
+    if (field == null) {
+        return null;
+    }
+    return getParameterCaseInsensitive(user === null || user === void 0 ? void 0 : user.statsigEnvironment, field);
+}
+exports.getFromEnvironment = getFromEnvironment;
+function getParameterCaseInsensitive(object, key) {
+    if (object == null) {
+        return undefined;
+    }
+    var asLowercase = key.toLowerCase();
+    var keyMatch = Object.keys(object).find(function (k) { return k.toLowerCase() === asLowercase; });
+    if (keyMatch === undefined) {
+        return undefined;
+    }
+    return object[keyMatch];
+}
+exports.getParameterCaseInsensitive = getParameterCaseInsensitive;
+function numberCompare(fn) {
+    return function (a, b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        var numA = Number(a);
+        var numB = Number(b);
+        if (isNaN(numA) || isNaN(numB)) {
+            return false;
+        }
+        return fn(numA, numB);
+    };
+}
+exports.numberCompare = numberCompare;
+function versionCompareHelper(fn) {
+    return function (a, b) {
+        var comparison = versionCompare(a, b);
+        if (comparison == null) {
+            return false;
+        }
+        return fn(comparison);
+    };
+}
+exports.versionCompareHelper = versionCompareHelper;
+// Compare two version strings without the extensions.
+// returns -1, 0, or 1 if first is smaller than, equal to, or larger than second.
+// returns false if any of the version strings is not valid.
+function versionCompare(first, second) {
+    if (typeof first !== 'string' || typeof second !== 'string') {
+        return null;
+    }
+    var version1 = removeVersionExtension(first);
+    var version2 = removeVersionExtension(second);
+    if (version1.length === 0 || version2.length === 0) {
+        return null;
+    }
+    var parts1 = version1.split('.');
+    var parts2 = version2.split('.');
+    for (var i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+        if (parts1[i] === undefined) {
+            parts1[i] = '0';
+        }
+        if (parts2[i] === undefined) {
+            parts2[i] = '0';
+        }
+        var n1 = Number(parts1[i]);
+        var n2 = Number(parts2[i]);
+        if (typeof n1 !== 'number' ||
+            typeof n2 !== 'number' ||
+            isNaN(n1) ||
+            isNaN(n2)) {
+            return null;
+        }
+        if (n1 < n2) {
+            return -1;
+        }
+        else if (n1 > n2) {
+            return 1;
+        }
+    }
+    return 0;
+}
+exports.versionCompare = versionCompare;
+function removeVersionExtension(version) {
+    var hyphenIndex = version.indexOf('-');
+    if (hyphenIndex >= 0) {
+        return version.substr(0, hyphenIndex);
+    }
+    return version;
+}
+exports.removeVersionExtension = removeVersionExtension;
+function stringCompare(ignoreCase, fn) {
+    return function (a, b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        return ignoreCase
+            ? fn(String(a).toLowerCase(), String(b).toLowerCase())
+            : fn(String(a), String(b));
+    };
+}
+exports.stringCompare = stringCompare;
+function dateCompare(fn) {
+    return function (a, b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        try {
+            // Try to parse into date as a string first, if not, try unixtime
+            var dateA = new Date(a);
+            if (typeof a == 'string') {
+                if (isNaN(dateA.getTime())) {
+                    dateA = new Date(getTimeInMs(a));
+                }
+            }
+            else {
+                dateA = new Date(getTimeInMs(a));
+            }
+            var dateB = new Date(b);
+            if (typeof b == 'string') {
+                if (isNaN(dateB.getTime())) {
+                    dateB = new Date(getTimeInMs(b));
+                }
+            }
+            else {
+                dateB = new Date(getTimeInMs(b));
+            }
+            return (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime()) && fn(dateA, dateB));
+        }
+        catch (e) {
+            // malformatted input, returning false
+            return false;
+        }
+    };
+}
+exports.dateCompare = dateCompare;
+function getTimeInMs(time) {
+    var numericalVal = Number(time);
+    if (isNaN(numericalVal)) {
+        return Number.NaN;
+    }
+    if (numericalVal < 10000000000) {
+        // Timestamp in seconds format, we convert it to be ms
+        numericalVal *= 1000;
+    }
+    return numericalVal;
+}
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function arrayAny(value, array, fn) {
+    if (!Array.isArray(array)) {
+        return false;
+    }
+    for (var i = 0; i < array.length; i++) {
+        if (fn(value, array[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.arrayAny = arrayAny;
+function arrayHasValue(value, target) {
+    var valueSet = new Set(value);
+    for (var i = 0; i < target.length; i++) {
+        if (valueSet.has(target[i]) ||
+            valueSet.has(parseInt(target[i]))) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.arrayHasValue = arrayHasValue;
+function arrayHasAllValues(value, target) {
+    var valueSet = new Set(value);
+    for (var i = 0; i < target.length; i++) {
+        if (!valueSet.has(target[i]) &&
+            !valueSet.has(parseInt(target[i]))) {
+            return false;
+        }
+    }
+    return true;
+}
+exports.arrayHasAllValues = arrayHasAllValues;
+
+
+/***/ }),
+
 /***/ 6813:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 exports.__esModule = true;
-exports.hashUnitIDForIDList = exports.hashString = exports.sha256Hash = exports.sha256HashBase64 = exports.djb2HashForObject = exports.djb2Hash = void 0;
+exports.hashUnitIDForIDList = exports.hashString = exports.sha256Hash = exports.bigqueryHash = exports.sha256HashBase64 = exports.djb2HashForObject = exports.djb2Hash = void 0;
 var Base64_1 = __nccwpck_require__(3429);
 var Sha256_1 = __nccwpck_require__(4046);
 function fasthash(value) {
@@ -8597,12 +11077,24 @@ function sha256HashBase64(name) {
     return Base64_1.Base64.encodeArrayBuffer(buffer.arrayBuffer());
 }
 exports.sha256HashBase64 = sha256HashBase64;
+function bigqueryHash(str) {
+    var hash = (0, Sha256_1.SHA256)(str).arrayBuffer();
+    var view = new DataView(hash);
+    var num = view.getBigUint64(0, false);
+    var TWO_TO_63 = BigInt('9223372036854775808'); // 2^63
+    var TWO_TO_64 = BigInt('18446744073709551616'); // 2^64
+    if (num >= TWO_TO_63) {
+        num -= TWO_TO_64;
+    }
+    return num;
+}
+exports.bigqueryHash = bigqueryHash;
 function sha256Hash(name) {
     return (0, Sha256_1.SHA256)(name).dataView();
 }
 exports.sha256Hash = sha256Hash;
 function hashString(str, algorithm) {
-    if (algorithm === void 0) { algorithm = 'sha256'; }
+    if (algorithm === void 0) { algorithm = 'djb2'; }
     switch (algorithm) {
         case 'sha256':
             return sha256HashBase64(str);
@@ -8614,6 +11106,7 @@ function hashString(str, algorithm) {
 }
 exports.hashString = hashString;
 function hashUnitIDForIDList(unitID, algorithm) {
+    if (algorithm === void 0) { algorithm = 'sha256'; }
     if (typeof unitID !== 'string' || unitID == null) {
         return '';
     }
@@ -8694,12 +11187,15 @@ var IDListUtil = /** @class */ (function () {
     };
     IDListUtil.parseBootstrapLookup = function (input) {
         try {
-            var result = JSON.parse(input);
+            var result = typeof input === 'string' ? JSON.parse(input) : input;
             if (Array.isArray(result)) {
                 return result;
             }
+            if (typeof result == 'object') {
+                return Object.keys(result);
+            }
         }
-        catch (_a) {
+        catch (e) {
             /* noop */
         }
         return null;
@@ -8738,10 +11234,7 @@ var IDListUtil = /** @class */ (function () {
             delete lists[name_2];
         }
     };
-    IDListUtil.getIdListDataStoreKey = function (name) {
-        return "".concat(IDataAdapter_1.DataAdapterKey.IDLists, "::").concat(name);
-    };
-    IDListUtil.saveToDataAdapter = function (dataAdapter, lists) {
+    IDListUtil.saveToDataAdapter = function (hashedSDKKey, dataAdapter, lists, lookup) {
         return __awaiter(this, void 0, void 0, function () {
             var tasks, _i, _a, _b, key, value, ids, prop;
             return __generator(this, function (_c) {
@@ -8756,12 +11249,12 @@ var IDListUtil = /** @class */ (function () {
                                     continue;
                                 ids += "+".concat(prop, "\n");
                             }
-                            tasks.push(dataAdapter.set(this.getIdListDataStoreKey(key), ids));
+                            tasks.push(dataAdapter.set((0, IDataAdapter_1.getDataAdapterKey)(hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.IDList, IDataAdapter_1.CompressFormat.PlainText, key), ids));
                         }
                         return [4 /*yield*/, Promise.all(tasks)];
                     case 1:
                         _c.sent();
-                        return [4 /*yield*/, dataAdapter.set(IDataAdapter_1.DataAdapterKey.IDLists, JSON.stringify(Object.keys(lists)))];
+                        return [4 /*yield*/, dataAdapter.set((0, IDataAdapter_1.getDataAdapterKey)(hashedSDKKey, IDataAdapter_1.DataAdapterKeyPath.V1IDLists), JSON.stringify(lookup))];
                     case 2:
                         _c.sent();
                         return [2 /*return*/];
@@ -9168,6 +11661,136 @@ var Sha256 = /** @class */ (function () {
 
 /***/ }),
 
+/***/ 288:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+exports.__esModule = true;
+exports.GlobalContext = exports.InitializeContext = exports.EvaluationContext = exports.StatsigContext = void 0;
+var StatsigContext = /** @class */ (function () {
+    function StatsigContext(ctx) {
+        this.ctx = ctx;
+        this.startTime = Date.now();
+        this.caller = ctx.caller;
+        this.eventCount = ctx.eventCount;
+        this.configName = ctx.configName;
+        this.clientKey = ctx.clientKey;
+        this.hash = ctx.clientKey;
+        this.bypassDedupe = ctx.bypassDedupe;
+        this.userPersistedValues = ctx.userPersistedValues;
+        this.persistentAssignmentOptions = ctx.persistentAssignmentOptions;
+    }
+    // Create a new context to avoid modifying context up the stack
+    StatsigContext["new"] = function (ctx) {
+        return new this(ctx);
+    };
+    StatsigContext.prototype.getContextForLogging = function () {
+        return {
+            tag: this.caller,
+            eventCount: this.eventCount,
+            configName: this.configName,
+            clientKey: this.clientKey,
+            hash: this.clientKey
+        };
+    };
+    StatsigContext.prototype.getRequestContext = function () {
+        return this.ctx;
+    };
+    return StatsigContext;
+}());
+exports.StatsigContext = StatsigContext;
+var EvaluationContext = /** @class */ (function (_super) {
+    __extends(EvaluationContext, _super);
+    function EvaluationContext(ctx, user, spec, targetAppID, onlyEvaluateTargeting, samplingRate, seenAnalyticalGates) {
+        var _this = _super.call(this, ctx) || this;
+        _this.seenAnalyticalGates = false;
+        _this.user = user;
+        _this.spec = spec;
+        _this.targetAppID = targetAppID;
+        _this.onlyEvaluateTargeting = onlyEvaluateTargeting;
+        _this.samplingRate = samplingRate;
+        _this.seenAnalyticalGates = seenAnalyticalGates !== null && seenAnalyticalGates !== void 0 ? seenAnalyticalGates : false;
+        return _this;
+    }
+    EvaluationContext["new"] = function (ctx) {
+        var user = ctx.user, spec = ctx.spec, optionalCtx = __rest(ctx, ["user", "spec"]);
+        return new this(optionalCtx, user, spec);
+    };
+    EvaluationContext.get = function (ctx, evalCtx) {
+        return new EvaluationContext(ctx, evalCtx.user, evalCtx.spec, evalCtx.targetAppID, evalCtx.onlyEvaluateTargeting, evalCtx.samplingRate, evalCtx.seenAnalyticalGates);
+    };
+    return EvaluationContext;
+}(StatsigContext));
+exports.EvaluationContext = EvaluationContext;
+var InitializeContext = /** @class */ (function (_super) {
+    __extends(InitializeContext, _super);
+    function InitializeContext(ctx, sdkKey) {
+        var _this = _super.call(this, ctx) || this;
+        _this.sdkKey = sdkKey;
+        _this.success = true;
+        return _this;
+    }
+    InitializeContext["new"] = function (ctx) {
+        return new this(ctx, ctx.sdkKey);
+    };
+    InitializeContext.prototype.setSuccess = function (source) {
+        this.success = true;
+        this.source = source;
+    };
+    InitializeContext.prototype.setFailed = function (error) {
+        this.success = false;
+        this.error = error;
+    };
+    InitializeContext.prototype.getInitDetails = function () {
+        return {
+            duration: Date.now() - this.startTime,
+            success: this.success,
+            error: this.error,
+            source: this.source
+        };
+    };
+    return InitializeContext;
+}(StatsigContext));
+exports.InitializeContext = InitializeContext;
+var GlobalContext = /** @class */ (function () {
+    function GlobalContext() {
+    }
+    // @ts-ignore
+    GlobalContext.isEdgeEnvironment = typeof EdgeRuntime === 'string';
+    return GlobalContext;
+}());
+exports.GlobalContext = GlobalContext;
+
+
+/***/ }),
+
 /***/ 2384:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -9224,19 +11847,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+exports.STATSIG_CDN = exports.STATSIG_API = void 0;
 var Diagnostics_1 = __importDefault(__nccwpck_require__(7413));
 var Errors_1 = __nccwpck_require__(484);
 var core_1 = __nccwpck_require__(8122);
 var Dispatcher_1 = __importDefault(__nccwpck_require__(4598));
-var getCompressionFunc_1 = __importDefault(__nccwpck_require__(1468));
+var getEncodedBody_1 = __nccwpck_require__(9612);
 var Hashing_1 = __nccwpck_require__(6813);
 var safeFetch_1 = __importDefault(__nccwpck_require__(7817));
-var retryStatusCodes = [408, 500, 502, 503, 504, 522, 524, 599];
+var StatsigContext_1 = __nccwpck_require__(288);
+var retryStatusCodes = [0, 408, 500, 502, 503, 504, 522, 524, 599];
+exports.STATSIG_API = 'https://statsigapi.net/v1';
+exports.STATSIG_CDN = 'https://api.statsigcdn.com/v1';
 var StatsigFetcher = /** @class */ (function () {
     function StatsigFetcher(secretKey, options, errorBoundry, sessionID) {
-        this.api = options.api;
+        var _a;
+        this.outputLogger = null;
         this.apiForDownloadConfigSpecs = options.apiForDownloadConfigSpecs;
         this.apiForGetIdLists = options.apiForGetIdLists;
+        this.fallbackToStatsigAPI = options.fallbackToStatsigAPI;
         this.sessionID = sessionID;
         this.leakyBucket = {};
         this.pendingTimers = [];
@@ -9244,33 +11873,86 @@ var StatsigFetcher = /** @class */ (function () {
         this.localMode = options.localMode;
         this.sdkKey = secretKey;
         this.errorBoundry = errorBoundry;
+        this.networkOverrideFunc = options.networkOverrideFunc;
+        this.outputLogger = (_a = options.logger) !== null && _a !== void 0 ? _a : null;
     }
     StatsigFetcher.prototype.validateSDKKeyUsed = function (hashedSDKKeyUsed) {
         var matched = hashedSDKKeyUsed === (0, Hashing_1.djb2Hash)(this.sdkKey);
         if (!matched) {
-            this.errorBoundry.logError(new Errors_1.StatsigSDKKeyMismatchError());
+            this.errorBoundry.logError(new Errors_1.StatsigSDKKeyMismatchError(), StatsigContext_1.StatsigContext["new"]({ caller: 'validateSDKKeyUsed' }));
         }
         return matched;
     };
     StatsigFetcher.prototype.downloadConfigSpecs = function (sinceTime) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.get(this.apiForDownloadConfigSpecs +
-                            '/download_config_specs' +
+            var path, url, options, res, error_1, message;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        path = '/download_config_specs' +
                             "/".concat(this.sdkKey, ".json") +
-                            (sinceTime ? "?sinceTime=".concat(sinceTime) : ''))];
-                    case 1: return [2 /*return*/, _a.sent()];
+                            (sinceTime === 0 ? '' : "?sinceTime=".concat(sinceTime));
+                        url = this.apiForDownloadConfigSpecs + path;
+                        if (!this.fallbackToStatsigAPI) return [3 /*break*/, 6];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.get(url, options)];
+                    case 2:
+                        res = _c.sent();
+                        if (res.ok) {
+                            return [2 /*return*/, res];
+                        }
+                        (_a = this.outputLogger) === null || _a === void 0 ? void 0 : _a.warn("Failed to download config specs from ".concat(this.apiForDownloadConfigSpecs, ", status code: ").concat(res.status, ". Falling back to Statsig API."));
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _c.sent();
+                        message = error_1 instanceof Error ? error_1.message : String(error_1);
+                        (_b = this.outputLogger) === null || _b === void 0 ? void 0 : _b.warn("Error downloading config specs from: ".concat(message, ". Falling back to Statsig API."));
+                        return [3 /*break*/, 4];
+                    case 4: return [4 /*yield*/, this.get(exports.STATSIG_CDN + path)];
+                    case 5: 
+                    // Fallback to Statsig API
+                    return [2 /*return*/, _c.sent()];
+                    case 6: return [4 /*yield*/, this.get(url, options)];
+                    case 7: return [2 /*return*/, _c.sent()];
                 }
             });
         });
     };
-    StatsigFetcher.prototype.getIDLists = function (sinceTime) {
+    StatsigFetcher.prototype.getIDLists = function () {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.post(this.apiForGetIdLists + '/get_id_lists', {})];
-                    case 1: return [2 /*return*/, _a.sent()];
+            var path, url, options, res, error_2, message;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        path = '/get_id_lists';
+                        url = this.apiForGetIdLists + path;
+                        if (!this.fallbackToStatsigAPI) return [3 /*break*/, 6];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.post(url, {}, options)];
+                    case 2:
+                        res = _c.sent();
+                        if (res.ok) {
+                            return [2 /*return*/, res];
+                        }
+                        (_a = this.outputLogger) === null || _a === void 0 ? void 0 : _a.warn("Failed to download ID lists from ".concat(this.apiForGetIdLists, ", status code: ").concat(res.status, ". Falling back to Statsig API."));
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_2 = _c.sent();
+                        message = error_2 instanceof Error ? error_2.message : String(error_2);
+                        (_b = this.outputLogger) === null || _b === void 0 ? void 0 : _b.warn("Error getting id lists from: ".concat(message));
+                        return [3 /*break*/, 4];
+                    case 4: return [4 /*yield*/, this.post(exports.STATSIG_API + path, {})];
+                    case 5: 
+                    // Fallback to Statsig API
+                    return [2 /*return*/, _c.sent()];
+                    case 6: return [4 /*yield*/, this.post(url, {}, options)];
+                    case 7: return [2 /*return*/, _c.sent()];
                 }
             });
         });
@@ -9292,83 +11974,87 @@ var StatsigFetcher = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.request('GET', url, options)];
+                    case 0: return [4 /*yield*/, this.request('GET', url, undefined, options)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     StatsigFetcher.prototype.request = function (method, url, body, options) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, retries, _c, backoff, _d, isRetrying, signal, _e, compress, markDiagnostic, counter, applyBackoffMultiplier, backoffAdjusted, headers, contents, gzipSync, params, res, error;
+            var _b, _c, retryURL, _d, retries, _e, backoff, _f, isRetrying, signal, _g, compress, markDiagnostic, counter, applyBackoffMultiplier, backoffAdjusted, headers, _h, contents, contentEncoding, res, error, fetcher;
             var _this = this;
-            return __generator(this, function (_f) {
-                _a = options !== null && options !== void 0 ? options : {}, _b = _a.retries, retries = _b === void 0 ? 0 : _b, _c = _a.backoff, backoff = _c === void 0 ? 1000 : _c, _d = _a.isRetrying, isRetrying = _d === void 0 ? false : _d, signal = _a.signal, _e = _a.compress, compress = _e === void 0 ? false : _e;
-                markDiagnostic = this.getDiagnosticFromURL(url);
-                if (this.localMode) {
-                    return [2 /*return*/, Promise.reject(new Errors_1.StatsigLocalModeNetworkError())];
-                }
-                counter = this.leakyBucket[url];
-                if (counter != null && counter >= 1000) {
-                    return [2 /*return*/, Promise.reject(new Errors_1.StatsigTooManyRequestsError("Request to ".concat(url, " failed because you are making the same request too frequently (").concat(counter, ").")))];
-                }
-                if (counter == null) {
-                    this.leakyBucket[url] = 1;
-                }
-                else {
-                    this.leakyBucket[url] = counter + 1;
-                }
-                applyBackoffMultiplier = function (backoff) {
-                    return isRetrying ? backoff * 10 : backoff;
-                };
-                backoffAdjusted = typeof backoff === 'number'
-                    ? applyBackoffMultiplier(backoff)
-                    : backoff(retries);
-                headers = __assign(__assign({}, options === null || options === void 0 ? void 0 : options.additionalHeaders), { 'Content-type': 'application/json; charset=UTF-8', 'STATSIG-API-KEY': this.sdkKey, 'STATSIG-CLIENT-TIME': Date.now(), 'STATSIG-SERVER-SESSION-ID': this.sessionID, 'STATSIG-SDK-TYPE': (0, core_1.getSDKType)(), 'STATSIG-SDK-VERSION': (0, core_1.getSDKVersion)() });
-                contents = undefined;
-                gzipSync = (0, getCompressionFunc_1["default"])();
-                if (compress && body && gzipSync) {
-                    headers['Content-Encoding'] = 'gzip';
-                    contents = gzipSync(JSON.stringify(body));
-                }
-                else if (body) {
-                    contents = JSON.stringify(body);
-                }
-                params = {
-                    method: method,
-                    body: contents,
-                    headers: headers,
-                    signal: signal
-                };
-                if (!isRetrying) {
-                    markDiagnostic === null || markDiagnostic === void 0 ? void 0 : markDiagnostic.start({});
-                }
-                return [2 /*return*/, (0, safeFetch_1["default"])(url, params)
-                        .then(function (localRes) {
-                        res = localRes;
-                        if ((!res.ok || retryStatusCodes.includes(res.status)) && retries > 0) {
-                            return _this._retry(method, url, body, retries - 1, backoffAdjusted);
+            return __generator(this, function (_j) {
+                switch (_j.label) {
+                    case 0:
+                        _b = options !== null && options !== void 0 ? options : {}, _c = _b.retryURL, retryURL = _c === void 0 ? url : _c, _d = _b.retries, retries = _d === void 0 ? 0 : _d, _e = _b.backoff, backoff = _e === void 0 ? 1000 : _e, _f = _b.isRetrying, isRetrying = _f === void 0 ? false : _f, signal = _b.signal, _g = _b.compress, compress = _g === void 0 ? false : _g;
+                        markDiagnostic = this.getDiagnosticFromURL(url);
+                        if (this.localMode) {
+                            return [2 /*return*/, Promise.reject(new Errors_1.StatsigLocalModeNetworkError())];
                         }
-                        else if (!res.ok) {
-                            return Promise.reject(new Error('Request to ' + url + ' failed with status ' + res.status));
+                        counter = this.leakyBucket[url];
+                        if (counter != null && counter >= 1000) {
+                            return [2 /*return*/, Promise.reject(new Errors_1.StatsigTooManyRequestsError("Request to ".concat(url, " failed because you are making the same request too frequently (").concat(counter, ").")))];
                         }
-                        return Promise.resolve(res);
-                    })["catch"](function (e) {
-                        error = e;
-                        if (retries > 0) {
-                            return _this._retry(method, url, body, retries - 1, backoffAdjusted);
+                        if (counter == null) {
+                            this.leakyBucket[url] = 1;
                         }
-                        return Promise.reject(error);
-                    })["finally"](function () {
-                        var _a;
-                        markDiagnostic === null || markDiagnostic === void 0 ? void 0 : markDiagnostic.end({
-                            statusCode: res === null || res === void 0 ? void 0 : res.status,
-                            success: (res === null || res === void 0 ? void 0 : res.ok) === true,
-                            sdkRegion: (_a = res === null || res === void 0 ? void 0 : res.headers) === null || _a === void 0 ? void 0 : _a.get('x-statsig-region'),
-                            error: Diagnostics_1["default"].formatNetworkError(error)
-                        });
-                        _this.leakyBucket[url] = Math.max(_this.leakyBucket[url] - 1, 0);
-                    })];
+                        else {
+                            this.leakyBucket[url] = counter + 1;
+                        }
+                        applyBackoffMultiplier = function (backoff) {
+                            return isRetrying ? backoff * 10 : backoff;
+                        };
+                        backoffAdjusted = typeof backoff === 'number'
+                            ? applyBackoffMultiplier(backoff)
+                            : backoff(retries);
+                        headers = __assign(__assign({}, options === null || options === void 0 ? void 0 : options.additionalHeaders), { 'Content-type': 'application/json; charset=UTF-8', 'STATSIG-API-KEY': this.sdkKey, 'STATSIG-CLIENT-TIME': "".concat(Date.now()), 'STATSIG-SERVER-SESSION-ID': this.sessionID, 'STATSIG-SDK-TYPE': (0, core_1.getSDKType)(), 'STATSIG-SDK-VERSION': (0, core_1.getSDKVersion)() });
+                        return [4 /*yield*/, (0, getEncodedBody_1.getEncodedBody)(body, compress ? 'gzip' : 'none', this.errorBoundry)];
+                    case 1:
+                        _h = _j.sent(), contents = _h.contents, contentEncoding = _h.contentEncoding;
+                        if (contentEncoding) {
+                            headers['Content-Encoding'] = contentEncoding;
+                        }
+                        if (!isRetrying) {
+                            markDiagnostic === null || markDiagnostic === void 0 ? void 0 : markDiagnostic.start({});
+                        }
+                        fetcher = (_a = this.networkOverrideFunc) !== null && _a !== void 0 ? _a : safeFetch_1["default"];
+                        return [2 /*return*/, fetcher(url, {
+                                method: method,
+                                body: contents,
+                                headers: headers,
+                                signal: signal
+                            })
+                                .then(function (localRes) {
+                                res = localRes;
+                                if ((!res.ok || retryStatusCodes.includes(res.status)) && retries > 0) {
+                                    return _this._retry(method, retryURL, body, retries - 1, backoffAdjusted);
+                                }
+                                else if (!res.ok) {
+                                    return Promise.reject(new Error('Request to ' + url + ' failed with status ' + res.status));
+                                }
+                                return Promise.resolve(res);
+                            })["catch"](function (e) {
+                                error = e;
+                                if (retries > 0) {
+                                    return _this._retry(method, url, body, retries - 1, backoffAdjusted);
+                                }
+                                return Promise.reject(error);
+                            })["finally"](function () {
+                                var _a;
+                                markDiagnostic === null || markDiagnostic === void 0 ? void 0 : markDiagnostic.end({
+                                    statusCode: res === null || res === void 0 ? void 0 : res.status,
+                                    success: (res === null || res === void 0 ? void 0 : res.ok) === true,
+                                    sdkRegion: (_a = res === null || res === void 0 ? void 0 : res.headers) === null || _a === void 0 ? void 0 : _a.get('x-statsig-region'),
+                                    error: Diagnostics_1["default"].formatNetworkError(error)
+                                });
+                                _this.leakyBucket[url] = Math.max(_this.leakyBucket[url] - 1, 0);
+                                if (_this.leakyBucket[url] <= 0) {
+                                    delete _this.leakyBucket[url];
+                                }
+                            })];
+                }
             });
         });
     };
@@ -9389,6 +12075,10 @@ var StatsigFetcher = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             var timer = setTimeout(function () {
                 _this.leakyBucket[url] = Math.max(_this.leakyBucket[url] - 1, 0);
+                if (_this.leakyBucket[url] <= 0) {
+                    delete _this.leakyBucket[url];
+                }
+                _this.pendingTimers = _this.pendingTimers.filter(function (t) { return t !== timer; });
                 _this.request(method, url, body, { retries: retries, backoff: backoff, isRetrying: true })
                     .then(resolve)["catch"](reject);
             }, backoff);
@@ -9410,32 +12100,6 @@ var StatsigFetcher = /** @class */ (function () {
     return StatsigFetcher;
 }());
 exports["default"] = StatsigFetcher;
-
-
-/***/ }),
-
-/***/ 5673:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-exports.__esModule = true;
-function asyncify(syncFunction) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-    return new Promise(function (resolve, reject) {
-        try {
-            var result = syncFunction.apply(void 0, args);
-            resolve(result);
-        }
-        catch (error) {
-            reject(error);
-        }
-    });
-}
-exports["default"] = asyncify;
 
 
 /***/ }),
@@ -9472,7 +12136,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.ExhaustSwitchError = exports.getTypeOf = exports.poll = exports.notEmptyObject = exports.notEmpty = exports.isUserIdentifiable = exports.getStatsigMetadata = exports.getSDKType = exports.getSDKVersion = exports.getNumericValue = exports.getBoolValue = exports.clone = void 0;
+exports.ExhaustSwitchError = exports.getTypeOf = exports.poll = exports.notEmptyObject = exports.notEmpty = exports.isUserIdentifiable = exports.getStatsigMetadata = exports.getSDKType = exports.getSDKVersion = exports.getNumericValue = exports.getBoolValue = exports.cloneEnforce = exports.clone = void 0;
 function getSDKVersion() {
     var _a, _b;
     try {
@@ -9511,6 +12175,10 @@ function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 exports.clone = clone;
+function cloneEnforce(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+exports.cloneEnforce = cloneEnforce;
 // Return a number if num can be parsed to a number, otherwise return null
 function getNumericValue(num) {
     if (num == null) {
@@ -9585,28 +12253,112 @@ exports.ExhaustSwitchError = ExhaustSwitchError;
 
 /***/ }),
 
-/***/ 1468:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ 9612:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 exports.__esModule = true;
-var zlib = null;
-try {
-    zlib = __nccwpck_require__(9796);
+exports.getEncodedBody = void 0;
+var StatsigContext_1 = __nccwpck_require__(288);
+function getEncodedBody(body, compression, errorBoundry) {
+    return __awaiter(this, void 0, void 0, function () {
+        var bodyString, gzip_1, compressed, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    bodyString = body ? JSON.stringify(body) : undefined;
+                    if (!compression || !bodyString) {
+                        return [2 /*return*/, { contents: bodyString }];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 5, , 6]);
+                    if (!(compression === 'gzip')) return [3 /*break*/, 4];
+                    return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(__nccwpck_require__(9796)); })];
+                case 2:
+                    gzip_1 = (_a.sent()).gzip;
+                    return [4 /*yield*/, new Promise(function (resolve, reject) {
+                            gzip_1(bodyString, function (err, result) {
+                                if (err)
+                                    return reject(err);
+                                resolve(result);
+                            });
+                        })];
+                case 3:
+                    compressed = _a.sent();
+                    return [2 /*return*/, { contents: compressed, contentEncoding: 'gzip' }];
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    e_1 = _a.sent();
+                    errorBoundry.logError(e_1, StatsigContext_1.StatsigContext["new"]({ caller: 'getEncodedBodyAsync' }));
+                    // Fallback to uncompressed if import or compression fails
+                    return [2 /*return*/, { contents: bodyString }];
+                case 6: return [2 /*return*/, { contents: bodyString }];
+            }
+        });
+    });
 }
-catch (err) {
-    // Ignore
-}
-function getCompressionFunc() {
-    if (zlib) {
-        return zlib.gzipSync;
-    }
-    else {
-        return null;
-    }
-}
-exports["default"] = getCompressionFunc;
+exports.getEncodedBody = getEncodedBody;
 
 
 /***/ }),
@@ -9621,9 +12373,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var ua_parser_js_1 = __importDefault(__nccwpck_require__(6655));
+// Memoize the most recent call
+var parseUserAgentMemo = {
+    uaString: undefined,
+    res: undefined
+};
 // This exists only to provide compatibility for useragent library that's used
 // everywhere else.
 function parseUserAgent(uaString) {
+    if (parseUserAgentMemo.uaString === uaString) {
+        return parseUserAgentMemo.res;
+    }
     var res = (0, ua_parser_js_1["default"])(uaString);
     if (res.os.name === 'Mac OS') {
         res.os.name = 'Mac OS X';
@@ -9632,6 +12392,8 @@ function parseUserAgent(uaString) {
         (res.device.type === 'mobile' || res.device.type === 'tablet')) {
         res.browser.name += ' Mobile';
     }
+    parseUserAgentMemo.uaString = uaString;
+    parseUserAgentMemo.res = res;
     return res;
 }
 exports["default"] = parseUserAgent;
@@ -9645,10 +12407,11 @@ exports["default"] = parseUserAgent;
 "use strict";
 
 exports.__esModule = true;
+var StatsigContext_1 = __nccwpck_require__(288);
 // @ts-ignore
 var nodeFetch = null;
 // @ts-ignore
-if (typeof EdgeRuntime !== 'string') {
+if (!StatsigContext_1.GlobalContext.isEdgeEnvironment) {
     try {
         nodeFetch = __nccwpck_require__(467);
         var nfDefault = nodeFetch["default"];
@@ -9675,6 +12438,52 @@ function safeFetch() {
     }
 }
 exports["default"] = safeFetch;
+
+
+/***/ }),
+
+/***/ 947:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+exports.__esModule = true;
+exports.is_hash_in_sampling_rate = exports.compute_dedupe_key_for_layer = exports.compute_dedupe_key_for_config = exports.compute_dedupe_key_for_gate = exports.compute_user_key = void 0;
+var Hashing_1 = __nccwpck_require__(6813);
+function compute_user_key(userId, customIds) {
+    var userKey = "u:".concat(userId || '', ";");
+    if (customIds) {
+        for (var _i = 0, _a = Object.entries(customIds); _i < _a.length; _i++) {
+            var _b = _a[_i], k = _b[0], v = _b[1];
+            userKey += "".concat(k, ":").concat(v, ";");
+        }
+    }
+    return userKey;
+}
+exports.compute_user_key = compute_user_key;
+function compute_dedupe_key_for_gate(name, ruleId, booleanValue, userId, customIds) {
+    var userKey = compute_user_key(userId, customIds);
+    var exposureKey = "n:".concat(name, ";").concat(userKey, "r:").concat(ruleId, ";v:").concat(String(booleanValue));
+    return exposureKey;
+}
+exports.compute_dedupe_key_for_gate = compute_dedupe_key_for_gate;
+function compute_dedupe_key_for_config(name, ruleId, userId, customIds) {
+    var userKey = compute_user_key(userId, customIds);
+    var exposureKey = "n:".concat(name, ";").concat(userKey, "r:").concat(ruleId);
+    return exposureKey;
+}
+exports.compute_dedupe_key_for_config = compute_dedupe_key_for_config;
+function compute_dedupe_key_for_layer(name, allocatedExperiment, paramName, ruleId, userId, customIds) {
+    var userKey = compute_user_key(userId, customIds);
+    var exposureKey = "n:".concat(name, ";e:").concat(allocatedExperiment, ";p:").concat(paramName, ";").concat(userKey, "r:").concat(ruleId);
+    return exposureKey;
+}
+exports.compute_dedupe_key_for_layer = compute_dedupe_key_for_layer;
+function is_hash_in_sampling_rate(exposureKey, samplingRate) {
+    var hash = (0, Hashing_1.bigqueryHash)(exposureKey);
+    return hash % BigInt(samplingRate) === BigInt(0);
+}
+exports.is_hash_in_sampling_rate = is_hash_in_sampling_rate;
 
 
 /***/ }),
@@ -13714,6 +16523,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 6113:
 /***/ ((module) => {
 
@@ -13794,6 +16611,22 @@ module.exports = require("stream");
 
 /***/ }),
 
+/***/ 1576:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("string_decoder");
+
+/***/ }),
+
+/***/ 9512:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("timers");
+
+/***/ }),
+
 /***/ 4404:
 /***/ ((module) => {
 
@@ -13830,7 +16663,7 @@ module.exports = require("zlib");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"statsig-node","version":"5.19.1","description":"Statsig Node.js SDK for usage in multi-user server environments.","main":"dist/index.js","scripts":{"prepare":"rm -rf dist/ && tsc","test":"npm run prepare && jest","docs":"jsdoc2md src/index.js src/typedefs.js src/DynamicConfig.js > docs/generated.md","lint":"eslint \'*/**/*.{ts,tsx}\' --fix --max-warnings 0 --cache --cache-strategy content && git status","lint:github":"eslint \'*/**/*.{ts,tsx}\' --max-warnings 100 --cache --cache-strategy content"},"keywords":["feature gate","feature flag","continuous deployment","ci","ab test"],"repository":{"type":"git","url":"git+https://github.com/statsig-io/node-js-server-sdk.git"},"author":"Statsig, Inc.","license":"ISC","bugs":{"url":"https://github.com/statsig-io/node-js-server-sdk/issues"},"homepage":"https://www.statsig.com","dependencies":{"ip3country":"^5.0.0","node-fetch":"^2.6.13","ua-parser-js":"^1.0.2","uuid":"^8.3.2"},"devDependencies":{"@babel/core":"^7.23.2","@babel/preset-env":"^7.18.10","@babel/preset-typescript":"^7.18.6","@types/jest":"^26.0.24","@types/node":"^14.18.26","@types/node-fetch":"^2.6.2","@types/sha.js":"^2.4.0","@types/ua-parser-js":"^0.7.36","@types/useragent":"^2.3.1","@types/uuid":"^8.3.4","@types/whatwg-fetch":"^0.0.33","@typescript-eslint/eslint-plugin":"^5.59.7","@typescript-eslint/parser":"^5.59.7","babel-jest":"^26.6.3","eslint":"^8.50.0","eslint-config-prettier":"^9.1.0","eslint-plugin-prettier":"^5.1.2","eslint-plugin-simple-import-sort":"^10.0.0","sha.js":"^2.4.11","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jsdoc-to-markdown":"^7.1.1","prettier":"^3.1.1","typescript":"^4.7.4"},"importSort":{".js, .jsx, .ts, .tsx":{"style":"module","parser":"typescript"}}}');
+module.exports = JSON.parse('{"name":"statsig-node","version":"6.5.1","description":"Statsig Node.js SDK for usage in multi-user server environments.","main":"dist/index.js","scripts":{"prepare":"rm -rf dist/ && tsc","test":"npm run prepare && jest","docs":"jsdoc2md src/index.js src/typedefs.js src/DynamicConfig.js > docs/generated.md","lint":"eslint \'*/**/*.{ts,tsx}\' --fix --max-warnings 0 --cache --cache-strategy content && git status","lint:github":"eslint \'*/**/*.{ts,tsx}\' --max-warnings 100 --cache --cache-strategy content"},"keywords":["feature gate","feature flag","continuous deployment","ci","ab test"],"repository":{"type":"git","url":"git+https://github.com/statsig-io/node-js-server-sdk.git"},"author":"Statsig, Inc.","license":"ISC","bugs":{"url":"https://github.com/statsig-io/node-js-server-sdk/issues"},"homepage":"https://www.statsig.com","dependencies":{"ip3country":"^5.0.0","node-fetch":"^2.7.0","ua-parser-js":"^1.0.2","uuid":"^8.3.2"},"devDependencies":{"@babel/core":"^7.23.2","@babel/preset-env":"^7.18.10","@babel/preset-typescript":"^7.18.6","@types/jest":"^26.0.24","@types/node":"^14.18.26","@types/node-fetch":"^2.6.12","@types/sha.js":"^2.4.0","@types/ua-parser-js":"^0.7.36","@types/useragent":"^2.3.1","@types/uuid":"^8.3.4","@types/whatwg-fetch":"^0.0.33","@typescript-eslint/eslint-plugin":"^5.59.7","@typescript-eslint/parser":"^5.59.7","eslint":"^8.50.0","eslint-config-prettier":"^9.1.0","eslint-plugin-prettier":"^5.1.2","eslint-plugin-simple-import-sort":"^10.0.0","babel-jest":"^29.7.0","form-data":"4.0.4","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jsdoc-to-markdown":"^7.1.1","prettier":"^3.1.1","sha.js":"^2.4.12","typescript":"^4.7.4"},"importSort":{".js, .jsx, .ts, .tsx":{"style":"module","parser":"typescript"}},"engines":{"pnpm":"never"}}');
 
 /***/ }),
 
@@ -13929,15 +16762,13 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: ./node_modules/statsig-node/dist/utils/core.js
-var utils_core = __nccwpck_require__(8122);
 // EXTERNAL MODULE: ./node_modules/statsig-node/dist/index.js
 var dist = __nccwpck_require__(6434);
 var dist_default = /*#__PURE__*/__nccwpck_require__.n(dist);
 ;// CONCATENATED MODULE: ./src/evaluator.ts
 
 // moneypatch sdk type and version
-
+const coreUtils = __nccwpck_require__(8122);
 function newGetSDKVersion() {
     return '1.3.0';
 }
@@ -13945,9 +16776,9 @@ function newGetSDKType() {
     return 'github-sdk';
 }
 // @ts-ignore
-utils_core.getSDKVersion = newGetSDKVersion;
+coreUtils.getSDKVersion = newGetSDKVersion;
 // @ts-ignore
-utils_core.getSDKType = newGetSDKType;
+coreUtils.getSDKType = newGetSDKType;
 
 class Evaluator {
     static async evaluate(inputs) {
@@ -13992,7 +16823,7 @@ class Evaluator {
                 dist_default().logEventObject(event);
             });
         });
-        dist_default().shutdown();
+        await dist_default().shutdown();
     }
 }
 
@@ -14043,8 +16874,8 @@ class Utils {
             return JSON.parse(input);
         }
         catch (e) {
-            if (defaultValue === undefined) {
-                core.setFailed(`Invalid Input (${key}): ${e.message}`);
+            if (required) {
+                throw new Error(`Invalid Input (${key}): ${e.message}`);
             }
         }
         return defaultValue;
