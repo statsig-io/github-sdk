@@ -1,23 +1,5 @@
 import * as core from "@actions/core";
-// moneypatch sdk type and version
-const coreUtils = require(
-  "statsig-node/dist/utils/core"
-) as typeof import("statsig-node/dist/utils/core");
-function newGetSDKVersion() {
-  return '1.3.0';
-}
-
-function newGetSDKType() {
-  return 'github-sdk';
-}
-
-// @ts-ignore
-coreUtils.getSDKVersion = newGetSDKVersion;
-// @ts-ignore
-coreUtils.getSDKType = newGetSDKType;
-
-import statsig from "statsig-node";
-import { StatsigOptions } from "statsig-node";
+import { Statsig, type StatsigOptions } from "@statsig/statsig-node-core";
 import type { Inputs } from "./utils";
 
 export default class Evaluator {
@@ -32,22 +14,25 @@ export default class Evaluator {
       logExposures,
       events,
     } = inputs;
+
+    const statsig = new Statsig(sdkKey, {
+      ...(environment ? { environment } : {}),
+    } satisfies StatsigOptions);
+
     await core.group("Initializing", async () => {
-      let options: StatsigOptions = {};
-      if (environment) {
-        options.environment = { tier: environment };
+      const result = await statsig.initialize();
+      if (!result.isSuccess) {
+        throw new Error(result.error ?? "Failed to initialize Statsig");
       }
-      await statsig.initialize(sdkKey, options);
     });
     await core.group(`Evaluating gates ${gates.join(", ")}`, async () => {
       await Promise.all(
         gates.map(async (gateName) => {
           const result = logExposures
-            ? await statsig.checkGate(user, gateName)
-            : await statsig.checkGateWithExposureLoggingDisabled(
-                user,
-                gateName
-              );
+            ? statsig.checkGate(user, gateName)
+            : statsig.checkGate(user, gateName, {
+                disableExposureLogging: true,
+              });
 
           core.setOutput(`gate::${gateName}`, result);
         })
@@ -57,11 +42,10 @@ export default class Evaluator {
       await Promise.all(
         configs.map(async (configName) => {
           const config = logExposures
-            ? await statsig.getConfig(user, configName)
-            : await statsig.getConfigWithExposureLoggingDisabled(
-                user,
-                configName
-              );
+            ? statsig.getDynamicConfig(user, configName)
+            : statsig.getDynamicConfig(user, configName, {
+                disableExposureLogging: true,
+              });
           Object.entries(config.value).forEach(([param, value]) => {
             core.setOutput(`config::${configName}::${param}`, value);
           });
@@ -74,11 +58,10 @@ export default class Evaluator {
         await Promise.all(
           experiments.map(async (experimentName) => {
             const experiment = logExposures
-              ? await statsig.getExperiment(user, experimentName)
-              : await statsig.getExperimentWithExposureLoggingDisabled(
-                  user,
-                  experimentName
-                );
+              ? statsig.getExperiment(user, experimentName)
+              : statsig.getExperiment(user, experimentName, {
+                  disableExposureLogging: true,
+                });
             Object.entries(experiment.value).forEach(([param, value]) => {
               core.setOutput(`experiment::${experimentName}::${param}`, value);
             });
@@ -90,7 +73,7 @@ export default class Evaluator {
       `Logging events ${events.map((event) => event.eventName).join(", ")}`,
       async () => {
         events.forEach((event) => {
-          statsig.logEventObject(event);
+          statsig.logEvent(event.user, event.eventName, event.value, event.metadata);
         });
       }
     );
