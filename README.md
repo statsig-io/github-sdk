@@ -61,14 +61,14 @@ jobs:
     steps:
       - name: Evaluate
         id: statsig
-        uses: statsig-io/github-sdk
+        uses: statsig-io/github-sdk@v1
         with:
           sdk-key: 'secret-key'
           user: '{ "userID": "test123", "email": "test123@statsig.com" }'
           log-exposures: 'false'
           gates: | 
-            'example_gate_1'
-            'example_gate_2'
+            example_gate_1
+            example_gate_2
           configs: 'example_config'
           experiments: 'example_experiment'
           events: |
