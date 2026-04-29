@@ -1,5 +1,26 @@
 import * as core from "@actions/core";
-import type { StatsigUser, LogEventObject } from "statsig-node";
+import {
+  StatsigUser,
+  type StatsigUserArgs,
+} from "@statsig/statsig-node-core";
+
+type ActionEventInput = {
+  eventName: string;
+  user?: StatsigUser | StatsigUserArgs;
+  value?: string | number | null;
+  metadata?: Record<string, string | number | boolean | null | undefined>;
+};
+
+type ConcreteStatsigUserArgs =
+  | (StatsigUserArgs & { userID: string })
+  | (StatsigUserArgs & { customIDs: Record<string, string> });
+
+export type ActionEvent = {
+  eventName: string;
+  user: StatsigUser;
+  value?: string | number | null;
+  metadata?: Record<string, string | number | boolean | null | undefined>;
+};
 
 export type Inputs = {
   sdkKey: string;
@@ -9,29 +30,31 @@ export type Inputs = {
   configs: string[];
   experiments: string[];
   logExposures: boolean;
-  events: LogEventObject[];
+  events: ActionEvent[];
 };
 
 export default class Utils {
   public static getInputs(): Inputs {
     const sdkKey: string = this.parseInputString("sdk-key", true);
     core.setSecret(sdkKey);
-    const user: StatsigUser = this.parseInputJSON("user", true) as StatsigUser;
+    const user = this.parseStatsigUser(this.parseInputJSON("user", true));
     const environment = this.parseInputString("environment");
     const gates: string[] = this.parseInputArray("gates");
     const configs: string[] = this.parseInputArray("configs");
     const experiments: string[] = this.parseInputArray("experiments");
     const logExposures: boolean = this.parseInputBoolean("log-exposures");
-    const eventsRaw: Partial<LogEventObject>[] =
+    const eventsRaw: Partial<ActionEventInput>[] =
       this.parseInputArrayOfJSON("events");
-    const events: LogEventObject[] = eventsRaw
+    const events: ActionEvent[] = eventsRaw
       .filter((event) => event.eventName != null)
       .map((event) => {
-        if (!event.user) {
-          event.user = user;
-        }
-        return event;
-      }) as LogEventObject[];
+        return {
+          eventName: event.eventName as string,
+          user: event.user ? this.parseStatsigUser(event.user) : user,
+          value: event.value,
+          metadata: event.metadata,
+        };
+      });
     return {
       sdkKey,
       environment,
@@ -71,6 +94,23 @@ export default class Utils {
       }
     }
     return defaultValue;
+  }
+
+  private static parseStatsigUser(input: object): StatsigUser {
+    if (input instanceof StatsigUser) {
+      return input;
+    }
+
+    const args = input as StatsigUserArgs;
+    if (typeof args.userID === "string") {
+      return new StatsigUser(args as ConcreteStatsigUserArgs);
+    }
+
+    if (args.customIDs && Object.keys(args.customIDs).length > 0) {
+      return new StatsigUser(args as ConcreteStatsigUserArgs);
+    }
+
+    throw new Error("Invalid Input (user): expected userID or customIDs");
   }
 
   private static parseInputArray(

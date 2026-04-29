@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build src/index.ts --license LICENSE",
-    "build-tsc": "tsc --build",
+    "build": "ncc build src/index.ts --license LICENSE && node scripts/collect-core-binaries.mjs",
+    "build-tsc": "tsc --noEmit",
     "test": "npm run build && jest",
     "test-tsc": "npm run build-tsc && jest"
   },
@@ -26,10 +26,10 @@
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@actions/core": "^2.0.3",
-    "statsig-node": "^6.5.1"
+    "@actions/core": "^3.0.1",
+    "@statsig/statsig-node-core": "^0.19.3"
   }
 }

@@ -2,6 +2,9 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@actions/core$': '<rootDir>/src/__tests__/actions-core-shim.ts',
+  },
   transformIgnorePatterns: ['node_modules'],
   testMatch: ['**/__tests__/**/*test.(j|t)s', '**/?(*.)+test.(j|t)s'],
   testPathIgnorePatterns: [
