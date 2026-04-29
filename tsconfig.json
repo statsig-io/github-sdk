@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "ESNext",                                  /* Specify what module code is generated. */
-    "moduleResolution": "node",                          /* Specify how TypeScript looks up a file from a given module specifier. */
+    "moduleResolution": "bundler",                       /* Specify how TypeScript looks up a file from a given module specifier. */
+    "rootDir": "src",                                     /* Keep emitted files under dist/ with TypeScript 6. */
+    "types": ["jest", "node"],                            /* Include test/runtime globals when compiling the full src tree. */
     "outDir": "dist",                                    /* Specify an output folder for all emitted files. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
